@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-// using UnityEngine.Networking;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Player class is responsible for behaviour related to player's object
@@ -189,7 +189,11 @@ public class Player : LightSource
         playerSound = GetComponent<PlayerSound>();
         
         this.currentLevel = SceneManager.GetActiveScene().buildIndex;
-        
+
+        // Debug
+        lastEnergy = LightEnergy.CurrentEnergy;
+
+
         LoadGame();
         ResetPlayerState();
         
@@ -235,15 +239,24 @@ public class Player : LightSource
     }
 
 
+    // debugging
+    public float buffer = 1f;
+    public float lastEnergy;
+
     /// <summary>
     /// Listens for player states such as movement, light controls and death
     /// Called once per frame
     /// </summary>
     protected override void Update()
     {
-        if (!isLocalPlayer) { return; }
+        // if (!isLocalPlayer) { return; }
 
         base.Update();
+
+        if (lastEnergy - this.LightEnergy.CurrentEnergy > buffer)
+        {
+            Debug.Log(this.gameObject.name + " current energy " + this.LightEnergy.CurrentEnergy);
+        }
 
         // if (gameOverCanvas == null)
         // {
@@ -258,7 +271,7 @@ public class Player : LightSource
         // {
         //     gameOverCanvas.SetActive(false);
         // }
-        
+
         // playerVelocity = (int)this.Rigidbody.velocity.magnitude;
         // playerSound.SetPlayerVelocity(playerVelocity);
 
@@ -279,7 +292,7 @@ public class Player : LightSource
         {
             this.isSafe = true;
             SetCanAbsorbState(false); //remove canAbsorb
-            gameOverCanvas.SetActive(true);
+            // gameOverCanvas.SetActive(true);
             RestartGame();
         }
         else
@@ -546,6 +559,14 @@ public class Player : LightSource
     /// </summary>
     private void Move()
     {
+        
+        if (isDead)
+        {
+            // Slow down gravity;
+            Rigidbody.AddForce(Vector3.up * 20, ForceMode.Force);
+            return;
+        }
+        
         // Ensure that the rigidbody never spins
         this.Rigidbody.angularVelocity = Vector3.zero;
 
@@ -588,11 +609,7 @@ public class Player : LightSource
             movement.Brake(brakeAxis);
         }
 
-        if (isDead)
-        {
-            // Slow down gravity;
-            Rigidbody.AddForce(Vector3.up * 20, ForceMode.Force);
-        }
+        
 
         // Makes the character follow the left stick's rotation
         movement.FollowLeftStickRotation();
@@ -651,11 +668,16 @@ public class Player : LightSource
     /// </summary>
     private void RestartGame()
     {
+        if (!isLocalPlayer) { return; }
         if (Input.GetButtonDown("Restart"))
         {
 
             Debug.Log("Game Restarted");
-            gameOverCanvas.SetActive(false);
+
+            if (gameOverCanvas != null)
+            {
+                gameOverCanvas.SetActive(false);
+            }
             Transform.localScale = new Vector3(1, 1, 1);
             Rigidbody.isKinematic = false;
             Rigidbody.useGravity = false;
@@ -666,16 +688,41 @@ public class Player : LightSource
             this.Rigidbody.drag = defaultDrag; // reset drag
             this.transform.FindChild("ProbeModel").gameObject.SetActive(true); //reactivate bubbles
             SetCanAbsorbState(true); //reset canAbsorb
-            ReactivateObjects();
-            
-            LoadGame();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            OnRespawn();   
+
+
+            // ReactivateObjects();
+
+            // LoadGame();
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+    
+    private NetworkStartPosition[] spawnPoints;
+    
+    public void OnRespawn()
+    {
+        if (!isServer) { return; }
+        RpcRespawn();
+    }
+
+    [ClientRpc]
+    void RpcRespawn()
+    {
+        if (isLocalPlayer)
+        {
+            Vector3 spawnPoint = Vector3.zero;
+            if (spawnPoints != null && spawnPoints.Length > 0)
+            {
+                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+                // maybe have it iterate instead of being random
+            }
+            transform.position = spawnPoint;
         }
     }
     
     private void ReactivateObjects()
     {
-        
         ObjectPooler.current.ResetPool();
     }
 

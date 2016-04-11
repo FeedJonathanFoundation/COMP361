@@ -13,9 +13,9 @@ public class NetworkHealthBar : NetworkBehaviour
     private float multiplier;
     [SerializeField]
     private float maxHealth;
+    [SerializeField]
     [SyncVar(hook = "OnLightChanged")]
     private float currentHealth;
-    private bool restartButtonPushed = false;
     private Player player;
     private NetworkStartPosition[] spawnPoints;
     
@@ -35,6 +35,9 @@ public class NetworkHealthBar : NetworkBehaviour
         {
             player = GetComponent<Player>();
         }
+
+        Debug.Log("Player " + player.gameObject.name + "health initialized");
+
         player.LightEnergy.LightChanged += OnLightChanged;
             
         maxHealth = player.DefaultEnergy;
@@ -52,25 +55,25 @@ public class NetworkHealthBar : NetworkBehaviour
         healthBar.sizeDelta = new Vector2(currentHealth * multiplier, healthBar.sizeDelta.y);
     }
 
-    public void OnRespawn()
-    {
-        if (!isServer) { return; }
-        RpcRespawn();
-    }
+    // public void OnRespawn()
+    // {
+    //     if (!isServer) { return; }
+    //     RpcRespawn();
+    // }
 
-    [ClientRpc]
-    void RpcRespawn()
-    {
-        if (isLocalPlayer)
-        {
-            Vector3 spawnPoint = Vector3.zero;
-            if (spawnPoints != null && spawnPoints.Length > 0)
-            {
-                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
-                // maybe have it iterate instead of being random
-            }
-            transform.position = spawnPoint;
-        }
-    }
+    // [ClientRpc]
+    // void RpcRespawn()
+    // {
+    //     if (isLocalPlayer)
+    //     {
+    //         Vector3 spawnPoint = Vector3.zero;
+    //         if (spawnPoints != null && spawnPoints.Length > 0)
+    //         {
+    //             spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+    //             // maybe have it iterate instead of being random
+    //         }
+    //         transform.position = spawnPoint;
+    //     }
+    // }
 
 }
