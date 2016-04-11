@@ -2690,7 +2690,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   healthBarWidth: 200
   healthBar: {fileID: 22448344}
-  maxHealth: 0
+  maxHealth: 40
+  currentHealth: 40
+  player: {fileID: 11479062}
 --- !u!114 &11456262
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2847,6 +2849,8 @@ MonoBehaviour:
   eatFlashDuration: 0.5
   hitFlashDuration: 2
   gameOverCanvasPrefab: {fileID: 0}
+  buffer: 1
+  lastEnergy: 0
 --- !u!114 &11479836
 MonoBehaviour:
   m_ObjectHideFlags: 1

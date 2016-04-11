@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
-// using UnityEngine.Networking;
+using UnityEngine.Networking;
 
 /// <summary>
 /// Player class is responsible for behaviour related to player's object
@@ -164,7 +164,7 @@ public class Player : LightSource
     {
         base.Awake(); // call parent LightSource Awake() first
         if (isLocalPlayer)
-        {                      
+        {
             if (playerInstance != null && playerInstance != this)
             {
                 GameObject.Destroy(this.gameObject);
@@ -173,10 +173,11 @@ public class Player : LightSource
             {
                 DontDestroyOnLoad(this.gameObject);
                 playerInstance = this;
-                
+
                 Debug.Log("CREATE CAMERA");
             }
         }
+
 
         this.movement = new PlayerMovement(massEjectionTransform, lightBallPrefab, thrustForce, changeDirectionBoost, thrustEnergyCost, brakeDrag, this.Transform, this.Rigidbody, this.LightEnergy, this.jetFuelEffect, this.rotationSpeed);
         this.lightToggle = new PlayerLightToggle(this.Transform.Find("LightsToToggle").gameObject, defaultLightStatus, this, minimalEnergyRestrictionToggleLights, propulsionLightRange);
@@ -187,14 +188,18 @@ public class Player : LightSource
         this.isSafe = true;
         this.controllerRumble = GetComponent<ControllerRumble>();
         playerSound = GetComponent<PlayerSound>();
-        
+
         this.currentLevel = SceneManager.GetActiveScene().buildIndex;
-        
+
+        // Debug
+        lastEnergy = LightEnergy.CurrentEnergy;
+        this.LightEnergy.Add(this.DefaultEnergy);
+
         LoadGame();
         ResetPlayerState();
-        
+
         // gameOverCanvas = GameObject.FindWithTag("GameOverCanvas");
-        
+
         // UI = GameObject.FindWithTag("UI");
 
         // if (gameOverCanvas == null)
@@ -210,8 +215,8 @@ public class Player : LightSource
         //     }
         // }
 
-        #if UNITY_EDITOR
-            this.ValidateInputs();
+#if UNITY_EDITOR
+        this.ValidateInputs();
         #endif
     }
     
@@ -235,6 +240,10 @@ public class Player : LightSource
     }
 
 
+    // debugging
+    public float buffer = 2f;
+    public float lastEnergy;
+
     /// <summary>
     /// Listens for player states such as movement, light controls and death
     /// Called once per frame
@@ -244,6 +253,12 @@ public class Player : LightSource
         if (!isLocalPlayer) { return; }
 
         base.Update();
+
+        if (lastEnergy - this.LightEnergy.CurrentEnergy > buffer)
+        {
+            Debug.Log(this.gameObject.name + " current energy " + this.LightEnergy.CurrentEnergy);
+            lastEnergy = this.LightEnergy.CurrentEnergy;
+        }
 
         // if (gameOverCanvas == null)
         // {
@@ -258,7 +273,7 @@ public class Player : LightSource
         // {
         //     gameOverCanvas.SetActive(false);
         // }
-        
+
         // playerVelocity = (int)this.Rigidbody.velocity.magnitude;
         // playerSound.SetPlayerVelocity(playerVelocity);
 
@@ -279,7 +294,7 @@ public class Player : LightSource
         {
             this.isSafe = true;
             SetCanAbsorbState(false); //remove canAbsorb
-            gameOverCanvas.SetActive(true);
+            // gameOverCanvas.SetActive(true);
             RestartGame();
         }
         else
@@ -309,6 +324,7 @@ public class Player : LightSource
     /// </summary>
     protected override void OnLightDepleted()
     {
+        if (!isLocalPlayer) { return; }
         base.OnLightDepleted();
 
         // If the player just died
@@ -360,10 +376,14 @@ public class Player : LightSource
     /// <param name="isSmooth">if true, the color change will follow a smooth gradient</param>
     protected override void ChangeColor(Color color, bool isSmooth, float seconds)
     {
+        if (!isLocalPlayer) { return; }
         if (changeColorCoroutine != null) { StopCoroutine(changeColorCoroutine); }
         
         foreach (GameObject probe in GameObject.FindGameObjectsWithTag("Probe"))
         {
+            string probeName = probe.transform.root.gameObject.name;
+            if (probeName != this.name) { return; }
+            
             Renderer renderer = probe.GetComponent<Renderer>();
             foreach (Material material in renderer.materials)
             {
@@ -410,6 +430,9 @@ public class Player : LightSource
         
         foreach (GameObject probe in GameObject.FindGameObjectsWithTag("Probe"))
         {
+            string probeName = probe.transform.root.gameObject.name;
+            if (probeName != this.name) { return; }
+            
             Renderer renderer = probe.GetComponent<Renderer>();
             foreach (Material material in renderer.materials)
             {
@@ -546,6 +569,14 @@ public class Player : LightSource
     /// </summary>
     private void Move()
     {
+        
+        if (isDead)
+        {
+            // Slow down gravity;
+            Rigidbody.AddForce(Vector3.up * 20, ForceMode.Force);
+            return;
+        }
+        
         // Ensure that the rigidbody never spins
         this.Rigidbody.angularVelocity = Vector3.zero;
 
@@ -588,11 +619,7 @@ public class Player : LightSource
             movement.Brake(brakeAxis);
         }
 
-        if (isDead)
-        {
-            // Slow down gravity;
-            Rigidbody.AddForce(Vector3.up * 20, ForceMode.Force);
-        }
+        
 
         // Makes the character follow the left stick's rotation
         movement.FollowLeftStickRotation();
@@ -651,11 +678,16 @@ public class Player : LightSource
     /// </summary>
     private void RestartGame()
     {
+        if (!isLocalPlayer) { return; }
         if (Input.GetButtonDown("Restart"))
         {
 
             Debug.Log("Game Restarted");
-            gameOverCanvas.SetActive(false);
+
+            if (gameOverCanvas != null)
+            {
+                gameOverCanvas.SetActive(false);
+            }
             Transform.localScale = new Vector3(1, 1, 1);
             Rigidbody.isKinematic = false;
             Rigidbody.useGravity = false;
@@ -666,16 +698,41 @@ public class Player : LightSource
             this.Rigidbody.drag = defaultDrag; // reset drag
             this.transform.FindChild("ProbeModel").gameObject.SetActive(true); //reactivate bubbles
             SetCanAbsorbState(true); //reset canAbsorb
-            ReactivateObjects();
-            
-            LoadGame();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+            OnRespawn();   
+
+
+            // ReactivateObjects();
+
+            // LoadGame();
+            // SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        }
+    }
+    
+    private NetworkStartPosition[] spawnPoints;
+    
+    public void OnRespawn()
+    {
+        if (!isServer) { return; }
+        RpcRespawn();
+    }
+
+    [ClientRpc]
+    void RpcRespawn()
+    {
+        if (isLocalPlayer)
+        {
+            Vector3 spawnPoint = Vector3.zero;
+            if (spawnPoints != null && spawnPoints.Length > 0)
+            {
+                spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
+                // maybe have it iterate instead of being random
+            }
+            transform.position = spawnPoint;
         }
     }
     
     private void ReactivateObjects()
     {
-        
         ObjectPooler.current.ResetPool();
     }
 
