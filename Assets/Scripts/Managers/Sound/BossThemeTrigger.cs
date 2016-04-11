@@ -20,8 +20,8 @@ public class BossThemeTrigger : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            AkSoundEngine.PostEvent("Ambient3", this.gameObject);
-            AkSoundEngine.PostEvent("Ambient2Stop", this.gameObject);
+            // AkSoundEngine.PostEvent("Ambient3", this.gameObject);
+            // AkSoundEngine.PostEvent("Ambient2Stop", this.gameObject);
         }
     }
 }

@@ -24,8 +24,8 @@ public class PlayerSound : MonoBehaviour
             return;
         }
         target = player.gameObject;
-        AkSoundEngine.SetState("PlayerLife", "Alive");
-        AkSoundEngine.PostEvent("Default", target); 
+        // AkSoundEngine.SetState("PlayerLife", "Alive");
+        // AkSoundEngine.PostEvent("Default", target); 
     }
     void OnCollisionEnter(Collision collision)
     {
