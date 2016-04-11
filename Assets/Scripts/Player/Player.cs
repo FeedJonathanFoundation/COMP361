@@ -112,11 +112,8 @@ public class Player : LightSource
     private GameObject gameOverCanvas;
     private int currentLevel;
     public int playerVelocity;
-
-    [Header("Emissive Colours")]
     [SerializeField]
     private Color probeColorOn;
-    
     [SerializeField]    
     private Color probeColorOff;
     
@@ -176,9 +173,16 @@ public class Player : LightSource
 
                 Debug.Log("CREATE CAMERA");
             }
+            
+            
         }
-
-
+        if (isLocalPlayer)
+        {
+            probeColorOn = localProbeColorOn;
+            probeColorOff = localProbeColorOff;
+            ChangeColor(probeColorOff, false, 0);
+        }
+        
         this.movement = new PlayerMovement(massEjectionTransform, lightBallPrefab, thrustForce, changeDirectionBoost, thrustEnergyCost, brakeDrag, this.Transform, this.Rigidbody, this.LightEnergy, this.jetFuelEffect, this.rotationSpeed);
         this.lightToggle = new PlayerLightToggle(this.Transform.Find("LightsToToggle").gameObject, defaultLightStatus, this, minimalEnergyRestrictionToggleLights, propulsionLightRange);
         this.materials = new MaterialExtensions();
@@ -191,9 +195,12 @@ public class Player : LightSource
 
         this.currentLevel = SceneManager.GetActiveScene().buildIndex;
 
-        // Debug
-        lastEnergy = LightEnergy.CurrentEnergy;
-        this.LightEnergy.Add(this.DefaultEnergy);
+        if (isLocalPlayer)
+        {
+            // Debug
+            lastEnergy = LightEnergy.CurrentEnergy;
+            this.LightEnergy.Add(this.DefaultEnergy);
+        }
 
         LoadGame();
         ResetPlayerState();
@@ -220,12 +227,12 @@ public class Player : LightSource
         #endif
     }
     
-    public override void OnStartLocalPlayer()
-    {
-        probeColorOn = localProbeColorOn;
-        probeColorOff = localProbeColorOff;
-        ChangeColor(probeColorOff, false, 0);
-    }
+    // public override void OnStartLocalPlayer()
+    // {
+    //     probeColorOn = localProbeColorOn;
+    //     probeColorOff = localProbeColorOff;
+    //     ChangeColor(probeColorOff, false, 0);
+    // }
 
     public override void OnEnable()
     {
@@ -462,13 +469,13 @@ public class Player : LightSource
                     
                     if (this.lightToggle.LightsEnabled)
                     {
-                        this.ChangeColor(probeColorOn, true, 0);
+                        this.ChangeColor(probeColorOn, true, 0f);
                         changeIntensityCoroutine = materials.ChangeLightIntensity(this.lightToggle, 0.3f);
                         StartCoroutine(changeIntensityCoroutine);
                     }
                     else
                     {
-                        this.ChangeColor(probeColorOff, true, 0);
+                        this.ChangeColor(probeColorOff, true, 0f);
                         changeIntensityCoroutine = materials.ChangeLightIntensity(this.lightToggle, 0f); 
                         StartCoroutine(changeIntensityCoroutine);
                     }
@@ -478,7 +485,7 @@ public class Player : LightSource
                     // If the player isn't thrusting, turn off his emissive lights
                     if (!movement.Thrusting)
                     {
-                        this.ChangeColor(probeColorOff, true, 0);
+                        this.ChangeColor(probeColorOff, true, 0f);
                     }
                     playerSound.InsufficientEnergySound();
                 }
@@ -576,7 +583,7 @@ public class Player : LightSource
             Rigidbody.AddForce(Vector3.up * 20, ForceMode.Force);
             return;
         }
-        
+
         // Ensure that the rigidbody never spins
         this.Rigidbody.angularVelocity = Vector3.zero;
 
