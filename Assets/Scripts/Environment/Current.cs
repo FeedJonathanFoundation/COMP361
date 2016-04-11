@@ -122,6 +122,11 @@ public class Current : MonoBehaviour
     {
         if (!particles)
         {
+            GameObject mainCamera = GameObject.FindWithTag("MainCamera");
+            if (mainCamera != null)
+            {
+                this.smoothCamera = mainCamera.GetComponent<SmoothCamera>();
+            }
             Transform child = smoothCamera.gameObject.transform.FindChild(particleDirection);
             particles = (GameObject)Instantiate(child.gameObject, this.transform.position, child.transform.rotation);
             particles.SetActive(true);
