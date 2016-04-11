@@ -66,8 +66,8 @@ public abstract class AbstractFish : LightSource
     {
         if (!isServer) { return; }
         base.Update();
+        
         List<NPCActionable> activeActions = actions.GetActiveActions();
-
         foreach (NPCActionable action in activeActions)
         {
             action.Execute(steerable);
@@ -85,12 +85,8 @@ public abstract class AbstractFish : LightSource
         {
             if (deathParticles != null)
             {
-                GameObject.Instantiate(deathParticles, transform.position,
-                                    transform.rotation);
-                                    
-                //Debug.Log("FISH DEAD");
+                GameObject.Instantiate(deathParticles, transform.position, transform.rotation);
             }
-            
             Dead = true;
         }
         OnActiveChange(false);

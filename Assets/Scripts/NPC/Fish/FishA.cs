@@ -1,8 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-// Small, easy to kill NPCs
-// Run away upon close contact
+/// <summary>
+/// FishA class is responsible for behaviour related to fish A
+/// Small, easy to kill NPCs
+///
+/// @author - Stella L.
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
+/// </summary>
 public class FishA : AbstractFish
 {
     [SerializeField]
@@ -16,6 +23,9 @@ public class FishA : AbstractFish
     [SerializeField]
     private SeekFlare flareBehaviour;
     
+    /// <summary>
+    /// Initializes the fish object
+    /// </summary>
     protected override void Awake()
     {        
         base.Awake(); 
@@ -29,6 +39,9 @@ public class FishA : AbstractFish
         flareBehaviour.Init();
     }
     
+    /// <summary>
+    /// Set's the fish's lowest priority to the default flocking behaviour
+    /// </summary>
     public override void Move() 
     {
         flockingBehaviour.SetPriority(0);   // Lowest priority
@@ -36,35 +49,26 @@ public class FishA : AbstractFish
         AddAction(flockingBehaviour);
     }
     
-    // Called every frame when the fish can see the player
+    /// <summary>
+    /// Called every frame when the fish can see the player
+    /// </summary>
     public override void ReactToPlayer(Transform player)
     {        
-        // Flee flee = new Flee(1, -1, player);
-        // flee.strengthMultiplier = 50f;
-        // flee.overrideSteerableSpeed = true;
-        // flee.minSpeed = 6f;
-        // flee.maxSpeed = 6f;
-        
         playerBehaviour.TargetLightSource = player.GetComponent<LightSource>();
         AddAction(playerBehaviour);
     }
     
-    public override void ReactToNPC(Transform other)
-    {
-        /*AbstractFish fish = other.gameObject.GetComponent<AbstractFish>();
-        int id = fish.GetID();
-        Flee flee = new Flee(1, other);
-        actions.InsertAction(id, flee);*/
-    }
+    public override void ReactToNPC(Transform other) { }
     
-    public override void NPCOutOfSight(Transform other)
-    {
-    }
+    public override void NPCOutOfSight(Transform other) { }
     
+    /// <summary>
+    /// Seeks the flare when it is nearby
+    /// </summary>
     public override void ReactToFlare(Transform flare)
     {
-        // Seek the flare
         flareBehaviour.TargetFlare = flare;
         AddAction(flareBehaviour);
     }
+    
 }
