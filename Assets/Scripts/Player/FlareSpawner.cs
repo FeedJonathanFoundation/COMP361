@@ -87,7 +87,7 @@ public class FlareSpawner : NetworkBehaviour
         if (flare != null)
         {
             flareDistance = Vector3.Distance(flare.transform.position, player.position);
-            flareSound.SetFlareDistance(flareDistance);
+            // flareSound.SetFlareDistance(flareDistance);
         }
     }
     
@@ -101,8 +101,10 @@ public class FlareSpawner : NetworkBehaviour
         rigidbody.AddForce(-flareSpawnObject.right * recoilForce, ForceMode.Impulse);
         controllerRumble.ShotFlare();   // Rumble the controller
         timer = 0.0f;
-        flareSound = new FlareSound(flare);
-        flareSound.ShootFlareSound();
+
+        Debug.Log("Stella refactor flare sound");
+        // flareSound = new FlareSound(flare);
+        // flareSound.ShootFlareSound();
 
         //reset all values for the zoom whenever player fires a flare
         if (smoothCamera != null)
