@@ -1,7 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class DestroyParticles : MonoBehaviour {
+public class DestroyParticles : MonoBehaviour
+{
 
     public float destroyTime = 7;
 
@@ -19,9 +20,5 @@ public class DestroyParticles : MonoBehaviour {
 
         gameObject.SetActive(false);
     }
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+
 }
