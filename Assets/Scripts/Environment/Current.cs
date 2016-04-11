@@ -190,7 +190,7 @@ public class Current : MonoBehaviour
             if (rigidbody != null)
             {
                 // Plays the current sound
-                AkSoundEngine.PostEvent("Current", this.gameObject);          
+                // AkSoundEngine.PostEvent("Current", this.gameObject);          
                 Vector3 initialVelocity = rigidbody.velocity;
                 rigidbody.AddForce(-initialVelocity);
                 rigidbody.AddForce(strength * direction);
