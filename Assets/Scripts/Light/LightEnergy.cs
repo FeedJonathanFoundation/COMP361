@@ -84,7 +84,7 @@ public class LightEnergy
 
         // Notify subscribers that the amount of energy in this light has changed
         LightChanged(this.currentEnergy);
-        //Debug.Log("LIGHT CHANGED on " + gameObject.name);
+        Debug.Log("LIGHT CHANGED on " + gameObject.name);
         
         // If all light was depleted from this light source
         if (this.currentEnergy <= 0)

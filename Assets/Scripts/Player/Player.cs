@@ -164,7 +164,7 @@ public class Player : LightSource
     {
         base.Awake(); // call parent LightSource Awake() first
         if (isLocalPlayer)
-        {                      
+        {
             if (playerInstance != null && playerInstance != this)
             {
                 GameObject.Destroy(this.gameObject);
@@ -173,10 +173,11 @@ public class Player : LightSource
             {
                 DontDestroyOnLoad(this.gameObject);
                 playerInstance = this;
-                
+
                 Debug.Log("CREATE CAMERA");
             }
         }
+
 
         this.movement = new PlayerMovement(massEjectionTransform, lightBallPrefab, thrustForce, changeDirectionBoost, thrustEnergyCost, brakeDrag, this.Transform, this.Rigidbody, this.LightEnergy, this.jetFuelEffect, this.rotationSpeed);
         this.lightToggle = new PlayerLightToggle(this.Transform.Find("LightsToToggle").gameObject, defaultLightStatus, this, minimalEnergyRestrictionToggleLights, propulsionLightRange);
@@ -187,18 +188,18 @@ public class Player : LightSource
         this.isSafe = true;
         this.controllerRumble = GetComponent<ControllerRumble>();
         playerSound = GetComponent<PlayerSound>();
-        
+
         this.currentLevel = SceneManager.GetActiveScene().buildIndex;
 
         // Debug
         lastEnergy = LightEnergy.CurrentEnergy;
-
+        this.LightEnergy.Add(this.DefaultEnergy);
 
         LoadGame();
         ResetPlayerState();
-        
+
         // gameOverCanvas = GameObject.FindWithTag("GameOverCanvas");
-        
+
         // UI = GameObject.FindWithTag("UI");
 
         // if (gameOverCanvas == null)
@@ -214,8 +215,8 @@ public class Player : LightSource
         //     }
         // }
 
-        #if UNITY_EDITOR
-            this.ValidateInputs();
+#if UNITY_EDITOR
+        this.ValidateInputs();
         #endif
     }
     
@@ -240,7 +241,7 @@ public class Player : LightSource
 
 
     // debugging
-    public float buffer = 1f;
+    public float buffer = 2f;
     public float lastEnergy;
 
     /// <summary>
@@ -249,13 +250,14 @@ public class Player : LightSource
     /// </summary>
     protected override void Update()
     {
-        // if (!isLocalPlayer) { return; }
+        if (!isLocalPlayer) { return; }
 
         base.Update();
 
         if (lastEnergy - this.LightEnergy.CurrentEnergy > buffer)
         {
             Debug.Log(this.gameObject.name + " current energy " + this.LightEnergy.CurrentEnergy);
+            lastEnergy = this.LightEnergy.CurrentEnergy;
         }
 
         // if (gameOverCanvas == null)
@@ -322,6 +324,7 @@ public class Player : LightSource
     /// </summary>
     protected override void OnLightDepleted()
     {
+        if (!isLocalPlayer) { return; }
         base.OnLightDepleted();
 
         // If the player just died
@@ -373,10 +376,14 @@ public class Player : LightSource
     /// <param name="isSmooth">if true, the color change will follow a smooth gradient</param>
     protected override void ChangeColor(Color color, bool isSmooth, float seconds)
     {
+        if (!isLocalPlayer) { return; }
         if (changeColorCoroutine != null) { StopCoroutine(changeColorCoroutine); }
         
         foreach (GameObject probe in GameObject.FindGameObjectsWithTag("Probe"))
         {
+            string probeName = probe.transform.root.gameObject.name;
+            if (probeName != this.name) { return; }
+            
             Renderer renderer = probe.GetComponent<Renderer>();
             foreach (Material material in renderer.materials)
             {
@@ -423,6 +430,9 @@ public class Player : LightSource
         
         foreach (GameObject probe in GameObject.FindGameObjectsWithTag("Probe"))
         {
+            string probeName = probe.transform.root.gameObject.name;
+            if (probeName != this.name) { return; }
+            
             Renderer renderer = probe.GetComponent<Renderer>();
             foreach (Material material in renderer.materials)
             {

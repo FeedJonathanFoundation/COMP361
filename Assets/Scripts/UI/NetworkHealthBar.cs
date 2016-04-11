@@ -16,40 +16,47 @@ public class NetworkHealthBar : NetworkBehaviour
     [SerializeField]
     [SyncVar(hook = "OnLightChanged")]
     private float currentHealth;
+    [SerializeField]
     private Player player;
     private NetworkStartPosition[] spawnPoints;
     
     void Start()
     {
+        if (!isLocalPlayer) { return; }
         InitializePlayer(); 
+        InitializeHealthBar();
+        player.LightEnergy.LightChanged += OnLightChanged;
+
         spawnPoints = FindObjectsOfType<NetworkStartPosition>();
     }
-    void onDisable()
+    
+    void OnDisable()
     {
+        if (!isLocalPlayer) { return; }
         player.LightEnergy.LightChanged -= OnLightChanged;
     }
     
     void InitializePlayer()
     {
-        if (player == null)
-        {
-            player = GetComponent<Player>();
-        }
-
-        Debug.Log("Player " + player.gameObject.name + "health initialized");
-
-        player.LightEnergy.LightChanged += OnLightChanged;
-            
+        player = GetComponent<Player>();
+    }
+    
+    void InitializeHealthBar()
+    {
+        if (!isLocalPlayer) { return; }
         maxHealth = player.DefaultEnergy;
         currentHealth = maxHealth;
         
         multiplier = healthBarWidth / maxHealth;
+        
+        healthBar.sizeDelta = new Vector2(currentHealth * multiplier, healthBar.sizeDelta.y);
     }
     
     void OnLightChanged(float currentEnergy)
     {
-        if (maxHealth == 0) { InitializePlayer(); }
-
+        if (!isLocalPlayer) { return; }
+        if (maxHealth == 0 || player == null) { InitializePlayer(); }
+        
         // Debug.Log("currentEnergy: " + currentEnergy + "\n healthBar: " + healthBar.sizeDelta.x);
         currentHealth = currentEnergy;
         healthBar.sizeDelta = new Vector2(currentHealth * multiplier, healthBar.sizeDelta.y);
