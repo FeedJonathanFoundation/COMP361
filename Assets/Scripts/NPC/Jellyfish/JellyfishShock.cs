@@ -34,23 +34,32 @@ public class JellyfishShock : MonoBehaviour
     private Color probeColorHit = new Color(1, 0.067f, 0.067f);
     
     private ControllerRumble controllerRumble;  // Caches the controller rumble component
+    private SoundManager soundManager;
+    
+    void Start()
+    {
+        GameObject soundObject = GameObject.FindWithTag("SoundManager");
+        if (soundObject != null)
+        {
+            soundManager = soundObject.GetComponent<SoundManager>();
+        }
+    }
     
     void OnTriggerEnter(Collider col)
     {
         if(col.tag == "Player")
         {
-            // timer += Time.deltaTime;
-            // if(timer > timeBeforeEnergyLost)
-            // {
             Player player = col.GetComponent<Player>();
             if(player)
             {
                 Knockback(player);
                 player.LightEnergy.Deplete(energyLost);
-                // AkSoundEngine.PostEvent("JellyfishAttack", this.gameObject);
+                
+                if (soundManager != null)
+                {
+                    soundManager.PlaySound("JellyfishAttack", this.gameObject);
+                }
             }
-                // timer = 0;
-            // }
         }
     }
     
@@ -108,7 +117,10 @@ public class JellyfishShock : MonoBehaviour
     {
         if (col.tag == "Player")
         {
-            // AkSoundEngine.PostEvent("StopJellyfishAttack", this.gameObject);
+            if (soundManager != null)
+            {
+                soundManager.PlaySound("StopJellyfishAttack", this.gameObject);
+            }
         }
     }
     

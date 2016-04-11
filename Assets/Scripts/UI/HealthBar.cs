@@ -10,11 +10,18 @@ public class HealthBar : MonoBehaviour {
     public Image background;
     private IEnumerator flashingBar;
     private bool isBarFlashing = false;
+    private SoundManager soundManager;
 
     void Start()
     {
         player = GameObject.Find("Player").GetComponent<Player>();
         player.LightEnergy.LightChanged += OnLightChanged;
+        
+        GameObject soundObject = GameObject.FindWithTag("SoundManager");
+        if (soundObject != null)
+        {
+            soundManager = soundObject.GetComponent<SoundManager>();
+        }
     }
     
     void Update()
@@ -49,7 +56,7 @@ public class HealthBar : MonoBehaviour {
             
             yield return new WaitForSeconds(0.35f);
             fill.enabled = true;
-            // AkSoundEngine.PostEvent("CriticalHealth", this.gameObject);
+            
         }
     } 
     
@@ -62,5 +69,13 @@ public class HealthBar : MonoBehaviour {
     {
         // Debug.Log("currentEnergy: " + currentEnergy + "\n healthBar: " + healthBar.value);
         healthBar.value = currentEnergy * 100;
+    }
+    
+    private void PlayCriticalHealthSound()
+    {
+        if (soundManager != null)
+        {
+            soundManager.PlaySound("", this.gameObject);
+        }
     }
 }

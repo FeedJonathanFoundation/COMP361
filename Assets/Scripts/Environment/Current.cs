@@ -45,6 +45,7 @@ public class Current : MonoBehaviour
     private SmoothCamera smoothCamera;
     private bool playerInCurrent;
     private GameObject particles;
+    private SoundManager soundManager;
 
     /// <summary>
     /// Initializes the current.
@@ -56,6 +57,11 @@ public class Current : MonoBehaviour
         if (mainCamera != null)
         {
             this.smoothCamera = mainCamera.GetComponent<SmoothCamera>();
+        }
+        GameObject soundObject = GameObject.FindWithTag("SoundManager");
+        if (soundObject != null)
+        {
+            soundManager = soundObject.GetComponent<SoundManager>();
         }
         // By default, the current pushes downward.
         SetDirection();
@@ -99,6 +105,8 @@ public class Current : MonoBehaviour
                 }
             }
         }
+
+        Debug.Log("SHOULD PROBABLY CALL A FUNCTION IN SMOOTH CAMERA INSTEAD");
     }
 
     /// <summary>
@@ -190,7 +198,10 @@ public class Current : MonoBehaviour
             if (rigidbody != null)
             {
                 // Plays the current sound
-                // AkSoundEngine.PostEvent("Current", this.gameObject);          
+                if (soundManager != null)
+                {
+                    soundManager.PlaySound("Current", this.gameObject);
+                }          
                 Vector3 initialVelocity = rigidbody.velocity;
                 rigidbody.AddForce(-initialVelocity);
                 rigidbody.AddForce(strength * direction);

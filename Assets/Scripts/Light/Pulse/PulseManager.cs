@@ -16,12 +16,18 @@ public class PulseManager : MonoBehaviour
     private float y;
     private Vector3 lastPosition = Vector3.zero;
     private bool stopped = false;
-    
-	void Start()
+    private SoundManager soundManager;
+
+    void Start()
     {
 	   mainCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
        player = GameObject.FindGameObjectWithTag("Player").transform;
        particles = GameObject.Find("Pulse").GetComponent<ParticleSystem>();
+       GameObject soundObject = GameObject.FindWithTag("SoundManager");
+        if (soundObject != null)
+        {
+            soundManager = soundObject.GetComponent<SoundManager>();
+        }
        InvokeRepeating("PulseSound", 0f, particles.duration);
     }
 	
@@ -37,7 +43,10 @@ public class PulseManager : MonoBehaviour
     
     void PulseSound()
     {
-        // AkSoundEngine.PostEvent("Pulse", this.transform.gameObject);
+        if (soundManager != null)
+        {
+            soundManager.PlaySound("Pulse", this.gameObject);
+        }
     }
     
     void CalculatePosition()
