@@ -1,6 +1,9 @@
-# Ubisoft Game Lab 2016 - FJF Entry
+# COMP 361 - Winter 2016
 
-FJF's entry for the Ubisoft 2016 Game Lab Competition.
+FJF's project for the COMP 361 Software Engineering Project.
+
+If there are troubles downloading the repo, use the following command:
+	- ```git config --global http.postBuffer 1048576000```
 
 ## Controls
 | Action        | Xbox 360 Controller | Keyboard                  |
@@ -24,8 +27,8 @@ FJF's entry for the Ubisoft 2016 Game Lab Competition.
 ## Dev Repo Setup:
 
 1. In Terminal, navigate to your working directory
-2. Enter the following command: ```git clone https://github.com/FeedJonathanFoundation/ubisoft-game-lab```
-3. Navigate into the newly created repository: ```cd ubisoft-game-lab```
+2. Enter the following command: ```git clone https://github.com/FeedJonathanFoundation/comp361.git```
+3. Navigate into the newly created repository: ```cd comp361```
 4. Replace *your_branch* with a more informative name and create a new branch: ```git checkout -b your_branch```
 5. Get to coding!
 5. Once you're ready to merge your changes, run the following commands: 
