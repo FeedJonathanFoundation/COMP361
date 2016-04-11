@@ -2,9 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 
-// Medium, hard to kill NPCs
-// Seeks smaller fish by default
-// Run away from large fish upon close contact
+/// <summary>
+/// FishA class is responsible for behaviour related to fish A
+/// Medium, hard to kill NPCs
+/// Seeks smaller fish by default
+/// Runs away from large fish upon close contact
+
+/// @author - Stella L.
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
+/// </summary>
 public class FishB : AbstractFish
 {
     [SerializeField]
@@ -22,6 +30,9 @@ public class FishB : AbstractFish
     [SerializeField]
     private SeekFlare flareBehaviour;
     
+    /// <summary>
+    /// Initializes the fish object
+    /// </summary>
     protected override void Awake()
     {
         // call parent LightSource Awake() first
@@ -39,6 +50,9 @@ public class FishB : AbstractFish
         flareBehaviour.Init();
     }
     
+    /// <summary>
+    /// Set's the fish's lowest priority to the default flocking behaviour
+    /// </summary>
     public override void Move() 
     {
         flockingBehaviour.SetPriority(0);   // Lowest priority
@@ -46,15 +60,11 @@ public class FishB : AbstractFish
         AddAction(flockingBehaviour);
     }
     
-    // Called every frame when the fish can see the player
+    /// <summary>
+    /// Called every frame when the fish can see the player
+    /// </summary>
     public override void ReactToPlayer(Transform player)
     {        
-        // Flee flee = new Flee(1, -1, player);
-        // flee.strengthMultiplier = 50f;
-        // flee.overrideSteerableSpeed = true;
-        // flee.minSpeed = 6f;
-        // flee.maxSpeed = 6f;
-        
         playerBehaviour.TargetLightSource = player.GetComponent<LightSource>();
         AddAction(playerBehaviour);
     }
@@ -62,10 +72,8 @@ public class FishB : AbstractFish
     public override void ReactToNPC(Transform other)
     {                
         LightSource currentFishTarget = otherFishBehaviour.TargetLightSource;
-        
         if (currentFishTarget == null)
         {
-            // Debug.Log("React to new fish: " + other.name);
             AbstractFish fish = other.gameObject.GetComponent<AbstractFish>();
             string id = fish.GetID();
             
@@ -84,10 +92,13 @@ public class FishB : AbstractFish
         }
     }
     
+    /// <summary>
+    /// Seeks the flare when it is nearby
+    /// </summary>
     public override void ReactToFlare(Transform flare)
     {
-        // Seek the flare
         flareBehaviour.TargetFlare = flare;
         AddAction(flareBehaviour);
     }
+    
 }

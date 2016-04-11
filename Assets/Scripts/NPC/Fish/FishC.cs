@@ -20,9 +20,11 @@ public class FishC : AbstractFish
     [SerializeField]
     private SeekFlare flareBehaviour;
     
+    /// <summary>
+    /// Initializes the fish object
+    /// </summary>
     protected override void Awake()
     {
-        // call parent LightSource Awake() first
         base.Awake(); 
         
         otherFishBehaviour.SetPriority(1);  // Medium priority
@@ -37,6 +39,9 @@ public class FishC : AbstractFish
         flareBehaviour.Init();
     }
     
+    /// <summary>
+    /// Set's the fish's lowest priority to the default flocking behaviour
+    /// </summary>
     public override void Move() 
     {
         flockingBehaviour.SetPriority(0);   // Lowest priority
@@ -44,15 +49,11 @@ public class FishC : AbstractFish
         AddAction(flockingBehaviour);
     }
     
-    // Called every frame when the fish can see the player
+    /// <summary>
+    /// Called every frame when the fish can see the player
+    /// </summary>
     public override void ReactToPlayer(Transform player)
     {        
-        // Flee flee = new Flee(1, -1, player);
-        // flee.strengthMultiplier = 50f;
-        // flee.overrideSteerableSpeed = true;
-        // flee.minSpeed = 6f;
-        // flee.maxSpeed = 6f;
-        
         playerBehaviour.TargetLightSource = player.GetComponent<LightSource>();
         AddAction(playerBehaviour);
     }
@@ -81,10 +82,13 @@ public class FishC : AbstractFish
         }
     }
     
+    /// <summary>
+    /// Seeks the flare when it is nearby
+    /// </summary>
     public override void ReactToFlare(Transform flare)
     {
-        // Seek the flare
         flareBehaviour.TargetFlare = flare;
         AddAction(flareBehaviour);
     }
+    
 }
