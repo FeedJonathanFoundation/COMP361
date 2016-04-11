@@ -176,6 +176,10 @@ public class Player : LightSource
 
                 Debug.Log("CREATE CAMERA");
             }
+            
+            probeColorOn = localProbeColorOn;
+            probeColorOff = localProbeColorOff;
+            ChangeColor(probeColorOff, false, 0);
         }
 
 
@@ -220,12 +224,12 @@ public class Player : LightSource
         #endif
     }
     
-    public override void OnStartLocalPlayer()
-    {
-        probeColorOn = localProbeColorOn;
-        probeColorOff = localProbeColorOff;
-        ChangeColor(probeColorOff, false, 0);
-    }
+    // public override void OnStartLocalPlayer()
+    // {
+    //     probeColorOn = localProbeColorOn;
+    //     probeColorOff = localProbeColorOff;
+    //     ChangeColor(probeColorOff, false, 0);
+    // }
 
     public override void OnEnable()
     {
@@ -462,13 +466,13 @@ public class Player : LightSource
                     
                     if (this.lightToggle.LightsEnabled)
                     {
-                        this.ChangeColor(probeColorOn, true, 0);
+                        this.ChangeColor(probeColorOn, true, 0f);
                         changeIntensityCoroutine = materials.ChangeLightIntensity(this.lightToggle, 0.3f);
                         StartCoroutine(changeIntensityCoroutine);
                     }
                     else
                     {
-                        this.ChangeColor(probeColorOff, true, 0);
+                        this.ChangeColor(probeColorOff, true, 0f);
                         changeIntensityCoroutine = materials.ChangeLightIntensity(this.lightToggle, 0f); 
                         StartCoroutine(changeIntensityCoroutine);
                     }
@@ -478,7 +482,7 @@ public class Player : LightSource
                     // If the player isn't thrusting, turn off his emissive lights
                     if (!movement.Thrusting)
                     {
-                        this.ChangeColor(probeColorOff, true, 0);
+                        this.ChangeColor(probeColorOff, true, 0f);
                     }
                     playerSound.InsufficientEnergySound();
                 }
