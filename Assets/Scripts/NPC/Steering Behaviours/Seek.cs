@@ -65,7 +65,7 @@ public class Seek : NPCActionable
     {
         if (soundManager != null)
         {
-            soundManager.PlaySound("Detection", this.gameObject);
+            soundManager.PlaySound("Detection", targetTransform.gameObject);
         }
     }
     
