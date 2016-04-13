@@ -1,69 +1,61 @@
 ﻿using UnityEngine;
 using UnityEngine.Networking;
 
+/// <summary>
+/// ???
+///
+/// @author - Jonathan L.A
+/// @author - Alex I.
+/// @version - 1.0.0
+///
+/// </summary>
 public class SmoothCamera : NetworkBehaviour
 {
-    /// <summary>
-    /// The higher the value, the slower the camera moves.
-    /// </summary>
-    public float dampTime = 0.15f;
-    /// <summary>
-    /// The camera will not follow the target if the target this close to the camera's center
-    /// </summary>
+
+    [SerializeField]
+    [Tooltip("The higher the value, the slower the camera moves.")]
+    private float dampTime = 0.15f;
+    [SerializeField]
     [Tooltip("The camera will not follow the target if the target this close to the camera's center")]
-    public float deadzoneRadius;
+    private float deadzoneRadius;
+    [SerializeField]
     [Tooltip("The higher this value, the slower the camera follows the target in the deadzone")]
-    public float deadzoneDampTime = 0.5f;
-    
+    private float deadzoneDampTime = 0.5f;
     [SerializeField]
     [Tooltip("The small speed value")]
     private float speedZoomSmall;
-    
     [SerializeField]
     [Tooltip("The medium speed value")]
     private float speedZoomMedium;
-    
     [SerializeField]
     [Tooltip("Z value for camera when player has small speed")]
     private float smallZoomValue;
-    
     [SerializeField]
     [Tooltip("Z value for camera when player has medium speed")]
     private float mediumZoomValue;
-    
     [SerializeField]
     [Tooltip("Z value for camera on flare launch")]
     private float maxZoomValue;
-    
     [SerializeField]
     [Tooltip("Z value for camera in zoom zones")]
     private float zoomZonesValue;
-    
     [SerializeField]
     [Tooltip("Amount of time before camera zooms back into the player")]
     private float timeBeforeZoomIn;
-    
     [SerializeField]
     [Tooltip("Camera zoom in speed")]
     private float zoomInSpeed;
-    
     [SerializeField]
     [Tooltip("Camera zoom out speed")]
     private float zoomOutSpeed;
-    
-    /// <summary>
-    /// The object that the camera follows.
-    /// </summary>
-    public Transform target;
-
-    /// <summary>
-    /// The camera's default z-value.
-    /// </summary>
-    public float zPosition;
-
+    [SerializeField]
+    [Tooltip("The object that the camera follows.")]
+    private Transform target;
+    [SerializeField]
+    [Tooltip("The camera's default z-value.")]
+    private float zPosition;
     private float deadzoneRadiusSquared;
     private new Transform transform;
-    
     private Vector2 velocity = Vector2.zero;
     private Rigidbody playerRigidbody;
     private bool acquiredZoom;
@@ -75,6 +67,11 @@ public class SmoothCamera : NetworkBehaviour
     private string particleDirection;
     private string waitingCurrent;
     private static SmoothCamera cameraInstance;
+    
+    /// <summary>
+    /// Intiailizes the camera,
+    /// and ensures that there is only once instance per player
+    /// </summary>
     public void Init()
     {
         this.shootFlare = false;
@@ -88,6 +85,7 @@ public class SmoothCamera : NetworkBehaviour
         transform.position = position;
         deadzoneRadiusSquared = deadzoneRadius * deadzoneRadius;
         this.zoomTimer = timeBeforeZoomIn;
+        
         if (isLocalPlayer)
         {
             if (cameraInstance != null && cameraInstance != this)
@@ -100,7 +98,6 @@ public class SmoothCamera : NetworkBehaviour
                 cameraInstance = this;
             }
         }
-
         initialized = true;
     }
     
@@ -113,21 +110,13 @@ public class SmoothCamera : NetworkBehaviour
             GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
             foreach (GameObject player in players)
             {
-                // need to also check that it is the player parent
-                // if (player.isLocalPlayer)
-                // {
-                //     if (player.name != "LightAbsorber")
-                //     {
-                        target = player.GetComponent<Transform>();
-                //     }
-                // }
+                target = player.GetComponent<Transform>();
             }
         }
 
         if (target)
         {
             Vector3 newPosition = Vector3.zero;
-            //Debug.Log(inCurrents + "----" + particleDirection);
             if(!inCurrents)
             {
                 float dampTime = this.dampTime;
@@ -147,7 +136,6 @@ public class SmoothCamera : NetworkBehaviour
                     Vector3 distanceFromPlayer = target.position - transform.position;
                     targetPosition = target.position - distanceFromPlayer.SetMagnitude(deadzoneRadius);
                 }
-
                 // Move the camera to its target smoothly.
                 newPosition = Vector2.SmoothDamp(transform.position, (Vector2)targetPosition, ref velocity, dampTime);
                 // Lock the camera's depth
@@ -173,12 +161,8 @@ public class SmoothCamera : NetworkBehaviour
                 {
                     newPosition = this.transform.position;
                 }
-                
-                //Debug.Log(newPosition);
-                
             }
-            
-            
+
             // camera zoom settings
             acquiredZoom = false;
             float playerVelocity = PlayerRigidbody.velocity.sqrMagnitude;
@@ -189,7 +173,6 @@ public class SmoothCamera : NetworkBehaviour
             {
                 if(zoomZonesValue != newPosition.z)
                 {
-                    //Debug.Log("Zoom zone");
                     newPosition.z = CameraZoom((newPosition.z > zoomZonesValue? zoomOutSpeed : zoomInSpeed), zoomZonesValue);
                 }
                 acquiredZoom = true;
@@ -199,47 +182,38 @@ public class SmoothCamera : NetworkBehaviour
             {
                 if(maxZoomValue != newPosition.z)
                 {
-                    //Debug.Log("flare shot");
                     newPosition.z = CameraZoom(zoomOutSpeed, maxZoomValue);
                     acquiredZoom = true;
                 }
                 else
                 {
-                    //Debug.Log("flare zoom out done");
                     shootFlare = false;
                 }
-                
             }
             
             if(zoomTimer < timeBeforeZoomIn && !shootFlare)
             {
-                //Debug.Log("wait before zoom in");
                 zoomTimer += Time.deltaTime;
                 acquiredZoom = true;
             }
             
             if(playerVelocity < smallSpeed && !acquiredZoom && zPosition != newPosition.z && !inCurrents)
             {
-                //Debug.Log("normal");
                 newPosition.z = CameraZoom(zoomInSpeed, zPosition);
                 acquiredZoom = true;
             }
             
             if((playerVelocity > smallSpeed && playerVelocity < mediumSpeed && !acquiredZoom && smallZoomValue != newPosition.z) || inCurrents)
             {
-                //Debug.Log("small");
                 newPosition.z = CameraZoom((newPosition.z > smallZoomValue? zoomOutSpeed : zoomInSpeed), smallZoomValue);
                 acquiredZoom = true;
             }
             
             if(playerVelocity > mediumSpeed && !acquiredZoom && mediumZoomValue != newPosition.z && !inCurrents)
             {
-                //Debug.Log("medium");
                 newPosition.z = CameraZoom((newPosition.z > mediumZoomValue? zoomOutSpeed : zoomInSpeed), mediumZoomValue);
                 acquiredZoom = true;
             }
-            
-            //Debug.Log("Move camera to: " + (Vector2)targetPosition);
             transform.position = newPosition;
         }
     }
@@ -252,8 +226,6 @@ public class SmoothCamera : NetworkBehaviour
         float zValue = Mathf.Lerp(this.transform.position.z, zoomToValue, Time.deltaTime * zoomSpeed);
         //round up the value to 2 digits after point in orther to check when the value is at the desired zoomToValue
         float roundedValue = Mathf.Round(zValue * 100f) / 100f;
-        //Debug.Log(roundedValue + " |------| " + (Mathf.Round(zoomToValue * 100f) / 100f));
-        
         if(roundedValue == (Mathf.Round(zoomToValue * 100f) / 100f))
         {
             return zoomToValue;
@@ -261,8 +233,7 @@ public class SmoothCamera : NetworkBehaviour
         else
         {
             return zValue;
-        }
-        
+        }  
     }
     
     public void FlareShoot()
@@ -305,8 +276,6 @@ public class SmoothCamera : NetworkBehaviour
             this.inCurrents = isCurrent;
             particleDirection = direction;
         }
-        
-        //Debug.Log("iscurrent: " + inCurrents + " particleDirection: " + particleDirection + " waitingCurrent: " + waitingCurrent);
         //need to reset if flare was shoot before entering zoomInZone
         this.shootFlare = false;
         this.zoomTimer = timeBeforeZoomIn;
