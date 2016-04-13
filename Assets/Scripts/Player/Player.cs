@@ -307,7 +307,7 @@ public class Player : LightSource
         else
         {
             Move();
-            LightControl();
+            //LightControl(); // disabled for networking
 
             // Clamp the player's velocity
             if (this.Rigidbody.velocity.sqrMagnitude > this.maxSpeed * this.maxSpeed)
