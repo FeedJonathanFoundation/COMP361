@@ -1,11 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// ???
+///
+/// @author - Karl C.
+/// @version - 1.0.0
+///
+/// </summary>
 public class ZoomZones : MonoBehaviour 
 {
     private SmoothCamera smoothCamera;
-
-    // Use this for initialization
+    
+    /// <summary>
+    /// Initializes the camera target
+    /// </summary>
     void Start () 
     {
         GameObject mainCamera = GameObject.Find("Main Camera");
@@ -15,6 +24,9 @@ public class ZoomZones : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Set zoom zone
+    /// </summary>
     void OnTriggerEnter(Collider col)
     {
         if(col.CompareTag("Player"))
@@ -22,7 +34,10 @@ public class ZoomZones : MonoBehaviour
             this.smoothCamera.SetZoomInZone(true);
         }
     }
-
+    
+    /// <summary>
+    /// Reset zoom zone
+    /// </summary>
     void OnTriggerExit(Collider col) 
     {
         if(col.CompareTag("Player"))
