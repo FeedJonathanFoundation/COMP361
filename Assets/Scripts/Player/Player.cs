@@ -170,17 +170,13 @@ public class Player : LightSource
             {
                 DontDestroyOnLoad(this.gameObject);
                 playerInstance = this;
-
-                Debug.Log("CREATE CAMERA");
-            }
-            
-            
+            }            
         }
         if (isLocalPlayer)
         {
             probeColorOn = localProbeColorOn;
             probeColorOff = localProbeColorOff;
-            ChangeColor(probeColorOff, false, 0);
+            ChangeColor(probeColorOn, false, 0);
         }
         
         this.movement = new PlayerMovement(massEjectionTransform, lightBallPrefab, thrustForce, changeDirectionBoost, thrustEnergyCost, brakeDrag, this.Transform, this.Rigidbody, this.LightEnergy, this.jetFuelEffect, this.rotationSpeed);
@@ -594,7 +590,7 @@ public class Player : LightSource
         {
             movement.OnPropulsionStart();
             lightToggle.OnPropulsionStart();
-            this.ChangeColor(probeColorOn, true, 0);
+            // this.ChangeColor(probeColorOn, true, 0);
         }
 
         if (Input.GetButton("Thrust"))
@@ -612,8 +608,8 @@ public class Player : LightSource
         {
             movement.OnPropulsionEnd();
             lightToggle.OnPropulsionEnd();
-            if (!lightToggle.LightButtonPressed)
-                this.ChangeColor(probeColorOff, true, 0);
+            // if (!lightToggle.LightButtonPressed)
+            //     this.ChangeColor(probeColorOff, true, 0);
         }
 
         // Brake
@@ -640,16 +636,16 @@ public class Player : LightSource
     private void OnConsumedLightSource(LightSource consumedLightSource)
     {
         // If the player ate a fish        
-        if (consumedLightSource.CompareTag("Fish"))
-        {
-            FlashColor(probeColorEatFish, eatFlashDuration);
-        }
+        // if (consumedLightSource.CompareTag("Fish"))
+        // {
+        //     FlashColor(probeColorEatFish, eatFlashDuration);
+        // }
         
-        // If the player collected a pickup (yellow ball)       
-        if (consumedLightSource.CompareTag("Pickup"))
-        {
-            FlashColor(probeColorEatPickup, eatFlashDuration);
-        }
+        // // If the player collected a pickup (yellow ball)       
+        // if (consumedLightSource.CompareTag("Pickup"))
+        // {
+        //     FlashColor(probeColorEatPickup, eatFlashDuration);
+        // }
         
     }
 
@@ -704,6 +700,7 @@ public class Player : LightSource
             this.deathParticlesPlayed = false;
             this.Rigidbody.drag = defaultDrag; // reset drag
             this.transform.FindChild("ProbeModel").gameObject.SetActive(true); //reactivate bubbles
+            
             SetCanAbsorbState(true); //reset canAbsorb
             OnRespawn();   
 

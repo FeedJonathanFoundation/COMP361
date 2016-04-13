@@ -8,26 +8,36 @@ public class Billboard : MonoBehaviour
     private float hightOffset;
     private GameObject player;
     private Transform probeModel;
+    
     void Start()
     {
-        Debug.Log("start");
         player = transform.parent.gameObject;
         probeModel = player.transform.FindChild("ProbeModel");
         transform.parent = null;
     }
+    
     void Update()
     {
         transform.LookAt(Camera.main.transform);
-        if(probeModel.name == "ProbeModel" && probeModel.gameObject.activeSelf == true)
+        if (probeModel != null && probeModel.gameObject.activeSelf == true)
         {
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(true);    
+            }
             Vector3 newPosition = player.transform.position;
             newPosition.y += hightOffset;
-            transform.position = newPosition;
+            transform.position = newPosition;           
         }
         else
         {
-            transform.gameObject.SetActive(false);
+            foreach (Transform child in transform)
+            {
+                child.gameObject.SetActive(false);    
+            }
+                                 
         }
         
     }
+   
 }
