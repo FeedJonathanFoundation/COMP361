@@ -81,7 +81,7 @@ public class FlareSpawner : NetworkBehaviour
             }
             else
             {
-                playerSound.InsufficientEnergySound();
+                //playerSound.InsufficientEnergySound();
             }
         }
         if (flare != null)
