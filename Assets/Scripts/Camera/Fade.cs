@@ -1,13 +1,25 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Player class is responsible for fading the camera out between scene changes
+///
+/// @author - Alex I.
+/// @version - 1.0.0
+///
+/// </summary>
 public class Fade : MonoBehaviour
 {
-    public Texture2D fadeOutTexture; // fade texture
-    public float fadeSpeed = 0.8f; // fade speed
-    private int drawDepth = -1000; // set on top of all other elements
-    private float alpha = 1f; // alpha value 0-1
-    private int fadeDir = -1; // fade in = -1, fade out = 1
+    [SerializeField]
+    private Texture2D fadeOutTexture;
+    [SerializeField]
+    private float fadeSpeed = 0.8f;
+    // set on top of all other elements
+    private int drawDepth = -1000;
+    [Range(0,1)]
+    private float alpha = 1f;
+    // fade in = -1, fade out = 1
+    private int fadeDir = -1; 
     
     protected void OnGUI()
     {
