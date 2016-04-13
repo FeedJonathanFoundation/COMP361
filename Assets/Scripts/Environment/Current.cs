@@ -46,9 +46,6 @@ public class Current : MonoBehaviour
     private bool playerInCurrent;
     private GameObject particles;
     private SoundManager soundManager;
-    
-    /// FOR DEBUGGING
-    static bool warning = false;
 
     /// <summary>
     /// Initializes the current.
@@ -107,11 +104,6 @@ public class Current : MonoBehaviour
                     Destroy(particles);
                 }
             }
-        }
-        if (!warning)
-        {
-            Debug.Log("SHOULD PROBABLY CALL A FUNCTION IN SMOOTH CAMERA INSTEAD");
-            warning = true;
         }
     }
 
