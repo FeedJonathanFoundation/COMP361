@@ -109,7 +109,7 @@ public class FlareSpawner : NetworkBehaviour
         //reset all values for the zoom whenever player fires a flare
         if (smoothCamera != null)
         {
-            smoothCamera.FlareShoot();
+            smoothCamera.MaxZoomOut();
             smoothCamera.ResetTimer();
         }
     }

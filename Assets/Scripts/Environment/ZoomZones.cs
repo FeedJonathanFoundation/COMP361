@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// ???
+/// Triggers the zoom manager to apply camera zoom upon collision.
 ///
 /// @author - Karl C.
 /// @version - 1.0.0
@@ -10,7 +10,7 @@ using System.Collections;
 /// </summary>
 public class ZoomZones : MonoBehaviour 
 {
-    private SmoothCamera smoothCamera;
+    private Zoom zoomManager;
     
     /// <summary>
     /// Initializes the camera target
@@ -20,7 +20,7 @@ public class ZoomZones : MonoBehaviour
         GameObject mainCamera = GameObject.Find("Main Camera");
         if (mainCamera != null)
         {
-            this.smoothCamera = mainCamera.GetComponent<SmoothCamera>();
+            this.zoomManager = mainCamera.GetComponent<Zoom>();
         }
     }
     
@@ -31,7 +31,7 @@ public class ZoomZones : MonoBehaviour
     {
         if(col.CompareTag("Player"))
         {
-            this.smoothCamera.SetZoomInZone(true);
+            this.zoomManager.SetZoomInZone(true);
         }
     }
     
@@ -42,7 +42,7 @@ public class ZoomZones : MonoBehaviour
     {
         if(col.CompareTag("Player"))
         {
-            this.smoothCamera.SetZoomInZone(false);
+            this.zoomManager.SetZoomInZone(false);
         }
     }
 }

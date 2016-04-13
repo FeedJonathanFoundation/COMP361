@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
 
 public enum Direction
@@ -26,15 +25,12 @@ public class Current : MonoBehaviour
     [SerializeField]
     [Tooltip("The strength of current force.")]
     private float strength;
-    
     [SerializeField]
     [Tooltip("The direction of current force.")]
     private Direction currentDirection;
-    
     [SerializeField]
     [Tooltip("Distance from current for the particle system to be destroyed.")]
     private float distanceFromPlayer;
-    
     private Vector3 direction;
     private string particleDirection;
     private float distance;
@@ -43,9 +39,11 @@ public class Current : MonoBehaviour
     // Holds all rigidbodies in the current.
     private List<Rigidbody> rigidbodies;
     private SmoothCamera smoothCamera;
+    private Zoom zoomManager;
     private bool playerInCurrent;
     private GameObject particles;
     private SoundManager soundManager;
+    public static string waitingCurrent = "";
 
     /// <summary>
     /// Initializes the current.
@@ -57,6 +55,7 @@ public class Current : MonoBehaviour
         if (mainCamera != null)
         {
             this.smoothCamera = mainCamera.GetComponent<SmoothCamera>();
+            this.zoomManager = mainCamera.GetComponent<Zoom>();
         }
         GameObject soundObject = GameObject.FindWithTag("SoundManager");
         if (soundObject != null)
@@ -68,13 +67,13 @@ public class Current : MonoBehaviour
         empty = true;
         playerInCurrent = false;
         distance = distanceFromPlayer;
+
     }
 
     /// <summary>
     /// If the current is not empty, add current force.
     /// Do not allow camera to go past current
     /// and only show particles if in view.
-///// SHOULD PROBABLY CALL A FUNCTION IN SMOOTH CAMERA INSTEAD //////
     /// </summary>
     protected void Update()
     {
@@ -164,7 +163,7 @@ public class Current : MonoBehaviour
             if (col.CompareTag("Player"))
             {
                 StartCurrentParticles();
-                smoothCamera.SetCurrentState(true, particleDirection);
+                SetCurrentState(true, particleDirection);
                 playerInCurrent = true;
             }
         }
@@ -185,10 +184,49 @@ public class Current : MonoBehaviour
             }
             if (col.CompareTag("Player"))
             {
-                smoothCamera.SetCurrentState(false, "");
+                SetCurrentState(false, "");
                 playerInCurrent = false;
             }
         }
+    }
+
+    private void SetCurrentState(bool isCurrent, string direction)
+    {
+        if (zoomManager == null) { return; }
+        if (!isCurrent && waitingCurrent != "")
+        {
+            particleDirection = waitingCurrent;
+            waitingCurrent = "";
+            isCurrent = !isCurrent;
+        }
+        if (PlayerInCurrents() && isCurrent)
+        {
+            waitingCurrent = direction;
+        }
+        else
+        {
+            particleDirection = direction;
+        }
+        zoomManager.RevertTimer();
+    }
+
+    public string CurrentParticleDirection()
+    {
+        GameObject[] currents = GameObject.FindGameObjectsWithTag("Current");
+        foreach (GameObject current in currents)
+        {
+            Current currentObject = current.GetComponent<Current>();
+            if (currentObject != null)
+            {
+                if (currentObject.InCurrent) { return ParticleDirection; }
+            }
+        }
+        return null;
+    }
+    
+    public string ParticleDirection
+    {
+        get { return particleDirection; }
     }
 
     /// <summary>
@@ -211,4 +249,25 @@ public class Current : MonoBehaviour
             }
         }
     }
+    
+    public bool PlayerInCurrents()
+    {
+        GameObject[] currents = GameObject.FindGameObjectsWithTag("Current");
+        foreach (GameObject current in currents)
+        {
+            Current currentObject = current.GetComponent<Current>();
+            if (currentObject != null)
+            {
+                if (currentObject.InCurrent) { return true; }
+            }
+        }
+        return false;
+    }
+    
+    public bool InCurrent
+    {
+        get { return playerInCurrent; }
+        set { playerInCurrent = value; }
+    }
+    
 }
