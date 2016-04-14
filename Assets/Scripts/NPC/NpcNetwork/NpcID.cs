@@ -3,7 +3,7 @@ using UnityEngine.Networking;
 using System.Collections;
 
 /// <summary>
-/// Assigns an ID to NPCs so that the server can distinguish 
+/// Assigns a unique ID to NPCs so that the server can distinguish 
 /// between the NPCs that are instantiated and destroyed.
 ///
 /// @author - Stella L.
