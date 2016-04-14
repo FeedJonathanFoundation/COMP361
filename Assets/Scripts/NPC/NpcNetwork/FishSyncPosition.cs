@@ -73,7 +73,7 @@ public class FishSyncPosition : NetworkBehaviour
     
     /// <summary>
     /// Transmits the position value to all clients.
-    /// Only sends commands if the player has moved at least the threshold value.
+    /// Only sends commands if the NPC has moved at least the threshold value.
 	/// </summary>
     
     [ClientCallback]
