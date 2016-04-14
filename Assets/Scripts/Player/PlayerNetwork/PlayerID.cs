@@ -2,6 +2,13 @@
 using System.Collections;
 using UnityEngine.Networking;
 
+/// <summary>
+/// Assigns a unique player ID to each player game object.
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 public class PlayerID : NetworkBehaviour
 {
 
@@ -24,6 +31,9 @@ public class PlayerID : NetworkBehaviour
         playerTransform = transform;
     }
     
+    /// <summary>
+    /// If player ID has not been set, set identity.
+    /// </summary>
     void Update()
     {
         if (playerTransform.name == "" || playerTransform.name == playerPrefabCloneName)
@@ -32,6 +42,9 @@ public class PlayerID : NetworkBehaviour
         }
     }
     
+    /// <summary>
+    /// Retrieves and syncs the identity with the server.
+    /// </summary>
     [Client]
     void GetNetIdentity()
     {
@@ -39,6 +52,9 @@ public class PlayerID : NetworkBehaviour
         CmdTellServerMyIdentity(MakeUniqueIdentity());
     }
 
+    /// <summary>
+    /// Sets the player ID to a unique identity.
+    /// </summary>
     [Client]
     void SetIdentity()
     {
@@ -52,12 +68,18 @@ public class PlayerID : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Creates a unique identity.
+    /// </summary>
     string MakeUniqueIdentity()
     {
         string uniqueIdentity = "Player" + playerNetworkID.ToString();
         return uniqueIdentity;
     }
     
+    /// <summary>
+    /// Syncs the player identity with the server.
+    /// </summary>
     [Command]
     void CmdTellServerMyIdentity(string identity)
     {

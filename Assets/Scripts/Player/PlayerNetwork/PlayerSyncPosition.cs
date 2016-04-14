@@ -3,6 +3,13 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// ????
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 // MAY NEED TO UPDATE LERP RATE VALUES, BUFFER VALUE
 
 [NetworkSettings (channel = 0, sendInterval = 0.033f)]

@@ -2,26 +2,29 @@
 using UnityEngine.Networking;
 using System.Collections;
 
+/// <summary>
+/// Assigns a unique ID to NPCs so that the server can distinguish 
+/// between the NPCs that are instantiated and destroyed.
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 public class NpcID : NetworkBehaviour
 {
 
     [SyncVar]
-    public string npcID;
-
+    private string npcID;
     private Transform npcTransform;
-
     [SerializeField]
     private string npcPrefabName = "Network";
-
     private bool identified = false;
 
-    // Use this for initialization
     void Start()
     {
         npcTransform = transform;
     }
-	
-	// Update is called once per frame
+
 	void Update()
     {
         if (!identified)
@@ -30,6 +33,9 @@ public class NpcID : NetworkBehaviour
         }
     }
     
+    /// <summary>
+    /// Assign NPC Name
+    /// </summary>
     void SetIdentity()
     {
         if (npcTransform.name == "" || npcTransform.name.Contains(npcPrefabName))
