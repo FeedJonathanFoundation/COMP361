@@ -70,6 +70,11 @@ public class WhaleMovement : MonoBehaviour
     /// </summary>
     protected void OnTriggerEnter(Collider col)
     {
+        Deactivate();
+    }
+    
+    private void Deactivate()
+    {
         gameObject.SetActive(false);
     }
 }
