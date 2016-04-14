@@ -4,6 +4,10 @@ using System.Collections;
 /// <summary>
 /// Manages the steering behaviours for the GameObject this script is attached to.
 /// (All steering behaviors implemented based on the tutorials on GameDevelopment Tuts+)
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class Steerable : MonoBehaviour

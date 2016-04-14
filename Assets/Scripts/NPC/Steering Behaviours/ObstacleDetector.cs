@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// Creates a box collider which detects obstacles in front of the GameObject. The collider acts like a line of sight. This
-/// line of sight rotates to face the entity's direction of movement. 
+/// Creates a box collider which detects obstacles in front of the GameObject.
+/// The collider acts like a line of sight. 
+/// This line of sight rotates to face the entity's direction of movement. 
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class ObstacleDetector : MonoBehaviour 
 {
