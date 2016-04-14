@@ -54,7 +54,6 @@ public class ObjectPooler : NetworkBehaviour
             for (int j = 0; j < pooledAmount[i]; j++)
             {
                 GameObject gameobject = (GameObject)Instantiate(pooledObjects[i]);
-                // NetworkServer.Spawn(gameobject);
 
                 AbstractFish fish = gameobject.GetComponent<AbstractFish>();
                 if (fish != null)
@@ -99,28 +98,47 @@ public class ObjectPooler : NetworkBehaviour
                 return current;
             }
         }
-        if (replace)
+        if (replace && FindReplacement() != null)
         {
-            for (int i = 0; i < pooledObjects.Length; i++)
-            {
-                for (int j = 0; j < pool[i].Count; j++)
-                {
-                    GameObject current = pool[i][j];
-                    if (!current.activeInHierarchy)
-                    {
-                        ReactivateObjectLight(current);
-                        return current;
-                    }
-                }
-            }
+            return FindReplacement();
         }
         if (extensible)
         {
-            GameObject gameobject = (GameObject)Instantiate(pooledObjects[objectID]);
-            pool[objectID].Add(gameobject);
-            return gameobject;
+            return ExtendPool(objectID);
         }
         return null;
+    }
+    
+    /// <summary>
+    /// Returns an object from the pool that is not in use
+    /// that is not the desired object (it is a replacement)
+    /// </summary>
+    
+    private GameObject FindReplacement()
+    {
+        for (int i = 0; i < pooledObjects.Length; i++)
+        {
+            for (int j = 0; j < pool[i].Count; j++)
+            {
+                GameObject current = pool[i][j];
+                if (!current.activeInHierarchy)
+                {
+                    ReactivateObjectLight(current);
+                    return current;
+                }
+            }
+        }
+        return null;
+    }
+    
+    /// <summary>
+    /// Returns a new object if the pool is already full
+    /// </summary>
+    private GameObject ExtendPool(int objectID)
+    {
+        GameObject gameobject = (GameObject)Instantiate(pooledObjects[objectID]);
+        pool[objectID].Add(gameobject);
+        return gameobject;
     }
     
     /// <summary>

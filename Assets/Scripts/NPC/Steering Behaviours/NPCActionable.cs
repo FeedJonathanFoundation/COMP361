@@ -8,6 +8,13 @@ public enum NPCActionPriority
     High = 2
 }
 
+/// <summary>
+/// ????
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
+/// </summary>
 public enum NPCActionType
 {
     Seek,

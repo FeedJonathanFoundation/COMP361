@@ -3,8 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 
 /// <summary>
-/// A Neighbourhood is a circle trigger collider which holds an array containing all GameObjects presently
-/// inside the trigger volume. Allows entities to keep track of the  
+/// A Neighbourhood is a circle trigger collider which holds an array
+/// containing all GameObjects presently inside the trigger volume.
+///  Allows entities to keep track of the GameObjects in the Neighbourhood.
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class Neighbourhood : MonoBehaviour
 {
