@@ -63,7 +63,7 @@ public class JellyfishShock : MonoBehaviour
         }
     }
     
-    public void Knockback(LightSource lightSource)
+    private void Knockback(LightSource lightSource)
     {
         if (lightSource is Player)
         {

@@ -39,8 +39,11 @@ public class JellyfishMovement : MonoBehaviour
             SetVelocity();
         }
     }
-
-    void SetVelocity()
+    
+    /// <summary>
+    /// Sets the velocity based on upwards or downwards movement
+    /// </summary>
+    private void SetVelocity()
     {
         if(goingUp)
         {
@@ -50,7 +53,7 @@ public class JellyfishMovement : MonoBehaviour
         {
             movement = Vector3.down * jellyfishSpeed;
         }
-        parentRigidbody.velocity = Vector3.zero; //reset velocity to zero
-        parentRigidbody.AddForce(movement * jellyfishSpeed,ForceMode.Force); //set velocity depending on if he is going up or not
+        parentRigidbody.velocity = Vector3.zero;
+        parentRigidbody.AddForce(movement * jellyfishSpeed,ForceMode.Force);
     }
 }
