@@ -3,7 +3,13 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
-
+/// <summary>
+/// ????
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 // If syncing too slowly, increase lerp rate
 public class PlayerSyncRotation : NetworkBehaviour
 {

@@ -3,6 +3,13 @@ using UnityEngine.Networking;
 using System.Collections;
 using System.Collections.Generic;
 
+/// <summary>
+/// Syncs fish positions between the server and its clients.
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 public class FishSyncPosition : NetworkBehaviour
 {
 
@@ -37,8 +44,9 @@ public class FishSyncPosition : NetworkBehaviour
         LerpPosition();
     }
     
-    // Used to provide player's position
+    /// <summary>
     // Only used for other clients to smooth out movement
+	/// </summary>
     void LerpPosition()
     {
         if (!isLocalPlayer)
@@ -54,25 +62,33 @@ public class FishSyncPosition : NetworkBehaviour
         }
     }
     
-    // Server receives this value
+    /// <summary>
+    // Send the position value to the serverserver
+	/// </summary>
     [Command]
     void CmdProvidePositionToServer(Vector3 position)
     {
         syncPosition = position;
     }
     
-    // Transmits this value to all clients
-    // Only sends commands if the player has moved at least the threshold value
+    /// <summary>
+    /// Transmits the position value to all clients.
+    /// Only sends commands if the player has moved at least the threshold value.
+	/// </summary>
+    
     [ClientCallback]
     void TransmitPosition()
     {
-        if (/*isLocalPlayer && */Vector3.Distance(objectTransform.position, lastPosition) > threshold)
+        if (Vector3.Distance(objectTransform.position, lastPosition) > threshold)
         {
             CmdProvidePositionToServer(objectTransform.position);
             lastPosition = objectTransform.position;
         }
     }
     
+    /// <summary>
+	/// Saves position values to use in saved lerping.
+	/// </summary>
     [Client]
     void SyncPositionValues(Vector3 latestPosition)
     {
@@ -80,11 +96,17 @@ public class FishSyncPosition : NetworkBehaviour
         syncPositionList.Add(syncPosition);
     }
     
+    /// <summary>
+	/// Syncs real-time values without compensation.
+	/// </summary>
     void OrdinaryLerping()
     {
         objectTransform.position = Vector3.Lerp(objectTransform.position, syncPosition, Time.deltaTime * lerpRate);
     }
     
+    /// <summary>
+	/// Smooths out position values by using historical positions.
+	/// </summary>
     void SavedLerping()
     {
         if (syncPositionList.Count > 0)
