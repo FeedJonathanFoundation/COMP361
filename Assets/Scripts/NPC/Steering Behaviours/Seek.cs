@@ -44,7 +44,7 @@ public class Seek : NPCActionable
             if (targetTransform.gameObject.CompareTag("Player")) 
             {
                 Player player = targetTransform.gameObject.GetComponent<Player>();
-                if (player.IsDetectable())
+                if (player.IsDetectable)
                 {
                     steerable.AddSeekForce(targetTransform.position, strengthMultiplier);
 

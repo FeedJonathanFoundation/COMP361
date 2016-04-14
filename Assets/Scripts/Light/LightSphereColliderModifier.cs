@@ -36,13 +36,11 @@ public class LightSphereColliderModifier : LightEnergyListener
         // Compute the sphere collider's radius based on the parent light source's energy
         float colliderRadius = lightSource.LightEnergy.CurrentEnergy * lightToRadiusRatio;
         Vector3 colliderCenter = Vector2.zero;
-        
-        //Debug.Log("Detectable radius: " + colliderRadius);
-        
+                
         if (player != null)
         {   
             // If the player's lights are turned off, disable the sphere. Fish should not be able to detect the player.
-            if (!player.IsDetectable())
+            if (!player.IsDetectable)
             {
                 colliderRadius = 0;
                 // Move the collider somewhere no fish will ever see

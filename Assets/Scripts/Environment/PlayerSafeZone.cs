@@ -17,7 +17,7 @@ public class PlayerSafeZone : MonoBehaviour
                 player.isSafe = true;
                 if (blookingCurrent)
                 {
-                    player.MaxSpeed(5);
+                    player.movementBean.maxSpeed = 5;
                 }
                 //Debug.Log(player.isSafe);
             }
