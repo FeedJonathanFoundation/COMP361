@@ -19,17 +19,18 @@ public class PlayerLightToggle
     private float minimalEnergyRestriction;
     private float propulsionLightRange; // The percent range of light when propulsion is on
     private GameObject lightsToToggle; 
-    private LightSource lightSource;
+    private Player player;
     private Light closeLight;
     
-    public PlayerLightToggle(GameObject lightsToToggle, bool defaultLightStatus, LightSource lightSource, float minimalEnergy, float propulsionLightRange)
+    public PlayerLightToggle(GameObject lightsToToggle, Player player, LightToggleBean lightToggleBean)
     {        
         this.lightsToToggle = lightsToToggle;
-        this.lightsEnabled = defaultLightStatus;
-        this.lightButtonPressed = defaultLightStatus;
-        this.lightSource = lightSource;                
-        this.minimalEnergyRestriction = minimalEnergy;
-        this.propulsionLightRange = propulsionLightRange;
+        this.player = player;
+        
+        this.lightsEnabled = lightToggleBean.defaultLightStatus;
+        this.lightButtonPressed = lightToggleBean.defaultLightStatus;                        
+        this.minimalEnergyRestriction = lightToggleBean.minimalEnergyRestrictionToggleLights;
+        this.propulsionLightRange = lightToggleBean.propulsionLightRange;
         this.ToggleLights();
         
         // Cache very close light - needs to be refactored
@@ -107,10 +108,10 @@ public class PlayerLightToggle
             if (this.timeToDeplete > timeToDeplete)
             {
                 //Debug.Log("DEPLETE LIGHT");
-                this.lightSource.LightEnergy.Deplete(energyCost);
+                this.player.LightEnergy.Deplete(energyCost);
                 this.timeToDeplete = 0;
 
-                if (this.minimalEnergyRestriction >= this.lightSource.LightEnergy.CurrentEnergy)
+                if (this.minimalEnergyRestriction >= this.player.LightEnergy.CurrentEnergy)
                 {
                     this.ToggleLights();
                 }

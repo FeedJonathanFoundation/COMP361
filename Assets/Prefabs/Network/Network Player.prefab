@@ -746,6 +746,7 @@ GameObject:
   - 114: {fileID: 11496696}
   - 114: {fileID: 11452186}
   - 114: {fileID: 11454282}
+  - 114: {fileID: 11427810}
   m_Layer: 9
   m_Name: Network Player
   m_TagString: Player
@@ -2528,6 +2529,17 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!114 &11427810
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 173166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49accc8addb6c47daa7dc5d2eb629e8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &11431330
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2660,12 +2672,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 34376894240ca478281ab625454c8611, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_LastSendTime: 0
+  m_SyncVarGuard: 0
+  m_MyView: {fileID: 0}
   flareObject: {fileID: 177066, guid: 1481585a8f164c04d9beedd085f2ee2d, type: 2}
   flareSpawnObject: {fileID: 498490}
   cooldownTime: 3
   flareEnergyCost: 6
   flareCostPercentage: 0.1
   recoilForce: 1
+  timer: 0
+  lightSource: {fileID: 0}
+  controllerRumble: {fileID: 0}
+  rigidbody: {fileID: 0}
+  smoothCamera: {fileID: 0}
+  flareDistance: 0
+  player: {fileID: 0}
+  flare: {fileID: 0}
+  flareSound: {fileID: 0}
+  playerSound: {fileID: 0}
 --- !u!114 &11452186
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2816,18 +2841,18 @@ MonoBehaviour:
   defaultEnergy: 40
   infiniteEnergy: 0
   absorbableLightDetector: {fileID: 11437526}
-  massEjectionTransform: {fileID: 481346}
-  lightBallPrefab: {fileID: 0}
-  maxSpeed: 8
-  thrustForce: 3
-  changeDirectionBoost: 5.2
-  thrustEnergyCost: 0.01
-  brakeDrag: 2
-  rotationSpeed: 15
-  jetFuelEffect: {fileID: 156186}
-  fishHitParticles: {fileID: 19865272, guid: ed2d060d09dc3e04faf8ca40914cb8d6, type: 2}
-  playerDeathParticles: {fileID: 19877132, guid: 71ac3ce401859634281fd1afa08277fc,
-    type: 2}
+  movementBean:
+    massEjectionTransform: {fileID: 0}
+    lightBallPrefab: {fileID: 0}
+    maxSpeed: 100
+    thrustForce: 0
+    changeDirectionBoost: 0
+    thrustEnergyCost: 1
+    brakeDrag: 1
+    rotationSpeed: 5
+    jetFuelEffect: {fileID: 0}
+    fishHitParticles: {fileID: 0}
+    playerDeathParticles: {fileID: 0}
   defaultLightStatus: 1
   knockbackForce: 10
   invulnerabilityTime: 1
@@ -2836,22 +2861,14 @@ MonoBehaviour:
   lightToggleEnergyCost: 0.01
   minimalEnergyRestrictionToggleLights: 0
   propulsionLightRange: 0.3
-  lightToggleTime: 0.1
-  disableCheckpoints: 1
   isSafe: 0
   playerVelocity: 0
   probeColorOn: {r: 0.24446934, g: 0.059039805, b: 0.38235295, a: 1}
   probeColorOff: {r: 0.53676474, g: 0.055255182, b: 0.46662372, a: 1}
   localProbeColorOn: {r: 1, g: 0.30980393, b: 0, a: 1}
   localProbeColorOff: {r: 0.29803923, g: 0.09019608, b: 0, a: 1}
-  probeColorHit: {r: 1, g: 0.067, b: 0.067, a: 1}
-  probeColorEatFish: {r: 0, g: 0.875, b: 1, a: 1}
-  probeColorEatPickup: {r: 0.82, g: 0.82, b: 0.596, a: 1}
-  eatFlashDuration: 0.5
-  hitFlashDuration: 2
-  gameOverCanvasPrefab: {fileID: 0}
-  buffer: 1
-  lastEnergy: 0
+  flareObject: {fileID: 0}
+  flareSpawnObject: {fileID: 0}
 --- !u!114 &11479836
 MonoBehaviour:
   m_ObjectHideFlags: 1

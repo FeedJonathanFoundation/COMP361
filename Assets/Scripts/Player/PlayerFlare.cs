@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Flare object extends LightSource
+/// </summary>
 public class PlayerFlare : MonoBehaviour
 {
     //variables not for user

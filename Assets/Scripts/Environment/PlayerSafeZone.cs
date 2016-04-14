@@ -29,7 +29,7 @@ public class PlayerSafeZone : MonoBehaviour
                 player.isSafe = true;
                 if (blockingCurrent)
                 {
-                    player.MaxSpeed(maxSpeed);
+                    player.movementBean.maxSpeed = 5;
                 }
             }
         }

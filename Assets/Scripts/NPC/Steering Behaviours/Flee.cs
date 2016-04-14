@@ -44,7 +44,7 @@ public class Flee : NPCActionable
             if (targetTransform.gameObject.CompareTag("Player")) 
             {
                 Player player = targetTransform.gameObject.GetComponent<Player>();
-                if (player.IsDetectable())
+                if (player.IsDetectable)
                 {
                     // Override the steerable's min/max speed
                     if (overrideSteerableSpeed)

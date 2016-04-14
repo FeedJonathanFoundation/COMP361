@@ -1,102 +1,67 @@
 ﻿using UnityEngine;
-using UnityEngine.Networking;
 
-public class FlareSpawner : NetworkBehaviour 
+public class FlareSpawner
 {
-    [SerializeField]
-    [Tooltip("Refers to flare game object")]
-    private GameObject flareObject;
-    
-    [SerializeField]
-    [Tooltip("Refers to the flare spawn zone")]
-    private Transform flareSpawnObject;
-    
-    [SerializeField]
-    [Tooltip("Time between flare shoots")]
     private float cooldownTime;
-    
-    [SerializeField]
-    [Tooltip("Cost to use your flare")]
     private float flareEnergyCost;
-    
-    [SerializeField]
-    [Range(0,1)]
-    [Tooltip("Percentage of energy needed to use flare. 1 = 100%")]
     private float flareCostPercentage;
-    
-    [SerializeField]
-    [Tooltip("The amount of recoil applied on the player when shooting the flare")]
-    private float recoilForce;
-    
-    [SyncVar]    
+    private float recoilForce;   
     private float timer;
-    private LightSource lightSource;
-    // Caches the component that rumbles the controller
-    private ControllerRumble controllerRumble;
-    private new Rigidbody rigidbody;    
+    private Player player;
+    private Transform flareSpawnObject;
+    private Rigidbody rigidbody;
     private SmoothCamera smoothCamera;
-    private float flareDistance = 0f;
-    private Transform player;
-    private GameObject flare;
     private FlareSound flareSound;
     private PlayerSound playerSound;
+    private ControllerRumble controllerRumble;
+    
+    public FlareSpawner(FlareBean flareBean, Player player, ControllerRumble controllerRumble) 
+    {               
+        this.timer = 0;
+        this.cooldownTime = flareBean.coolDown;               
+        this.flareSpawnObject = flareBean.flareSpawnObject;
+        this.recoilForce = flareBean.recoilForce;
+        this.flareCostPercentage = flareBean.flareCostPercentage;
+        this.flareEnergyCost = flareBean.flareEnergyCost;               
+        
+        this.player = player;
+        this.controllerRumble = controllerRumble;
+        this.rigidbody = player.GetComponent<Rigidbody>();
 
-    void Start()
-    {
-        this.timer = cooldownTime;
-        this.lightSource = GetComponent<LightSource>();
-        this.controllerRumble = GetComponent<ControllerRumble>();
-        this.rigidbody = GetComponent<Rigidbody>();
-        player = GameObject.FindWithTag("Player").transform;
-        playerSound = player.GetComponent<PlayerSound>();
         GameObject mainCamera = GameObject.Find("Main Camera");
         if (mainCamera != null)
         {
             this.smoothCamera = mainCamera.GetComponent<SmoothCamera>();
         }
+
     }
 
-    void Update() 
+    public bool SpawnFlare()
     {
-        if (!isLocalPlayer) { return; }
-        
-        bool ready = false;
+        bool ready = true;
         if (timer < cooldownTime)
         {
             timer += Time.deltaTime;
+            ready = false;
         }
-        else
+
+        if (ready)
         {
-            ready = true;
-        }
-        if (Input.GetButtonDown("UseFlare"))
-        {
-            if (ready)
+            float cost = flareEnergyCost * flareCostPercentage;
+            if ((player.LightEnergy.CurrentEnergy > (flareEnergyCost + cost)))
             {
-                float cost = flareEnergyCost * flareCostPercentage;
-                if ((lightSource.LightEnergy.CurrentEnergy > (flareEnergyCost + cost)))
-                {
-                    Cmd_ShootFlare();
-                }
-            }
-            else
-            {
-                //playerSound.InsufficientEnergySound();
+                ShootFlare();
+                return true;
             }
         }
-        if (flare != null)
-        {
-            flareDistance = Vector3.Distance(flare.transform.position, player.position);
-            // flareSound.SetFlareDistance(flareDistance);
-        }
+
+        playerSound.InsufficientEnergySound();
+        return false;
+
     }
-    
-    [Command]
-    private void Cmd_ShootFlare()
+    private void ShootFlare()
     {
-        flare = (GameObject)Instantiate(flareObject, flareSpawnObject.position, flareSpawnObject.rotation);
-        NetworkServer.Spawn(flare);
-        lightSource.LightEnergy.Deplete(flareEnergyCost);
+        player.LightEnergy.Deplete(flareEnergyCost);
         // Apply recoil in the opposite direction the flare was shot
         rigidbody.AddForce(-flareSpawnObject.right * recoilForce, ForceMode.Impulse);
         controllerRumble.ShotFlare();   // Rumble the controller
@@ -113,9 +78,10 @@ public class FlareSpawner : NetworkBehaviour
             smoothCamera.ResetTimer();
         }
     }
-    
+
     public void EatFlare()
     {
         flareSound.EatFlareSound();
     }
+
 }

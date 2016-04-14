@@ -106,7 +106,7 @@ public abstract class AbstractFish : LightSource
     /// Subscribe to the events dictating when lights enter
     /// or exit the fish's line-of-sight.
     /// </summary>
-    public override void OnEnable()
+    protected override void OnEnable()
     {
         base.OnEnable();
         lightDetector.NeighbourEnter += OnLightEnter;
@@ -118,7 +118,7 @@ public abstract class AbstractFish : LightSource
     /// Unsubscribe to the events dictating when lights enter
     /// or exit the fish's line-of-sight.
     /// </summary>
-    public override void OnDisable()
+    protected override void OnDisable()
     {
         base.OnDisable();
         lightDetector.NeighbourEnter -= OnLightEnter;

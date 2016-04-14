@@ -46,6 +46,7 @@ public class LightSource : NetworkBehaviour
     private new Rigidbody rigidbody;
     // DO NOT ACCESS DIRECTLY. Use LightEnergy property instead.
     private LightEnergy lightEnergy;
+    private bool isAbsorbable;
     private string lightSourceId;
     
     /** Raised when the light source consumes some light */
@@ -67,7 +68,7 @@ public class LightSource : NetworkBehaviour
     /// <summary>
     /// Subscribe to OnLightDepleted event
     /// </summary>
-    public virtual void OnEnable()
+    protected virtual void OnEnable()
     {
         this.LightEnergy.LightDepleted += OnLightDepleted;
     }
@@ -75,7 +76,7 @@ public class LightSource : NetworkBehaviour
     /// <summary>
     /// Unsubscribe from OnLightDepleted event
     /// </summary>
-    public virtual void OnDisable()
+    protected virtual void OnDisable()
     {        
         this.LightEnergy.LightDepleted -= OnLightDepleted;
     }
@@ -123,7 +124,7 @@ public class LightSource : NetworkBehaviour
                     // Debug.Log("Absorb " + lightToAbsorb + " from player");
                      
                     // Knockback the player away from the enemy fish
-                    otherLightSource.Knockback(this);
+                    otherLightSource.OnKnockback(this);
                 }
                 
                 // Transfer light energy from the other light source to this one
@@ -136,10 +137,7 @@ public class LightSource : NetworkBehaviour
         }
     }
      
-    protected virtual void ChangeColor(Color color, bool isSmooth, float seconds)
-    {
-        // Implemented in children        
-    } 
+    protected virtual void ChangeColor(Color color) { return; }
      
      
     /// <summary>
@@ -148,7 +146,7 @@ public class LightSource : NetworkBehaviour
     /// </summary>
     private bool CanAbsorb(LightSource otherLightSource)
     {
-        if (!otherLightSource.CanBeAbsorbed()) { return false; }
+        if (!otherLightSource.IsAbsorbable) { return false; }
         
         // If this light source has more energy than the other one, return true. This light source can absorb the given argument.
         if (canAbsorb && LightEnergy.CurrentEnergy > otherLightSource.LightEnergy.CurrentEnergy) { return true; }
@@ -160,23 +158,22 @@ public class LightSource : NetworkBehaviour
 
         return false;        
     }
-
-    
+        
     /// <summary>
     /// Returns true if this light source be absorbed
     /// A light source can always be absorbed by default 
     /// </summary>
-    public virtual bool CanBeAbsorbed()
-    {        
-        return true;
+    protected virtual bool IsAbsorbable
+    {
+        get { return true; }
     }
     
     /// <summary>
     /// Applies a knockback force going away from the enemy light source
     /// </summary>
-    public virtual void Knockback(LightSource enemyLightSource)
-    {
-    }
+    protected virtual void OnKnockback(LightSource enemyLightSource) { return; }
+    
+    protected virtual void OnConsumedLightSource(LightSource otherLightSource) { return; }
     
     /// <summary>
     /// Called the instant the light depletes to zero 

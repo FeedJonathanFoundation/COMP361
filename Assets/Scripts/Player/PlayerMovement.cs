@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 public class PlayerMovement
 {
@@ -57,32 +56,20 @@ public class PlayerMovement
     /// <summary>
     /// Public constructor
     /// </summary>
-    public PlayerMovement(
-        Transform massEjectionTransform,
-        GameObject lightBallPrefab,
-        float thrustForce,
-        float changeDirectionBoost,
-        float thrustEnergyCost,
-        float brakeDrag,
-        Transform transform,
-        Rigidbody rigidbody,
-        LightEnergy lightEnergy,
-        GameObject jetFuelEffect,
-        float rotationSpeed
-    )
+    public PlayerMovement(MovementBean movementBean, Transform transform, Rigidbody rigidbody, LightEnergy lightEnergy)
     {
-        this.massEjectionTransform = massEjectionTransform;
-        this.lightBallPrefab = lightBallPrefab;
-        this.thrustForce = thrustForce;
-        this.changeDirectionBoost = changeDirectionBoost;
-        this.thrustEnergyCost = thrustEnergyCost;
-        this.brakeDrag = brakeDrag;
-        this.jetFuelEffect = jetFuelEffect;
-        this.defaultDrag = rigidbody.drag;
-        this.rotationSpeed = rotationSpeed;
+        this.massEjectionTransform = movementBean.massEjectionTransform;
+        this.lightBallPrefab = movementBean.lightBallPrefab;
+        this.thrustForce = movementBean.thrustForce;
+        this.changeDirectionBoost = movementBean.changeDirectionBoost;
+        this.thrustEnergyCost = movementBean.thrustEnergyCost;
+        this.brakeDrag = movementBean.brakeDrag;
+        this.jetFuelEffect = movementBean.jetFuelEffect;        
+        this.rotationSpeed = movementBean.rotationSpeed;
 
         this.transform = transform;
         this.rigidbody = rigidbody;
+        this.defaultDrag = rigidbody.drag;
         this.lightEnergy = lightEnergy;
 
         OnPropulsionEnd();
