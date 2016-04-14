@@ -1,6 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Flare Sound plays the appropriate flare-related sounds based
+/// on distance and context.
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 public class FlareSound : MonoBehaviour
 {
 
@@ -13,18 +21,20 @@ public class FlareSound : MonoBehaviour
 
     public void ShootFlareSound()
     {
-        // AkSoundEngine.PostEvent("Flare", target);
+        AkSoundEngine.PostEvent("Flare", target);
     }
     
+    /// <summary>
+    /// Changes the flare sound based on distance 
+    /// </summary>
     public void SetFlareDistance(float flareDistance)
     {
-        // AkSoundEngine.SetRTPCValue("flareDistance", flareDistance);
+        AkSoundEngine.SetRTPCValue("flareDistance", flareDistance);
     }
-    
-    // need to pass boss fish object
-    public void EatFlareSound()
+
+    public void EatFlareSound(GameObject target)
     {
-        // AkSoundEngine.PostEvent("FlareEat", this.gameObject);
+        AkSoundEngine.PostEvent("FlareEat", target);
     }
     
 }

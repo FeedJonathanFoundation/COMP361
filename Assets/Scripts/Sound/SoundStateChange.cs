@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Manages ambient states.
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 public class SoundStateChange : MonoBehaviour
 {
 
@@ -17,7 +24,6 @@ public class SoundStateChange : MonoBehaviour
 
     void Start()
     {
-
         switch (scene)
         {
             case 0:
@@ -64,44 +70,41 @@ public class SoundStateChange : MonoBehaviour
         {
             if (other.CompareTag("Player"))
             {
-                // AkSoundEngine.SetState("IMAmb3", "Hunted");
+                AkSoundEngine.SetState("IMAmb3", "Hunted");
             }
         }
     }
 
     private void SetState(int newState)
     {
-        // Debug.Log("new state: " + newState);
-        // switch (newState)
-        // {
-        //     case 0:// Field scene
-        //         AkSoundEngine.SetState("IMAmb1", "Amb1start");
-        //         break;
-        //     case 1:
-        //         AkSoundEngine.SetState("IMAmb1", "Amb1end");
-        //         break;
-        //     case 2: // Volcano scene
-        //         AkSoundEngine.SetState("IMAmb2", "CP2");
-        //         break;
-        //     case 3:
-        //         AkSoundEngine.SetState("IMAmb2", "CP3");
-        //         break;
-        //     case 4: // Beginning cave scene
-        //         //AkSoundEngine.PostEvent("Ambient2Stop", this.gameObject);
-        //         //AkSoundEngine.PostEvent("Ambient3", this.gameObject);
-        //         AkSoundEngine.SetState("IMAmb3", "Hunted");
-        //         break;
-        //     case 5: // boss theme
-        //         AkSoundEngine.SetState("IMAmb3", "Over");
-        //         break;
-        //     default:
-        //         break;
+        switch (newState)
+        {
+            case 0:// Field scene
+                AkSoundEngine.SetState("IMAmb1", "Amb1start");
+                break;
+            case 1:
+                AkSoundEngine.SetState("IMAmb1", "Amb1end");
+                break;
+            case 2: // Volcano scene
+                AkSoundEngine.SetState("IMAmb2", "CP2");
+                break;
+            case 3:
+                AkSoundEngine.SetState("IMAmb2", "CP3");
+                break;
+            case 4: // Beginning cave scene
+                AkSoundEngine.SetState("IMAmb3", "Hunted");
+                break;
+            case 5: // boss theme
+                AkSoundEngine.SetState("IMAmb3", "Over");
+                break;
+            default:
+                break;
             
-        // }
+        }
     }
     
     private void SafeZoneSound()
     {
-        // AkSoundEngine.SetState("IMAmb3", "Hiding");
+        AkSoundEngine.SetState("IMAmb3", "Hiding");
     }
 }
