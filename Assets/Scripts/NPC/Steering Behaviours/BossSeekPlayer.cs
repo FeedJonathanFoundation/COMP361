@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// ????
+///
+/// @author - Karl C.
+/// @version - 1.0.0
+///
+/// </summary>
 [System.Serializable]
 public class BossSeekPlayer : NPCActionable
 {

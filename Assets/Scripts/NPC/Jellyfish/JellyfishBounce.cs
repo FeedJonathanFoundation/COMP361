@@ -1,22 +1,34 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// The Jellyfish Bounce class causes jellyfish bouncing movement
+/// on player collision.
+/// To make the jellyfish are not affected by the collision,
+/// make sure 'is kinematic' is checked in rigidbody
+///
+/// @author - Karl C.
+/// @version - 1.0.0
+///
+/// </summary>
 public class JellyfishBounce : MonoBehaviour 
 {
-    //NOTE IMPORTANT
-    //in order to make this script work and to make the jellyfish not get affected by the collision
-    //make sure is kenematic is checked in rigidbody
+
     [SerializeField]
     [Tooltip("Intensity that the player bounces on the jellyfish.")]
     private float bounceIntensity;
     
-    void OnCollisionEnter(Collision col)
+    void OnCollisionEnter(Collision collision)
     {
-        //Check if you have to be specific to an object to bounce
-        //this could not exist and the player would still bounce off the body as long as istrigger is not checked
-        if(col.gameObject.tag == "Player")
+        if(collision.gameObject.tag == "Player")
         {
-            col.gameObject.GetComponent<Rigidbody>().velocity = Vector3.Reflect(col.relativeVelocity*-bounceIntensity, col.contacts[0].normal );
+            Bounce(collision);
         }
+    }
+    
+    private void Bounce(Collision collision)
+    {
+        Rigidbody rigidbody = collision.gameObject.GetComponent<Rigidbody>();
+        rigidbody.velocity = Vector3.Reflect(collision.relativeVelocity*-bounceIntensity, collision.contacts[0].normal);
     }
 }

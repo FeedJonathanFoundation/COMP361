@@ -1,6 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Manages miscellaneous sound playing.
+///
+/// @author - Stella L.
+/// @version - 1.0.0
+///
+/// </summary>
 public class SoundManager : MonoBehaviour
 {
 
@@ -9,40 +16,29 @@ public class SoundManager : MonoBehaviour
         switch (name)
         {
             case "Current":
-                // AkSoundEngine.PostEvent("Current", target);
+                AkSoundEngine.PostEvent("Current", target);
                 break;
             case "Pulse":
-                // AkSoundEngine.PostEvent("Pulse", target);
+                AkSoundEngine.PostEvent("Pulse", target);
                 break;
             case "CriticalHealth":
-                // AkSoundEngine.PostEvent("CriticalHealth", this.gameObject);
+                AkSoundEngine.PostEvent("CriticalHealth", target);
+                break;
             case "Detection":
-                // AkSoundEngine.PostEvent("Fish_Detection", targetTransform.gameObject);
+                AkSoundEngine.PostEvent("Fish_Detection", target);
+                break;
             case "BossEat":
-                // AkSoundEngine.PostEvent("BossEat", target);
+                AkSoundEngine.PostEvent("BossEat", target);
+                break;
             case "JellyfishAttack":
-                 // AkSoundEngine.PostEvent("JellyfishAttack", this.gameObject);
+                 AkSoundEngine.PostEvent("JellyfishAttack", target);
                  break;
             case "StopJellyfishAttack":
-                // AkSoundEngine.PostEvent("StopJellyfishAttack", this.gameObject);
+                AkSoundEngine.PostEvent("StopJellyfishAttack", target);
                 break;
             default:
                 break;
         }
     }
-    
-	/* GOES IN ATTRIBUTES */
-        // private SoundManager soundManager;
-    /* GOES IN VOID START() */
-        // GameObject soundObject = GameObject.FindWithTag("SoundManager");
-    //     if (soundObject != null)
-    //     {
-    //         soundManager = soundObject.GetComponent<SoundManager>();
-    //     }
-    /* GOES IN VOID PLAYSOUND() */
-        // if (soundManager != null)
-    //     {
-    //         soundManager.PlaySound("", this.gameObject);
-    //     }
-    
+
 }

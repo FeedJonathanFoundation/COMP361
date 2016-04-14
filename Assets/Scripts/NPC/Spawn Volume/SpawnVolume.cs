@@ -75,7 +75,6 @@ public class SpawnVolume : NetworkBehaviour
     {
         fishes = new List<GameObject>();
         players = new List<Transform>();
-        // player = GameObject.Find("Player").transform;
         pool = ObjectPooler.current;
         numberOfTypes = pool.PooledObjectCount;
         colliderCount = colliders.Length;
@@ -95,27 +94,23 @@ public class SpawnVolume : NetworkBehaviour
     /// </summary>
     void Update()
     {
-        if (players.Count < 2)
-        {
-            Debug.Log("need to adjust to find correct number of players!");
-            GameObject[] currentPlayers = GameObject.FindGameObjectsWithTag("Player");
-            foreach (GameObject current in currentPlayers)
-            {
-                if (current.name != "LightAbsorber")
-                {
-                    players.Add(current.transform);
-                }
-            }
-        }
-        // Iterate through the colliders
-        // If not disabled and not intialized, initialized
+        UpdateActivePlayers();
+        UpdateColliderStatus();
+        UpdateFishStatus();
+    }
+    
+    /// <summary>
+    /// Iterate through colliders to see which should be initialized.
+    /// If not disabled and not intialized, initialized.
+    /// </summary>
+    private void UpdateColliderStatus()
+    {
         for (int i = 0; i < colliderCount; i++)
         {
             if (disabled[i]) { continue; }
             if (!initialized[i])
             {
                 Initialize(i);
-                
                 // Reset the collider the player has passed
                 if (automaticReset)
                 {
@@ -123,20 +118,39 @@ public class SpawnVolume : NetworkBehaviour
                 }
             }
         }
-        // Check if fish should be active or deactivated
+    }
+    
+    /// <summary>
+    /// Update the list of active players.
+    /// </summary>
+    private void UpdateActivePlayers()
+    {
+        if (players.Count == Network.connections.Length) { return; }
+        GameObject[] currentPlayers = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject current in currentPlayers)
+        {
+            if (current.name != "LightAbsorber")
+            {
+                players.Add(current.transform);
+            }
+        }
+    }
+    
+    /// <summary>
+    /// Check and update existing fish status.
+    /// Check if fish should be active or deactivated.
+    /// </summary>
+    private void UpdateFishStatus()
+    {
         if (fishes.Count > 0)
         {
             for (int i = 0; i < fishes.Count; i++)
             {
                 if (fishes[i] != null)
                 {
-                    
-                    
                     AbstractFish fish = fishes[i].GetComponent<AbstractFish>();
                     if (fish != null)
                     {
-                        // REMOVE THIS - for DEBUGGING
-                        // fishes[i].SetActive(true);
                         fish.OnActiveChange(true);
                         CheckDistanceToPlayer(fish);
                     }
@@ -154,19 +168,19 @@ public class SpawnVolume : NetworkBehaviour
     {
         if (fish == null) { return; }
 
-        // for (int i = 0; i < players.Count; i++)
-        // {
-        //     float distanceSquared = (fish.transform.position - players[i].position).sqrMagnitude;
-        //     if (distanceSquared > maxDistanceSquared)
-        //     {
-        //         fish.gameObject.SetActive(false);
-        //     }
-        //     else if (fish.gameObject.activeSelf == false && !fish.Dead)
-        //     {
-                // fish.gameObject.SetActive(true);
+        for (int i = 0; i < players.Count; i++)
+        {
+            float distanceSquared = (fish.transform.position - players[i].position).sqrMagnitude;
+            if (distanceSquared > maxDistanceSquared)
+            {
+                fish.gameObject.SetActive(false);
+            }
+            else if (fish.gameObject.activeSelf == false && !fish.Dead)
+            {
+                fish.gameObject.SetActive(true);
         fish.OnActiveChange(true);
-        //     }
-        // }
+            }
+        }
     }
     
     /// <summary>
@@ -218,7 +232,6 @@ public class SpawnVolume : NetworkBehaviour
         if (fish == null) { return; }
         fish.transform.position = spawnLocation;
         fish.transform.rotation = Quaternion.identity;
-        // fish.SetActive(true);
         
         LightSource lightSource = fish.GetComponent<LightSource>();
         AbstractFish abstractFish = fish.GetComponent<AbstractFish>();
@@ -234,7 +247,6 @@ public class SpawnVolume : NetworkBehaviour
             abstractFish.OnActiveChange(true);
         }
         fishes.Add(fish);
-        // NetworkServer.Spawn(fish);
         NpcID npcID = fish.GetComponent<NpcID>();
         if (npcID != null)
         {

@@ -1,27 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// The Jellyfish Movement class causes the jellyfish to move
+/// up and down.
+///
+/// @author - Karl C.
+/// @version - 1.0.0
+///
+/// </summary>
 public class JellyfishMovement : MonoBehaviour 
 {
-    [Tooltip("Distance jellyfish travels from its initial ^point")]
-    public float jellyfishTravelDistance;
+    [SerializeField]
+    [Tooltip("Distance jellyfish travels from its initial point")]
+    private float jellyfishTravelDistance;
+    [SerializeField]
     [Tooltip("Speed of the jellyfish movement")]
-    public float jellyfishSpeed;
+    private float jellyfishSpeed;
     private Vector3 jellyfishStart;
     private bool goingUp; //decide if he goes up or down
     private Vector3 movement;
-    private Rigidbody parenRigidbody; //make sure the root parent has a rigidbody!!!
-	// Use this for initialization
-    void Start () 
+    private Rigidbody parentRigidbody;
+    
+    void Start() 
     {
         jellyfishStart = this.transform.position;
         goingUp = (Random.value >= 0.5? true : false); //randomly chooses true or false
-        parenRigidbody = this.transform.root.GetComponent<Rigidbody>();
+        parentRigidbody = this.transform.root.GetComponent<Rigidbody>();
         SetVelocity();
     }
 
-    // Update is called once per frame
-    void Update () 
+    void Update() 
     {
         float distance = Vector3.Distance(jellyfishStart,this.transform.position);
         if(distance >= jellyfishTravelDistance)
@@ -30,8 +39,11 @@ public class JellyfishMovement : MonoBehaviour
             SetVelocity();
         }
     }
-
-    void SetVelocity()
+    
+    /// <summary>
+    /// Sets the velocity based on upwards or downwards movement
+    /// </summary>
+    private void SetVelocity()
     {
         if(goingUp)
         {
@@ -41,7 +53,7 @@ public class JellyfishMovement : MonoBehaviour
         {
             movement = Vector3.down * jellyfishSpeed;
         }
-        parenRigidbody.velocity = Vector3.zero; //reset velocity to zero
-        parenRigidbody.AddForce(movement * jellyfishSpeed,ForceMode.Force); //set velocity depending on if he is going up or not
+        parentRigidbody.velocity = Vector3.zero;
+        parentRigidbody.AddForce(movement * jellyfishSpeed,ForceMode.Force);
     }
 }
