@@ -12,16 +12,16 @@ public class LightEnergy
 {
     public delegate void LightChangedHandler(float currentLight);
     public delegate void LightDepletedHandler();
-    
+
     // Called when the GameObject's amount of stored light changes
-    public event LightChangedHandler LightChanged = delegate {};
-        
+    public event LightChangedHandler LightChanged = delegate { };
+
     // Called when all light was depleted from the light source.
-    public event LightDepletedHandler LightDepleted = delegate {};
-    
+    public event LightDepletedHandler LightDepleted = delegate { };
+
     private float currentEnergy;
     private float defaultEnergy;
-    private GameObject gameObject;    
+    private GameObject gameObject;
     private bool hasInfiniteEnergy = false;
 
     /// <summary>
@@ -46,12 +46,12 @@ public class LightEnergy
     {
         if (this.currentEnergy + lightEnergy > this.defaultEnergy)
         {
-            this.currentEnergy = this.defaultEnergy;    
+            this.currentEnergy = this.defaultEnergy;
         }
-        else 
+        else
         {
-            this.currentEnergy += lightEnergy;    
-        }        
+            this.currentEnergy += lightEnergy;
+        }
         LightChanged(this.currentEnergy);
     }
 
@@ -64,13 +64,13 @@ public class LightEnergy
     /// <returns>float - amount of energy removed</returns>
     public float Deplete(float energyToRemove)
     {
-        if (hasInfiniteEnergy) 
-        { 
+        if (hasInfiniteEnergy)
+        {
             LightChanged(this.currentEnergy);
-            return energyToRemove; 
+            return energyToRemove;
         }
-        
-        float energyRemoved = energyToRemove;        
+
+        float energyRemoved = energyToRemove;
         if (energyToRemove > this.currentEnergy)
         {
             energyRemoved = this.currentEnergy;
@@ -82,7 +82,7 @@ public class LightEnergy
 
         // Notify subscribers that the amount of energy in this light has changed
         LightChanged(this.currentEnergy);
-        
+
         // If all light was depleted from this light source
         if (this.currentEnergy <= 0)
         {
@@ -94,7 +94,7 @@ public class LightEnergy
                 if (rigidbody) { rigidbody.drag = 10; }
             }
         }
-        
+
         return energyRemoved;
     }
 
@@ -106,5 +106,5 @@ public class LightEnergy
         get { return currentEnergy; }
         set { currentEnergy = value; }
     }
-    
+
 }

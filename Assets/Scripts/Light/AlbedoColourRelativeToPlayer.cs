@@ -2,10 +2,15 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Changes the GameObject's albedo colour based on whether it has more or less energy than the player
+/// Changes the GameObject's albedo colour based on whether it has more 
+/// or less energy than the player
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class AlbedoColourRelativeToPlayer : ColourRelativeToPlayer
-{    
+{
     // The MeshRenderer attached to this GameObject
     private MeshRenderer myRenderer;
     // The MeshRenderer attached to this GameObject's children
@@ -21,21 +26,21 @@ public class AlbedoColourRelativeToPlayer : ColourRelativeToPlayer
     protected override void OnLightChanged(float energy)
     {
         Color targetColour = GetTargetColour();
-        
+
         // Stop any colour lerping before changing the colour again.
         StopAllCoroutines();
-        
+
         if (MyRenderer != null)
         {
             StartCoroutine(UpdateAlbedoColour(MyRenderer.material, targetColour));
         }
-        
+
         if (SkinnedMeshRenderer != null)
         {
-            StartCoroutine(UpdateAlbedoColour(SkinnedMeshRenderer.material,targetColour));
+            StartCoroutine(UpdateAlbedoColour(SkinnedMeshRenderer.material, targetColour));
         }
     }
-    
+
     /// <summary>
     /// Gradually changes the material's albedo colour to the targetColour.
     /// The higher the changeRate, the faster the change occurs.
@@ -47,9 +52,9 @@ public class AlbedoColourRelativeToPlayer : ColourRelativeToPlayer
             // Gradually lerp to the target colour
             Color currentColour = material.GetColor("_Color");
             Color newColour = Color.Lerp(currentColour, targetColour, changeSpeed * Time.deltaTime);
-            
+
             material.SetColor("_Color", newColour);
-            
+
             yield return null;
         }
     }
@@ -73,13 +78,13 @@ public class AlbedoColourRelativeToPlayer : ColourRelativeToPlayer
             return renderers;
         }
     }
-    
+
     private SkinnedMeshRenderer SkinnedMeshRenderer
     {
-        get 
-        { 
+        get
+        {
             if (skinnedMeshRenderer == null) { skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>(); }
-            return skinnedMeshRenderer; 
+            return skinnedMeshRenderer;
         }
         set { skinnedMeshRenderer = value; }
     }

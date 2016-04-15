@@ -1,8 +1,12 @@
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
-/// Changes the GameObject's colour based on whether it has more or less energy than the player
+/// Changes the GameObject's colour based on whether it has more or 
+/// less energy than the player.
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public abstract class ColourRelativeToPlayer : MonoBehaviour
 {
@@ -11,13 +15,13 @@ public abstract class ColourRelativeToPlayer : MonoBehaviour
     public Color minColour;
     [Tooltip("The colour used when the light source is at >= maxLight")]
     public Color maxColour;
-    
+
     [Tooltip("The higher the value, the faster the colour changes.")]
     public float changeSpeed;
 
     [Tooltip("If true, the children's colours are also changed")]
     public bool updateChildren;
-    
+
     private LightSource lightSource;
     private static Player player;   // Do not access directly. Use Player property instead.
     private static bool playerSearched; // If true, the player has been searched using GameObject.FindTag().
@@ -26,27 +30,24 @@ public abstract class ColourRelativeToPlayer : MonoBehaviour
     {
         // Cache the GameObject's components
         lightSource = GetComponentInParent<LightSource>();
-        
+
         // Set the initial colour of the light source.
         OnLightChanged(lightSource.LightEnergy.CurrentEnergy);
     }
-    
+
     void OnEnable()
     {
         if (Player != null)
         {
             Player.LightEnergy.LightChanged += OnLightChanged;
-            //lightSource.LightEnergy.LightChanged += OnLightChanged;
-            
             // Set the initial colour of the light source.
             OnLightChanged(Player.LightEnergy.CurrentEnergy);
         }
     }
-    
+
     void OnDisable()
     {
         if (Player != null) { Player.LightEnergy.LightChanged -= OnLightChanged; }
-        //lightSource.LightEnergy.LightChanged -= OnLightChanged;
     }
 
     /// <summary>
@@ -55,7 +56,7 @@ public abstract class ColourRelativeToPlayer : MonoBehaviour
     /// <param name="energy"> The energy for the light source that gained/lost light </param>
     /// </summary>
     protected abstract void OnLightChanged(float energy);
-    
+
     /// <summary>
     /// Returns a colour between based on this light source's current energy
     /// lightEnergy < player ---> colour = minColour
@@ -67,15 +68,15 @@ public abstract class ColourRelativeToPlayer : MonoBehaviour
         {
             float currentEnergy = lightSource.LightEnergy.CurrentEnergy;
             float playerEnergy = Player.LightEnergy.CurrentEnergy;
-            
+
             Color targetColour = Color.white;
-            
+
             if (currentEnergy > playerEnergy) { targetColour = maxColour; }
             else { targetColour = minColour; }
-            
+
             return targetColour;
         }
-        
+
         return minColour;
     }
 
@@ -84,7 +85,7 @@ public abstract class ColourRelativeToPlayer : MonoBehaviour
     /// </summary>
     protected static Player Player
     {
-        get 
+        get
         {
             // Only search for the player once
             if (!playerSearched && player == null)
@@ -93,13 +94,12 @@ public abstract class ColourRelativeToPlayer : MonoBehaviour
 
                 if (playerObject != null)
                 {
-                    // Debug.Log("Found player (EmissiveColourRelativeToPlayer.cs): " + playerObject);
                     player = playerObject.GetComponentInParent<Player>();
                 }
-                
+
                 playerSearched = true;
             }
-            
+
             return player;
         }
     }

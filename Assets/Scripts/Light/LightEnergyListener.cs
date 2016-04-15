@@ -10,7 +10,7 @@ using UnityEngine;
 /// </summary>
 public abstract class LightEnergyListener : MonoBehaviour
 {
-    [Tooltip("The LightEnergy component which modifies the desired attribute." + 
+    [Tooltip("The LightEnergy component which modifies the desired attribute." +
     "If none specified, the LightEnergy attached to this GameObject is used.")]
     public LightEnergy lightEnergyOverride;
     protected LightSource lightSource;  // The LightSource being listened to
@@ -19,7 +19,7 @@ public abstract class LightEnergyListener : MonoBehaviour
     protected virtual void Start()
     {
         lightSource = GetComponentInParent<LightSource>();
-        
+
         // Choose either the override (if assigned in the Inspector) or the component
         // attached to this GameObject.
         if (lightEnergyOverride != null)

@@ -5,10 +5,12 @@ using System.Runtime.Serialization;
 using System.IO;
 using Parse;
 
- /// <summary>
- /// Data Manager contains static methods to read and write PlayerData to disk
- /// TODO extend beyond player data and implement loading from Parse
- /// </summary>
+/// <summary>
+/// Data Manager contains static methods to read and write PlayerData to disk.
+///
+/// /// @author - Alex I.
+/// @version - 1.0.0
+/// </summary>
 public static class DataManager
 {
     private static String fileName = ".playerInfo.dat";
@@ -24,7 +26,6 @@ public static class DataManager
         FileStream file = File.Open(Application.persistentDataPath + fileName, FileMode.Create);
         bf.Serialize(file, data);
         file.Close();
-        Debug.Log("Saved!");
     }
 
     /// <summary>
@@ -41,7 +42,6 @@ public static class DataManager
             try 
             {
                 data = (PlayerData) bf.Deserialize(file);
-                Debug.Log("Loaded");
             }
             catch (SerializationException e) 
             {
@@ -52,41 +52,20 @@ public static class DataManager
             {
                 file.Close();
             }
-        }
-        else
-        {
-            Debug.Log("No saved progress! File does not exist :(");
-        }
+        }        
         
         return data;
     }
     
+    /// <summary>
+    /// Delete all locally saved information
+    /// </summary>
     public static void ClearSavedData()
     {
         if (File.Exists(Application.persistentDataPath + fileName))
         {
             File.Delete(Application.persistentDataPath + fileName);
         }
-    }
-
-
-    /// <summary>
-    /// Utility method - converts Vector3 objects to strings.
-    /// Useful to allow serialization Vector3 objects.
-    /// </summary>
-    public static string Vector3ToString(Vector3 v)
-    {
-        return string.Format("{0:0.00},{1:0.00},{2:0.00}", v.x, v.y, v.z);
-    }
-
-    /// <summary>
-    /// Utility method - converts strings to Vector3 objects.
-    /// Useful to allow DEserialization of Vector3 objects.
-    /// </summary>
-    public static Vector3 Vector3FromString(String s)
-    {
-        string[] parts = s.Split(new string[] { "," }, StringSplitOptions.None);
-        return new Vector3(float.Parse(parts[0]), float.Parse(parts[1]), float.Parse(parts[2]));
     }
 
     /// <summary>

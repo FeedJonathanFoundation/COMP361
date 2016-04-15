@@ -2,7 +2,12 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// Changes the GameObject's emissive colour based on whether it has more or less energy than the player
+/// Changes the GameObject's emissive colour based on whether it has more or 
+/// less energy than the player.
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class EmissiveColourRelativeToPlayer : ColourRelativeToPlayer
 {
@@ -21,23 +26,23 @@ public class EmissiveColourRelativeToPlayer : ColourRelativeToPlayer
     protected override void OnLightChanged(float energy)
     {
         Color targetColour = GetTargetColour();
-        
+
         // Stop any colour lerping before changing the colour again.
         StopAllCoroutines();
-        
+
         if (MyRenderer != null)
         {
             StartCoroutine(UpdateEmissiveColour(MyRenderer.material, targetColour));
         }
-        
+
         //Debug.Log("SKINNEDMESHRENDERER: " + SkinnedMeshRenderer);
         if (SkinnedMeshRenderer != null)
         {
-            StartCoroutine(UpdateEmissiveColour(SkinnedMeshRenderer.material,targetColour));
+            StartCoroutine(UpdateEmissiveColour(SkinnedMeshRenderer.material, targetColour));
             //Debug.Log("CHANGE LIGHT TO: " + targetColour);
         }
     }
-    
+
     /// <summary>
     /// Gradually changes the material's emissive colour to the targetColour.
     /// The higher the changeRate, the faster the change occurs.
@@ -49,15 +54,11 @@ public class EmissiveColourRelativeToPlayer : ColourRelativeToPlayer
             // Gradually lerp to the target colour
             Color currentColour = material.GetColor("_EmissionColor");
             Color newColour = Color.Lerp(currentColour, targetColour, changeSpeed * Time.deltaTime);
-            
             material.SetColor("_EmissionColor", newColour);
-            
-            //Debug.Log("Set target emissive colour: " + newColour);
-            
             yield return null;
         }
     }
-   
+
     // The MeshRenderer attached to this GameObject
     private MeshRenderer MyRenderer
     {
@@ -77,13 +78,13 @@ public class EmissiveColourRelativeToPlayer : ColourRelativeToPlayer
             return renderers;
         }
     }
-    
+
     private SkinnedMeshRenderer SkinnedMeshRenderer
     {
-        get 
-        { 
+        get
+        {
             if (skinnedMeshRenderer == null) { skinnedMeshRenderer = GetComponent<SkinnedMeshRenderer>(); }
-            return skinnedMeshRenderer; 
+            return skinnedMeshRenderer;
         }
         set { skinnedMeshRenderer = value; }
     }

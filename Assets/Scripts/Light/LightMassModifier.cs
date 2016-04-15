@@ -13,11 +13,11 @@ public class LightMassModifier : LightEnergyListener
     [Tooltip("Theamount of energy points required to have a 1.0 mass")]
     [SerializeField]
     private float lightToMassRatio = 0.1f;
-        
+
     [Tooltip("The minimum amount of mass this GameObject can have")]
     [SerializeField]
     private float minMass;
-        
+
     private new Rigidbody rigidbody; // Always access through Rigidbody property
 
     /// <summary>

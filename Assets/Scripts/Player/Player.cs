@@ -326,7 +326,7 @@ public class Player : LightSource
     private void RestartGameListener()
     {
         this.isSafe = true;
-        SetCanAbsorbState(false); //remove canAbsorb
+        CanAbsorbState = false; //remove canAbsorb
 
         if (Input.GetButtonDown("Restart"))
         {
@@ -339,7 +339,7 @@ public class Player : LightSource
             this.showDeathParticles = false;
             this.Rigidbody.drag = movementBean.DefaultDrag; // reset drag
             this.transform.FindChild("ProbeModel").gameObject.SetActive(true); //reactivate bubbles
-            SetCanAbsorbState(true); //reset canAbsorb
+            CanAbsorbState = true; //reset canAbsorb
             OnRespawn();
         }
     }

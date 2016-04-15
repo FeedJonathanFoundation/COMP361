@@ -1,6 +1,14 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Set of static classes to manage player level (unity scenes).
+/// New game/load game functionality and initial settings. 
+/// 
+/// @author - Alex I.
+/// @version - 1.0.0
+///
+/// </summary>
 public class LevelManager : MonoBehaviour
 {
     private int currentLevel;  
@@ -15,28 +23,7 @@ public class LevelManager : MonoBehaviour
         ResetPlayerState();
         LoadGame();
     }
-        
-    /// <summary>
-    /// Loads the last saved game state on the scene or places player at the origin
-    /// </summary>
-    private void LoadGame()
-    {
-        PlayerData data = DataManager.LoadFile();
-
-        if (data != null && !disableCheckpoints)
-        {
-            if (data.levelID != this.currentLevel)
-            {
-                if (SceneManager.sceneCountInBuildSettings > data.levelID)
-                {
-                    SceneManager.LoadScene(data.levelID, LoadSceneMode.Single);
-                }
-            }
-            this.player.Transform.position = DataManager.Vector3FromString(data.playerPosition);
-            this.player.Transform.localEulerAngles = DataManager.Vector3FromString(data.playerRotation);
-        }        
-    }
-    
+            
     /// <summary>
     /// Invoked when a new scene is loaded
     /// </summary>
@@ -46,6 +33,30 @@ public class LevelManager : MonoBehaviour
         ResetPlayerState();
     }
     
+    /// <summary>
+    /// Loads the last saved game state on the scene or places player at the origin
+    /// </summary>
+    private void LoadGame()
+    {
+        PlayerData data = DataManager.LoadFile();
+        if (data != null && !disableCheckpoints)
+        {
+            if (data.levelID != this.currentLevel)
+            {
+                if (SceneManager.sceneCountInBuildSettings > data.levelID)
+                {
+                    SceneManager.LoadScene(data.levelID, LoadSceneMode.Single);
+                }
+            }
+            this.player.Transform.position = VectorExtensions.Vector3FromString(data.playerPosition);
+            this.player.Transform.localEulerAngles = VectorExtensions.Vector3FromString(data.playerRotation);
+        }        
+    }
+    
+    /// <summary>
+    /// Resets player position, rotation and velocity when the scene
+    /// is reloaded
+    /// </summary>
     public void ResetPlayerState()
     {
         player = GetComponent<Player>();

@@ -34,17 +34,17 @@ public class Checkpoint : LightSource
             if (changeScene)
             {
                 // if checkpoint changes scene, save values for the new scene
-                data.playerPosition = DataManager.Vector3ToString(new Vector3(0, 0, 0));
+                data.playerPosition = VectorExtensions.Vector3ToString(new Vector3(0, 0, 0));
                 // data.levelID = player.CurrentLevel + 1;                    
             } 
             else
             {
-                data.playerPosition = DataManager.Vector3ToString(other.gameObject.transform.position);
+                data.playerPosition = VectorExtensions.Vector3ToString(other.gameObject.transform.position);
                 // data.levelID = player.CurrentLevel;    
             }            
             
-            data.playerRotation = DataManager.Vector3ToString(other.gameObject.transform.localEulerAngles);
-            data.playerScale = DataManager.Vector3ToString(other.gameObject.transform.localScale);
+            data.playerRotation = VectorExtensions.Vector3ToString(other.gameObject.transform.localEulerAngles);
+            data.playerScale = VectorExtensions.Vector3ToString(other.gameObject.transform.localScale);
             data.playerEnergy = other.gameObject.GetComponent<Player>().LightEnergy.CurrentEnergy;            
             DataManager.SaveFile(data);    
             

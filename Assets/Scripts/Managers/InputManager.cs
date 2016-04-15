@@ -1,6 +1,13 @@
 using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Contains set of static helper classes used when processing user input
+/// from keyboard or controller.
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
+/// </summary>
 public static class InputManager
 {
     /// <summary>

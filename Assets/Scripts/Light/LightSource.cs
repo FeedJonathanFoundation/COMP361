@@ -21,7 +21,7 @@ public class LightSource : NetworkBehaviour
     [SerializeField]
     [Tooltip("If true, this GameObject will absorb other GameObjects with a LightSource component")]
     private bool canAbsorb = false;
-    
+
     [SerializeField]
     [Tooltip("If true, the player will always absorb this GameObject, even if it has higher light")]
     private bool playerWillAlwaysAbsorb = false;
@@ -39,46 +39,28 @@ public class LightSource : NetworkBehaviour
     private bool infiniteEnergy = false;
 
     [SerializeField]
-    [Tooltip("Detects absorbable lights that are in contact with this light source" )]
-    public Neighbourhood absorbableLightDetector;
+    [Tooltip("Detects absorbable lights that are in contact with this light source")]
+    private Neighbourhood absorbableLightDetector;
 
     private new Transform transform;
     private new Rigidbody rigidbody;
-    // DO NOT ACCESS DIRECTLY. Use LightEnergy property instead.
-    private LightEnergy lightEnergy;
+    private LightEnergy lightEnergy; // Use LightEnergy property to access
     private bool isAbsorbable;
     private string lightSourceId;
-    
+
     /** Raised when the light source consumes some light */
     public delegate void ConsumedLightSourceHandler(LightSource consumedLightSource);
-    public event ConsumedLightSourceHandler ConsumedLightSource = delegate {};
+    public event ConsumedLightSourceHandler ConsumedLightSource = delegate { };
 
 
     /// <summary>
-    /// Awake is called when the script instance is being loaded
     /// <see cref="Unity Documentation">
     /// </summary>
-    protected virtual void Awake() 
+    protected virtual void Awake()
     {
         // Generates a unique id prefixed by object name
         this.lightSourceId = GenerateID(this.name);
-        this.rigidbody = GetComponent<Rigidbody>();        
-    }
-    
-    /// <summary>
-    /// Subscribe to OnLightDepleted event
-    /// </summary>
-    protected virtual void OnEnable()
-    {
-        this.LightEnergy.LightDepleted += OnLightDepleted;
-    }
-    
-    /// <summary>
-    /// Unsubscribe from OnLightDepleted event
-    /// </summary>
-    protected virtual void OnDisable()
-    {        
-        this.LightEnergy.LightDepleted -= OnLightDepleted;
+        this.rigidbody = GetComponent<Rigidbody>();
     }
 
     /// <summary>
@@ -90,27 +72,27 @@ public class LightSource : NetworkBehaviour
         // Cycle through each absorbable light source being touched by this GameObject
         for (int i = 0; i < absorbableLightDetector.NeighbourCount; i++)
         {
-            GameObject absorbableLight = absorbableLightDetector.GetNeighbour(i);            
+            GameObject absorbableLight = absorbableLightDetector.GetNeighbour(i);
             if (absorbableLight == null) { continue; }
-            
+
             LightSource otherLightSource = absorbableLight.GetComponentInParent<LightSource>();
             if (otherLightSource == null) { continue; }
-                                    
+
             // If this GameObject can absorb the touched light source, 
             // Transfer light energy from the other light source to this one
             if (CanAbsorb(otherLightSource))
             {
-                
+
                 if (this is Player)
                 {
                     PlayerSound playerSound = GetComponent<PlayerSound>();
                     playerSound.EatSound();
                 }
                 LightEnergy lightEnergyToAbsorb = otherLightSource.LightEnergy;
-                                        
+
                 // Calculate the amount of light to absorb from the other light source
                 float lightToAbsorb = absorptionRate * Time.deltaTime;
-                
+
                 // If the player was hit
                 if (otherLightSource is Player)
                 {
@@ -120,45 +102,59 @@ public class LightSource : NetworkBehaviour
                         AbstractFish fish = (AbstractFish)this;
                         lightToAbsorb = fish.damageInflicted;
                     }
-                    
-                    // Debug.Log("Absorb " + lightToAbsorb + " from player");
-                     
                     // Knockback the player away from the enemy fish
                     otherLightSource.OnKnockback(this);
                 }
-                
+
                 // Transfer light energy from the other light source to this one
                 float lightAbsorbed = lightEnergyToAbsorb.Deplete(lightToAbsorb);
                 lightEnergy.Add(lightAbsorbed);
-                
+
                 // Inform subscribers that this light source consumed another light source.
                 ConsumedLightSource(otherLightSource);
             }
         }
     }
-     
-    protected virtual void ChangeColor(Color color) { return; }
-     
-     
-    /// <summary>
-    /// Returns true if this LightSource can absorb the given LightSource
-    /// Calculated by comparing the amount of energy in LightEnergy property of LightSources 
-    /// </summary>
-    private bool CanAbsorb(LightSource otherLightSource)
-    {
-        if (!otherLightSource.IsAbsorbable) { return false; }
-        
-        // If this light source has more energy than the other one, return true. This light source can absorb the given argument.
-        if (canAbsorb && LightEnergy.CurrentEnergy > otherLightSource.LightEnergy.CurrentEnergy) { return true; }
-                       
-        if (canAbsorb && !otherLightSource.canAbsorb) { return true; }        
-        
-        // The player can always absorb a light source with LightSource.playerWillAlwaysAbsorb set to true
-        if (this is Player && canAbsorb && otherLightSource.playerWillAlwaysAbsorb) { return true; }
 
-        return false;        
+    /// <summary>
+    /// Subscribe to OnLightDepleted event
+    /// </summary>
+    protected virtual void OnEnable()
+    {
+        this.LightEnergy.LightDepleted += OnLightDepleted;
     }
-        
+
+    /// <summary>
+    /// Unsubscribe from OnLightDepleted event
+    /// </summary>
+    protected virtual void OnDisable()
+    {
+        this.LightEnergy.LightDepleted -= OnLightDepleted;
+    }
+
+    /// <summary>
+    /// Change color of a light source to a given color
+    /// </summary>
+    protected virtual void ChangeColor(Color color) { }
+
+    /// <summary>
+    /// Listens for knockback events on light source
+    /// Implemented in children classes
+    /// </summary>
+    protected virtual void OnKnockback(LightSource enemyLightSource) { }
+
+    /// <summary>
+    /// Listens for consumed light source events on light source 
+    /// Implemented in children classes
+    /// </summary>
+    protected virtual void OnConsumedLightSource(LightSource otherLightSource) { }
+
+    /// <summary>
+    /// Called the instant the light depletes to zero from the LightEnergy.LightDepleted event
+    /// Implemented in children classes
+    /// </summary>
+    protected virtual void OnLightDepleted() { }
+
     /// <summary>
     /// Returns true if this light source be absorbed
     /// A light source can always be absorbed by default 
@@ -167,103 +163,97 @@ public class LightSource : NetworkBehaviour
     {
         get { return true; }
     }
-    
+
     /// <summary>
-    /// Applies a knockback force going away from the enemy light source
+    /// Returns true if this LightSource can absorb the given LightSource
+    /// Calculated by comparing the amount of energy in LightEnergy property of LightSources 
     /// </summary>
-    protected virtual void OnKnockback(LightSource enemyLightSource) { return; }
-    
-    protected virtual void OnConsumedLightSource(LightSource otherLightSource) { return; }
-    
-    /// <summary>
-    /// Called the instant the light depletes to zero 
-    /// from the LightEnergy.LightDepleted event
-    /// 
-    /// Implemented in child classes
-    /// </summary>
-    protected virtual void OnLightDepleted() {}
-          
+    private bool CanAbsorb(LightSource otherLightSource)
+    {
+        if (!otherLightSource.IsAbsorbable) { return false; }
+
+        // If this light source has more energy than the other one, return true. This light source can absorb the given argument.
+        if (canAbsorb && LightEnergy.CurrentEnergy > otherLightSource.LightEnergy.CurrentEnergy) { return true; }
+
+        if (canAbsorb && !otherLightSource.canAbsorb) { return true; }
+
+        // The player can always absorb a light source with LightSource.playerWillAlwaysAbsorb set to true
+        if (this is Player && canAbsorb && otherLightSource.playerWillAlwaysAbsorb) { return true; }
+
+        return false;
+    }
+
     /// <summary>
     /// Generates an unique ID for each LightSource
     /// </summary>
     /// <param name="objectName">name of the object used to prefix generated ID</param>
     /// <returns></returns>       
     private string GenerateID(string objectName)
-    {        
+    {
         if (objectName != null)
         {
-            return string.Format("{0}_{1:N}", objectName, Guid.NewGuid());    
+            return string.Format("{0}_{1:N}", objectName, Guid.NewGuid());
         }
-        else 
+        else
         {
             return Guid.NewGuid().ToString();
-        }        
+        }
     }
-    
-   
-    /// PROPERTIES
-    
-     /// <summary>
-    /// Cached transform component
-    /// </summary>
+
+    public bool CanAbsorbState
+    {
+        get { return canAbsorb; }
+        set { canAbsorb = value; }
+    }
+
     public Transform Transform
     {
-        get 
+        get
         {
             if (this.transform == null) { transform = GetComponent<Transform>(); }
             return transform;
         }
         set { this.transform = value; }
     }
-    
-    /// <summary>
-    /// Cached rigidbody component
-    /// </summary>
+
     public Rigidbody Rigidbody
     {
-        get 
+        get
         {
             if (this.rigidbody == null) { rigidbody = GetComponent<Rigidbody>(); }
             return rigidbody;
         }
         set { this.rigidbody = value; }
     }
-      
-    /// <summary>
-    /// The LightEnergy component accessor controlling this object's amount of energy
-    /// </summary>
+
     public LightEnergy LightEnergy
     {
-        get 
-        { 
+        get
+        {
             if (lightEnergy == null)
             {
-                lightEnergy = new LightEnergy(defaultEnergy, gameObject, infiniteEnergy);    
-            }                        
-            return lightEnergy; 
+                lightEnergy = new LightEnergy(defaultEnergy, gameObject, infiniteEnergy);
+            }
+            return lightEnergy;
         }
         set { this.lightEnergy = value; }
     }
-    
+
     public float DefaultEnergy
     {
         get { return this.defaultEnergy; }
         set { this.defaultEnergy = value; }
     }
-    
+
     public string LightSourceID
     {
-        get { return this.lightSourceId; }        
+        get { return this.lightSourceId; }
     }
-    
+
     public bool InfiniteEnergy
     {
         get { return this.infiniteEnergy; }
         set { this.infiniteEnergy = value; }
     }
-    
-    public void SetCanAbsorbState(bool state)
-    {
-        canAbsorb = state;
-    }
+
 }

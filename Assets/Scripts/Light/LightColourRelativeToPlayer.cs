@@ -9,7 +9,7 @@ using System.Collections;
 ///
 /// </summary>
 public class LightColourRelativeToPlayer : ColourRelativeToPlayer
-{    
+{
     private Light myLight; // The Light attached to this GameObject    
     private Light[] childLights; // The Lights attached to this GameObject's children
 
@@ -20,15 +20,15 @@ public class LightColourRelativeToPlayer : ColourRelativeToPlayer
     /// </summary>
     protected override void OnLightChanged(float energy)
     {
-        Color targetColour = GetTargetColour();        
+        Color targetColour = GetTargetColour();
         // Stop any colour lerping before changing the colour again.
-        StopAllCoroutines();        
+        StopAllCoroutines();
         if (MyLight != null)
         {
             StartCoroutine(UpdateColour(MyLight, targetColour));
         }
     }
-    
+
     /// <summary>
     /// Gradually changes the light's colour to the targetColour.
     /// The higher the changeRate, the faster the change occurs.
@@ -40,9 +40,9 @@ public class LightColourRelativeToPlayer : ColourRelativeToPlayer
             // Gradually lerp to the target colour
             Color currentColour = light.color;
             Color newColour = Color.Lerp(currentColour, targetColour, changeSpeed * Time.deltaTime);
-            
+
             light.color = newColour;
-            
+
             yield return null;
         }
     }

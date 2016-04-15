@@ -19,7 +19,7 @@ public class LightEmissiveColourModifier : LightEnergyListener
     public float minLight;
     [Tooltip("The minimum amount of light needed to use the maxColour")]
     public float maxLight;
-    
+
     [Tooltip("The higher the value, the faster the colour changes.")]
     public float changeSpeed;
 
@@ -34,18 +34,18 @@ public class LightEmissiveColourModifier : LightEnergyListener
     public override void OnLightChanged(float currentLight)
     {
         // Calculates the percentage of colour to use between [minColour,maxColour]
-        float percent = (currentLight - minLight) / (maxLight-minLight);
-        
+        float percent = (currentLight - minLight) / (maxLight - minLight);
+
         // Stop any colour lerping before changing the colour again.
         StopAllCoroutines();
-        
+
         if (MyRenderer != null)
         {
             Color targetColour = GetTargetColour(percent);
             StartCoroutine(UpdateEmissiveColour(MyRenderer.material, targetColour));
         }
     }
-    
+
     /// <summary>
     /// Gradually changes the material's emissive colour to the targetColour.
     /// The higher the changeRate, the faster the change occurs.
@@ -57,13 +57,13 @@ public class LightEmissiveColourModifier : LightEnergyListener
             // Gradually lerp to the target colour
             Color currentColour = material.GetColor("_EmissionColor");
             Color newColour = Color.Lerp(currentColour, targetColour, changeSpeed * Time.deltaTime);
-            
+
             material.SetColor("_EmissionColor", newColour);
-            
+
             yield return null;
         }
     }
-    
+
     /// <summary>
     /// Returns a colour between [minColour,maxColour] based
     /// on the given percentage:
@@ -72,7 +72,7 @@ public class LightEmissiveColourModifier : LightEnergyListener
     /// </summary>
     private Color GetTargetColour(float percent)
     {
-        Color targetColour = Color.Lerp(minColour, maxColour, percent);        
+        Color targetColour = Color.Lerp(minColour, maxColour, percent);
         return targetColour;
     }
 
