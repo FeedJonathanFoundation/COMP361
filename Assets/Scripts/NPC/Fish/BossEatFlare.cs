@@ -39,6 +39,6 @@ public class BossEatFlare : MonoBehaviour
         {
             soundManager.PlaySound("BossEat", this.gameObject);
         }
-        player.GetComponent<FlareSpawner>().EatFlare();
+        player.GetComponent<PlayerSpawnFlare>().EatFlare();
     }
 }

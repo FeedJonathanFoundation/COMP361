@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// BossThemeTrigger is responsible for stopping sounds from scene 2

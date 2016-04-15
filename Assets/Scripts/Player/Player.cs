@@ -44,7 +44,7 @@ public class Player : LightSource
 
     private PlayerMovement movement;
     private PlayerLightToggle lightToggle;
-    private FlareSpawner flareControl;
+    private PlayerSpawnFlare flareControl;
 
 
     private float lastTimeHit = -100;  // The last time player was hit by an enemy
@@ -52,16 +52,12 @@ public class Player : LightSource
     private float previousThrustAxis; // Previous value of Input.GetAxis("ThrustAxis")
     private bool isDead; // determines is current player is dead
     public bool isSafe; // used for boss AI
-    private bool deathParticlesPlayed;
-    private MaterialExtensions materials;
-    private ControllerRumble controllerRumble;  // Caches the controller rumble component
-    private GameObject gameOverCanvas;
-    public int playerVelocity;
+    private bool deathParticlesPlayed;   
+    private ControllerRumble controllerRumble;  // Caches the controller rumble component   
 
 
     private IEnumerator changeIntensityCoroutine;
 
-    [Header("Other")]
     private static Player playerInstance;
     private PlayerSound playerSound;
 
@@ -73,6 +69,7 @@ public class Player : LightSource
 
     /// <summary>
     /// Initialize Player components
+    /// <see cref="Unity Documentation">
     /// </summary>
     protected override void Awake()
     {
@@ -81,7 +78,7 @@ public class Player : LightSource
         this.playerSound = GetComponent<PlayerSound>();
         this.movement = new PlayerMovement(movementBean, this.Transform, this.Rigidbody, this.LightEnergy);
         this.lightToggle = new PlayerLightToggle(this.Transform.Find("LightsToToggle").gameObject, this, lightToggleBean);
-        this.flareControl = new FlareSpawner(flareBean, this, controllerRumble);
+        this.flareControl = new PlayerSpawnFlare(flareBean, this, controllerRumble);
         this.defaultDrag = Rigidbody.drag;
         this.isDead = false;
         this.isSafe = true;
@@ -89,8 +86,8 @@ public class Player : LightSource
     }
 
     /// <summary>
-    /// Listens for player states such as movement, light controls and death
-    /// Called once per frame
+    /// Listen for player actions
+    /// <see cref="Unity Documentation">
     /// </summary>
     protected override void Update()
     {
@@ -108,13 +105,19 @@ public class Player : LightSource
             FlareControlListener();
         }
     }
-
+    
+    /// <summary>
+    /// <see cref="Unity Documentation">
+    /// </summary>
     protected override void OnEnable()
     {
         base.OnEnable();
         ConsumedLightSource += OnConsumedLightSource;
     }
 
+    /// <summary>
+    ///<see cref="Unity Documentation"> 
+    /// </summary>
     protected override void OnDisable()
     {
         base.OnEnable();
@@ -144,7 +147,7 @@ public class Player : LightSource
     }
 
     /// <summary>
-    /// Called when the player is hit by a light source that is stronger than him
+    /// Invoked when the player is hit by a light source that is stronger than him
     /// </summary>
     protected override void OnKnockback(LightSource enemyLightSource)
     {
@@ -159,7 +162,7 @@ public class Player : LightSource
         if (enemyLightSource.CompareTag("Fish"))
         {
             // Instantiate hit particles
-            GameObject.Instantiate(movementBean.fishHitParticles, transform.position, Quaternion.Euler(0, 0, 0));
+            GameObject.Instantiate(movementBean.FishHitParticles, transform.position, Quaternion.Euler(0, 0, 0));
             // Rumble the controller when the player hits a fish.
             controllerRumble.PlayerHitByFish();
         }
@@ -171,14 +174,14 @@ public class Player : LightSource
     protected void OnCollisionEnter(Collision collision)
     {
         // Player has collided upon death
-        if (isDead && !deathParticlesPlayed && movementBean.playerDeathParticles != null)
+        if (isDead && !deathParticlesPlayed && movementBean.PlayerDeathParticles != null)
         {
             // Calculate the angle of the player's velocity upon impact
             float crashAngle = Mathf.Rad2Deg * Mathf.Atan2(Rigidbody.velocity.y, Rigidbody.velocity.x);
             // Orient the explosion opposite to the player's velocity
             float explosionAngle = crashAngle + 180;
             // Spawn the explosion
-            ParticleSystem explosion = GameObject.Instantiate(movementBean.playerDeathParticles,
+            ParticleSystem explosion = GameObject.Instantiate(movementBean.PlayerDeathParticles,
                                         Transform.position, Quaternion.Euler(-90, explosionAngle, 0)) as ParticleSystem;
             // Explosion sound
             playerSound.ExplosionSound();
@@ -197,7 +200,6 @@ public class Player : LightSource
 
     /// <summary>
     /// Changes the color of the player avatar to the given one
-    ///
     /// </summary>
     /// <param name="color">target color</param>
     /// <param name="isSmooth">if true, the color change will follow a smooth gradient</param>
@@ -235,9 +237,9 @@ public class Player : LightSource
 
 
         // Clamp the player's velocity
-        if (this.Rigidbody.velocity.sqrMagnitude > movementBean.maxSpeed * movementBean.maxSpeed)
+        if (this.Rigidbody.velocity.sqrMagnitude > movementBean.MaxSpeed * movementBean.MaxSpeed)
         {
-            this.Rigidbody.velocity = ((Vector2)this.Rigidbody.velocity).SetMagnitude(movementBean.maxSpeed);
+            this.Rigidbody.velocity = ((Vector2)this.Rigidbody.velocity).SetMagnitude(movementBean.MaxSpeed);
         }
 
         // Ensure that the rigidbody never spins
@@ -255,13 +257,13 @@ public class Player : LightSource
 
         if (Input.GetButton("Thrust"))
         {
-            movement.Propulse(-movementBean.massEjectionTransform.up);
+            movement.Propulse(-movementBean.MassEjectionTransform.up);
         }
 
         if (thrustAxis != 0)
         {
             // Propulse in the direction of the left stick (opposite to the rear of the probe)
-            movement.Propulse(-movementBean.massEjectionTransform.up, thrustAxis);
+            movement.Propulse(-movementBean.MassEjectionTransform.up, thrustAxis);
         }
 
         if (Input.GetButtonUp("Thrust") || (previousThrustAxis > 0 && thrustAxis == 0))
@@ -299,7 +301,7 @@ public class Player : LightSource
         {
             if (Input.GetButtonDown("LightToggle"))
             {
-                if (lightToggleBean.minimalEnergyRestrictionToggleLights < this.LightEnergy.CurrentEnergy)
+                if (lightToggleBean.MinimalEnergy < this.LightEnergy.CurrentEnergy)
                 {
                     this.lightToggle.ToggleLights();
                     playerSound.LightToggleSound();
@@ -330,7 +332,7 @@ public class Player : LightSource
                 }
             }
 
-            this.lightToggle.DepleteLight(lightToggleBean.timeToDeplete, lightToggleBean.lightToggleEnergyCost);
+            this.lightToggle.DepleteLight(lightToggleBean.TimeToDeplete, lightToggleBean.LightToggleEnergyCost);
         }
     }
 
@@ -357,12 +359,7 @@ public class Player : LightSource
         if (Input.GetButtonDown("Restart"))
         {
 
-            Debug.Log("Game Restarted");
-
-            if (gameOverCanvas != null)
-            {
-                gameOverCanvas.SetActive(false);
-            }
+            Debug.Log("Game Restarted");            
             Transform.localScale = new Vector3(1, 1, 1);
             Rigidbody.isKinematic = false;
             Rigidbody.useGravity = false;
@@ -472,7 +469,7 @@ public class Player : LightSource
     [Command]
     private void Cmd_ShootFlare()
     {
-        GameObject flare = (GameObject)Instantiate(flareObject, flareBean.flareSpawnObject.position, flareBean.flareSpawnObject.rotation);
+        GameObject flare = (GameObject)Instantiate(flareObject, flareBean.FlareSpawnObject.position, flareBean.FlareSpawnObject.rotation);
         NetworkServer.Spawn(flare);
     }
 

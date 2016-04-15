@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FlareSpawner
+public class PlayerSpawnFlare
 {
     private float cooldownTime;
     private float flareEnergyCost;
@@ -15,14 +15,14 @@ public class FlareSpawner
     private PlayerSound playerSound;
     private ControllerRumble controllerRumble;
     
-    public FlareSpawner(FlareBean flareBean, Player player, ControllerRumble controllerRumble) 
+    public PlayerSpawnFlare(FlareBean flareBean, Player player, ControllerRumble controllerRumble) 
     {               
         this.timer = 0;
-        this.cooldownTime = flareBean.coolDown;               
-        this.flareSpawnObject = flareBean.flareSpawnObject;
-        this.recoilForce = flareBean.recoilForce;
-        this.flareCostPercentage = flareBean.flareCostPercentage;
-        this.flareEnergyCost = flareBean.flareEnergyCost;               
+        this.cooldownTime = flareBean.CoolDown;               
+        this.flareSpawnObject = flareBean.FlareSpawnObject;
+        this.recoilForce = flareBean.RecoilForce;
+        this.flareCostPercentage = flareBean.FlareCostPercentage;
+        this.flareEnergyCost = flareBean.FlareEnergyCost;               
         
         this.player = player;
         this.controllerRumble = controllerRumble;
@@ -81,7 +81,7 @@ public class FlareSpawner
 
     public void EatFlare()
     {
-        flareSound.EatFlareSound();
+        flareSound.EatFlareSound(player.gameObject);
     }
 
 }

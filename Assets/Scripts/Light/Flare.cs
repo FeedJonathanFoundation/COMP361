@@ -3,7 +3,7 @@
 /// <summary>
 /// Flare object extends LightSource
 /// </summary>
-public class PlayerFlare : MonoBehaviour
+public class Flare : LightSource
 {
     //variables not for user
     private new Rigidbody rigidbody;            //rigibody information, init in Start()
@@ -13,18 +13,30 @@ public class PlayerFlare : MonoBehaviour
     private float timer = 0;                    //timer for decaylight
 
     //variables changable in the interface
+    
     [Tooltip("Speed at which the flare travels")]
-    public float speed;
+    [SerializeField]
+    private float speed;
+    
     [Tooltip("Time before the light starts diminishing")]
-    public float timeBeforeDecay;
+    [SerializeField]
+    private float timeBeforeDecay;
+    
     [Tooltip("How long the objects last before being destroyed")]
-    public float destroyTime;
+    [SerializeField]
+    private float destroyTime;
+    
     [Tooltip("Time interval in which the light diminishes")]
-    public float decayRateTime;
+    [SerializeField]
+    private float decayRateTime;
+    
     [Tooltip("The higher the value, the faster light(flare) diminishes")]
-    public float fadeSpeed;
+    [SerializeField]
+    private float fadeSpeed;
+    
     [Tooltip("The higher the value, the faster light(spot) diminishes")]
-    public float lightReduction;
+    [SerializeField]
+    private float lightReduction;
 
     // Use this for initialization
     void Start()

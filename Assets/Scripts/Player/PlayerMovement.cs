@@ -58,14 +58,14 @@ public class PlayerMovement
     /// </summary>
     public PlayerMovement(MovementBean movementBean, Transform transform, Rigidbody rigidbody, LightEnergy lightEnergy)
     {
-        this.massEjectionTransform = movementBean.massEjectionTransform;
-        this.lightBallPrefab = movementBean.lightBallPrefab;
-        this.thrustForce = movementBean.thrustForce;
-        this.changeDirectionBoost = movementBean.changeDirectionBoost;
-        this.thrustEnergyCost = movementBean.thrustEnergyCost;
-        this.brakeDrag = movementBean.brakeDrag;
-        this.jetFuelEffect = movementBean.jetFuelEffect;        
-        this.rotationSpeed = movementBean.rotationSpeed;
+        this.massEjectionTransform = movementBean.MassEjectionTransform;
+        this.lightBallPrefab = movementBean.LightBallPrefab;
+        this.thrustForce = movementBean.ThrustForce;
+        this.changeDirectionBoost = movementBean.ChangeDirectionBoost;
+        this.thrustEnergyCost = movementBean.ThrustEnergyCost;
+        this.brakeDrag = movementBean.BrakeDrag;
+        this.jetFuelEffect = movementBean.JetFuelEffect;        
+        this.rotationSpeed = movementBean.RotationSpeed;
 
         this.transform = transform;
         this.rigidbody = rigidbody;

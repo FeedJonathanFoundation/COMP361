@@ -15,7 +15,7 @@ public class JellyfishShock : MonoBehaviour
     [SerializeField]
     [Tooltip("Amount of energy sucked up but the jellyfish")]
     private float energyLost;
-    erializeField]
+    [SerializeField]
     [Tooltip("Interval at which the jellyfish sucks up player energy")]
     private float timeBeforeEnergyLost;
     private float timer = 0;

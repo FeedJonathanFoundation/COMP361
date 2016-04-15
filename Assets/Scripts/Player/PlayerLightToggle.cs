@@ -27,10 +27,10 @@ public class PlayerLightToggle
         this.lightsToToggle = lightsToToggle;
         this.player = player;
         
-        this.lightsEnabled = lightToggleBean.defaultLightStatus;
-        this.lightButtonPressed = lightToggleBean.defaultLightStatus;                        
-        this.minimalEnergyRestriction = lightToggleBean.minimalEnergyRestrictionToggleLights;
-        this.propulsionLightRange = lightToggleBean.propulsionLightRange;
+        this.lightsEnabled = lightToggleBean.DefaultLightStatus;
+        this.lightButtonPressed = lightToggleBean.DefaultLightStatus;                        
+        this.minimalEnergyRestriction = lightToggleBean.MinimalEnergy;
+        this.propulsionLightRange = lightToggleBean.PropulsionLightRange;
         this.ToggleLights();
         
         // Cache very close light - needs to be refactored

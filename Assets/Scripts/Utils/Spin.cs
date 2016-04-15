@@ -1,33 +1,35 @@
 using UnityEngine;
-using System.Collections;
-
-public enum RotationAxis
-{
-    X,Y,Z
-}
 
 /// <summary>
 /// Spins a GameObject around a given axis
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class Spin : MonoBehaviour
-{
-    /// <summary>
-    /// The speed at which the player spins whilst idle (degrees/sec)
-    /// </summary>
+{    
     [Tooltip("The speed at which the object spins (degrees/sec)")]
-    public float spinSpeed = 50f;
-    
+    [SerializeField]
+    private float spinSpeed = 50f;
+            
     [Tooltip("The axis around which the object spins")]
-    public RotationAxis rotationAxis;
-    
-    /** Caches the GameObject's components */
+    [SerializeField]
+    private RotationAxis rotationAxis;    
     private new Transform transform;
+    private enum RotationAxis { X,Y,Z }
     
+    /// <summary>
+    /// <see cref="Unity Documentation">
+    /// </summary>
     void Start()
     {
         transform = GetComponent<Transform>();
     }
     
+    /// <summary>
+    /// <see cref="Unity Documentation">
+    /// </summary>
     void FixedUpdate()
     {
         Vector3 rotationDirection = Vector3.zero;
@@ -53,3 +55,4 @@ public class Spin : MonoBehaviour
         transform.RotateAround(transform.position, rotationDirection, spinSpeed*Time.fixedDeltaTime);
     }
 }
+
