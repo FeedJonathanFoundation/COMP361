@@ -1,39 +1,36 @@
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Changes the GameObject's mass based on its current amount of light energy.
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 [RequireComponent(typeof(Rigidbody))]
 public class LightMassModifier : LightEnergyListener
 {
-    /// <summary>
-    /// Determines the amount of energy points required to have a 1.0 mass.
-    /// (Rigidbody.mass = currentLight * lightToMassRatio);
-    /// </summary>
-    public float lightToMassRatio = 0.1f;
-
-    /// <summary>
-    /// The minimum amount of mass this GameObject can have
-    /// </summary>
+    [Tooltip("Theamount of energy points required to have a 1.0 mass")]
+    [SerializeField]
+    private float lightToMassRatio = 0.1f;
+        
     [Tooltip("The minimum amount of mass this GameObject can have")]
-    public float minMass;
+    [SerializeField]
+    private float minMass;
+        
+    private new Rigidbody rigidbody; // Always access through Rigidbody property
 
-    // Don't access directly. Access the Rigidbody property instead
-    private new Rigidbody rigidbody;
-
+    /// <summary>
+    /// Implementation of OnLightChanged() from LightEnergyListener
+    /// Scales the rigidbody's mass based on its current amount of light
+    /// </summary>
+    /// <param name="currentLight"></param>
     public override void OnLightChanged(float currentLight)
     {
-        // Scales the rigidbody's mass based on its current amount of light
         Rigidbody.mass = currentLight * lightToMassRatio;
-
-        // Clamp the mass to its minimum value
         Rigidbody.mass = Mathf.Max(minMass, Rigidbody.mass);
-
-        // Debug.Log("Current mass: " + Rigidbody.mass);
     }
 
-    /** Cached Rigidbody component. */
     private Rigidbody Rigidbody
     {
         get

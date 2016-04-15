@@ -1,19 +1,22 @@
 using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Modifies the GameObject based on its current amount of light energy
+///
+/// @author - Jonathan L.A
+/// @author - Alex I.
+/// @version - 1.0.0
+///
 /// </summary>
 public abstract class LightEnergyListener : MonoBehaviour
 {
-    [Tooltip("The LightEnergy component which modifies the desired attribute. If none " +
-     "specified, the LightEnergy attached to this GameObject is used.")]
+    [Tooltip("The LightEnergy component which modifies the desired attribute." + 
+    "If none specified, the LightEnergy attached to this GameObject is used.")]
     public LightEnergy lightEnergyOverride;
-
     protected LightSource lightSource;  // The LightSource being listened to
     private LightEnergy lightEnergy;
 
-    public virtual void Start()
+    protected virtual void Start()
     {
         lightSource = GetComponentInParent<LightSource>();
         
@@ -33,31 +36,36 @@ public abstract class LightEnergyListener : MonoBehaviour
         }
 
         Subscribe();
-
         // Initialize the attribute to the light's initial energy
         OnLightChanged(lightEnergy.CurrentEnergy);
     }
 
+    /// <summary>
+    /// Subscribe to OnLightChanged() event to track whenever 
+    /// the GameObject's amount of light energy changes.
+    /// </summary>
     public void Subscribe()
     {
         if (this.lightEnergy != null)
         {
-            // Call OnLightChanged() whenever the GameObject's amount of light energy changes.
             this.lightEnergy.LightChanged += OnLightChanged;
-            //this.lightEnergy.LightDepleted += OnLightDepleted;
         }
     }
 
+    /// <summary>
+    /// Unsubscribe from OnLightChanged event
+    /// </summary>
     public void Unsubscribe()
     {
         if (this.lightEnergy != null)
         {
-            // Unsubscribe from events to avoid errors
             this.lightEnergy.LightChanged -= OnLightChanged;
-            //this.lightEnergy.LightDepleted -= OnLightDepleted;
         }
     }
 
+    /// <summary>
+    /// Calls Unsubscribe() once player is out of light enegry
+    /// </summary>
     public void OnLightDepleted()
     {
         Unsubscribe();

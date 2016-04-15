@@ -2,18 +2,14 @@
 
 /// <summary>
 /// Flare object extends LightSource
+///
+/// @author - Jonathan L.A
+/// @author - Alex I.
+/// @version - 1.0.0
+///
 /// </summary>
 public class Flare : LightSource
-{
-    //variables not for user
-    private new Rigidbody rigidbody;            //rigibody information, init in Start()
-    private Light lightObject;                  //light of the flare, init in Start()
-    private LensFlare flareLens;                //controls brightness of flare, init in Start()
-    private float intensity;                    //intensity of light, used for decay of light
-    private float timer = 0;                    //timer for decaylight
-
-    //variables changable in the interface
-    
+{    
     [Tooltip("Speed at which the flare travels")]
     [SerializeField]
     private float speed;
@@ -37,24 +33,26 @@ public class Flare : LightSource
     [Tooltip("The higher the value, the faster light(spot) diminishes")]
     [SerializeField]
     private float lightReduction;
+    
+    private new Rigidbody rigidbody;            //rigibody information, init in Start()
+    private Light lightObject;                  //light of the flare, init in Start()
+    private LensFlare flareLens;                //controls brightness of flare, init in Start()
+    private float intensity;                    //intensity of light, used for decay of light
+    private float timer = 0;                    //timer for decaylight
 
     // Use this for initialization
-    void Start()
+    protected void Start()
     {
-        rigidbody = GetComponent<Rigidbody>();
-        lightObject = gameObject.GetComponentInChildren<Light>();
-        flareLens = lightObject.GetComponent<LensFlare>();
-
-        rigidbody.velocity = transform.right * speed;
+        this.rigidbody = GetComponent<Rigidbody>();
+        this.lightObject = gameObject.GetComponentInChildren<Light>();
+        this.flareLens = lightObject.GetComponent<LensFlare>();
+        this.rigidbody.velocity = transform.right * speed;
         Destroy(gameObject, destroyTime);
     }
 	
-	// Update is called once per frame
-	void Update()
+	protected override void Update()
     {
-        //might need to put if rotating!    
-        //timers could help with frames
-        
+        base.Update();        
         if ((timer += Time.deltaTime) > timeBeforeDecay)
         {
             lightObject.intensity -= Time.deltaTime * lightReduction;

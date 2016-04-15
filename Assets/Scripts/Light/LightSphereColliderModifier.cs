@@ -1,37 +1,42 @@
 using UnityEngine;
-using System.Collections;
 
+/// <summary>
+/// Changes the GameObject's sphere collider properties
+/// 
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
+/// </summary>
 [RequireComponent(typeof(SphereCollider))]
 public class LightSphereColliderModifier : LightEnergyListener
 {
     [Tooltip("The amount of light energy required to have a SphereCollider radius of 1")]
-    public float lightToRadiusRatio;
+    [SerializeField]
+    private float lightToRadiusRatio;
     
     [Tooltip("The collider's radius is multiplied by this constant if the player is thrusting.")]
-    public float thrustRadiusMultiplier;
-    
-    // Cache GameObject components
+    [SerializeField]
+    private float thrustRadiusMultiplier;
+      
     private SphereCollider sphereCollider;
     private Player player;
     private PlayerLightToggle playerLightToggle;
     
-    public override void Start()
+    protected override void Start()
     {
+        base.Start();
         sphereCollider = GetComponent<SphereCollider>();
         // Move the collider somewhere no fish will ever see on game start
-        sphereCollider.center = new Vector3(1000000,1000000,100000);
-        
-        base.Start();
-        
+        sphereCollider.center = new Vector3(1000000,1000000,100000);        
         if (lightSource is Player) { player = (Player)lightSource; }
     }
     
     public override void OnLightChanged(float currentLight)
     {
-        //sphereCollider.radius = currentLight * lightToRadiusRatio;
+        sphereCollider.radius = currentLight * lightToRadiusRatio;
     }
     
-    void Update()
+    protected void Update()
     {
         // Compute the sphere collider's radius based on the parent light source's energy
         float colliderRadius = lightSource.LightEnergy.CurrentEnergy * lightToRadiusRatio;
@@ -45,15 +50,8 @@ public class LightSphereColliderModifier : LightEnergyListener
                 colliderRadius = 0;
                 // Move the collider somewhere no fish will ever see
                 colliderCenter = new Vector3(1000000,1000000,100000);
-            }
-            
-            if (player.Movement.Thrusting)
-            {
-                colliderRadius *= thrustRadiusMultiplier;
-
-                //Debug.Log("AFTER THRUSTING Detectable radius: " + colliderRadius);
-                //Debug.Log("PLAYER THRUSTING");
-            }
+            }            
+            if (player.Movement.Thrusting) { colliderRadius *= thrustRadiusMultiplier; }
         }
         
         sphereCollider.radius = colliderRadius;

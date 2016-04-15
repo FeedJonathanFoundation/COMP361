@@ -3,26 +3,26 @@ using System.Collections;
 
 /// <summary>
 /// Changes the light's colour based on whether it has more or less energy than the player
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class LightColourRelativeToPlayer : ColourRelativeToPlayer
-{
-    // The Light attached to this GameObject
-    private Light myLight;
-    // The Lights attached to this GameObject's children
-    private Light[] childLights;
+{    
+    private Light myLight; // The Light attached to this GameObject    
+    private Light[] childLights; // The Lights attached to this GameObject's children
 
     /// <summary>
     /// Called when the player or this light source gains/loses light. Updates the light source's colour
     /// based on whether it has more or less light than the player.
-    /// <param name="energy"> The energy for the light source that gained/lost light </param>
+    /// <param name="energy">The energy for the light source that gained/lost light </param>
     /// </summary>
     protected override void OnLightChanged(float energy)
     {
-        Color targetColour = GetTargetColour();
-        
+        Color targetColour = GetTargetColour();        
         // Stop any colour lerping before changing the colour again.
-        StopAllCoroutines();
-        
+        StopAllCoroutines();        
         if (MyLight != null)
         {
             StartCoroutine(UpdateColour(MyLight, targetColour));

@@ -3,10 +3,13 @@ using System.Collections;
 
 /// <summary>
 /// Changes the GameObject's emissive colour based on its current amount of light energy.
+///
+/// @author - Jonathan L.A
+/// @version - 1.0.0
+///
 /// </summary>
 public class LightEmissiveColourModifier : LightEnergyListener
 {
-
     [Tooltip("The colour used when the light source is at <= minLight")]
     public Color minColour;
     [Tooltip("The colour used when the light source is at >= maxLight")]
@@ -69,8 +72,7 @@ public class LightEmissiveColourModifier : LightEnergyListener
     /// </summary>
     private Color GetTargetColour(float percent)
     {
-        Color targetColour = Color.Lerp(minColour, maxColour, percent);
-        
+        Color targetColour = Color.Lerp(minColour, maxColour, percent);        
         return targetColour;
     }
 
