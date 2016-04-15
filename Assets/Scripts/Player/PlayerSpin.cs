@@ -1,32 +1,36 @@
 using UnityEngine;
-using System.Collections;
 
+
+/// <summary>
+/// Responsible for all the mechanics related to player's 
+/// rotations in the game universe
+///
+/// @author - Jonathan L.A
+///
+/// @version - 1.0.0
+///
+/// </summary>
 public class PlayerSpin : MonoBehaviour
-{
-    /// <summary>
-    /// The speed at which the player spins whilst idle (degrees/sec)
-    /// </summary>
+{    
     [Tooltip("The speed at which the player spins whilst idle (degrees/sec)")]
-    public float idleSpinSpeed = 50f;
-    
-    /** Caches the player's components */
+    [SerializeField]
+    private float idleSpinSpeed = 50f;
     private new Transform transform;
-    private new Rigidbody rigidbody;
-    
+    private new Rigidbody rigidbody;    
+    private enum SpinState { Idle } //Determines the way in which the player is spinning
+      
     /// <summary>
-    /// Determines the way in which the player is spinning
-    /// </summary>
-    private enum SpinState
-    {
-        Idle
-    }
-    
+    /// <see cref="Unity Documentation">
+    /// </summary>  
     void Start()
     {
         transform = GetComponent<Transform>();
         rigidbody = GetComponent<Rigidbody>();
     }
     
+    /// <summary>
+    /// <see cref="Unity Documentation">
+    /// </summary>
     void FixedUpdate()
     {
         transform.RotateAround(transform.position, transform.up, idleSpinSpeed*Time.fixedDeltaTime);

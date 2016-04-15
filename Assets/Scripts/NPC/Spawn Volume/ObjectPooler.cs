@@ -71,7 +71,7 @@ public class ObjectPooler : NetworkBehaviour
                 if (npcID != null)
                 {
                     string identity =  lightSource.LightSourceID;
-                    npcID.npcID = identity;
+                    npcID.ID = identity;
                 }
                 
             }

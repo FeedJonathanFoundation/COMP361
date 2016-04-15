@@ -3,9 +3,14 @@ using System.Collections;
 using XInputDotNetPure;
 
 /// <summary>
-/// Most of the code was copied from the example XInputDotNet script
+/// Adds joystick vibrations for given actions.
+/// Note: code is based on the template from XInputDotNet
+///
+/// @author - Jonathan L.A
+///
+/// @version - 1.0.0
+///
 /// </summary>
-
 public class ControllerRumble : MonoBehaviour
 {
     [Tooltip("The rumble intensity when a flare is shot")]
@@ -90,14 +95,6 @@ public class ControllerRumble : MonoBehaviour
             {
 
             }
-            // Detect if a button was released this frame
-            if (prevState.Buttons.A == ButtonState.Pressed && state.Buttons.A == ButtonState.Released)
-            {
-                //GetComponent<Renderer>().material.color = new Color(1.0f, 1.0f, 1.0f, 1.0f);
-            }
-
-            // Set vibration according to triggers
-            //GamePad.SetVibration(playerIndex, state.Triggers.Left, state.Triggers.Right);
         }
     }
 
