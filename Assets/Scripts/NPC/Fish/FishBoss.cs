@@ -77,7 +77,6 @@ public class FishBoss : AbstractFish
         Animate(false, true);
         moveToWaypoint.SetPriority(0);   // Lowest priority
         moveToWaypoint.SetID(GetID());
-        Debug.Log(moveToWaypoint.ToString());
         AddAction(moveToWaypoint);
         SetAnimationSpeed();
     }

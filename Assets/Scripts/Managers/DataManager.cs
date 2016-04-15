@@ -8,7 +8,7 @@ using Parse;
 /// <summary>
 /// Data Manager contains static methods to read and write PlayerData to disk.
 ///
-/// /// @author - Alex I.
+/// @author - Alex I.
 /// @version - 1.0.0
 /// </summary>
 public static class DataManager
@@ -69,35 +69,36 @@ public static class DataManager
     }
 
     /// <summary>
-    /// Save to Parse
-    /// NOTE: currently not used
+    /// Saves information about player state to Parse
     /// </summary>
-    public static void Save(PlayerData data)
+    public static void SaveToParse(PlayerData data)
     {
-        ParseObject gameControl = new ParseObject("Player");
-        gameControl["playerID"] = data.playerID;
-        gameControl["playerEnergy"] = data.playerEnergy;
-        gameControl["playerPosition"] = data.playerPosition;
-        gameControl["playerRotation"] = data.playerRotation;
-        gameControl["playerScale"] = data.playerScale;
-        gameControl.SaveAsync();
-        Debug.Log("Game Saved!");
+        ParseObject gameData = new ParseObject("Player");
+        gameData["levelID"] = data.levelID;
+        gameData["playerID"] = data.playerID;
+        gameData["playerEnergy"] = data.playerEnergy;
+        gameData["playerPosition"] = data.playerPosition;
+        gameData["playerRotation"] = data.playerRotation;
+        gameData["playerScale"] = data.playerScale;
+        gameData.SaveAsync();
     }
 
     /// <summary>
-    /// Load from Parse
-    /// NOTE: currently not used
+    /// Load information about Player state from Parse
     /// </summary>
-    public static PlayerData Load()
+    public static PlayerData Load(string parsePlayerId)
     {
         ParseQuery<ParseObject> query = ParseObject.GetQuery("Player");
-        query.GetAsync("ZOPe3i9KbM").ContinueWith(t =>
+        query.GetAsync(parsePlayerId).ContinueWith(t =>
         {
-            ParseObject gameScore = t.Result;
+            ParseObject gameData = t.Result;
             PlayerData data = new PlayerData();
-            data.playerPosition = gameScore["playerPosition"].ToString();
-            data.playerScale = gameScore["playerScale"].ToString();
-            data.playerEnergy = float.Parse(gameScore["playerEnergy"].ToString());
+            data.levelID = int.Parse(gameData["levelID"].ToString());
+            data.playerID = int.Parse(gameData["playerID"].ToString());
+            data.playerEnergy = float.Parse(gameData["playerEnergy"].ToString());            
+            data.playerPosition = gameData["playerPosition"].ToString();
+            data.playerRotation = gameData["playerRotation"].ToString();
+            data.playerScale = gameData["playerScale"].ToString();            
             return data;
         });
         return null;
@@ -107,15 +108,14 @@ public static class DataManager
 
  /// <summary>
  /// Model holding player data
- /// DATA to be changed
  /// </summary>
 [Serializable]
 public class PlayerData
 {
-    public float playerID;
+    public int playerID;
+    public int levelID;
     public float playerEnergy;
     public String playerPosition;   
     public String playerRotation;    
-    public String playerScale;
-    public int levelID;
+    public String playerScale;    
 }

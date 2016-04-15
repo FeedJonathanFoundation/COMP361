@@ -83,9 +83,7 @@ public class SeekOrFleeLight : NPCActionable
             if(!alwaysSeek && (myLightEnergy < targetLightSource.LightEnergy.CurrentEnergy || alwaysFlee))
             {
                 // Flee the light source since it is stronger than this fish
-                fleeWhenWeaker.Execute(steerable);
-                
-                //Debug.Log("FLEE THE FISH: " + targetLightSource.name);
+                fleeWhenWeaker.Execute(steerable);                              
             }
             // Else, if this fish has more light than its target
             else

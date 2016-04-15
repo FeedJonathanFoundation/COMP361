@@ -61,9 +61,7 @@ public class ObstacleDetector : MonoBehaviour
 		if(((1 << collider.gameObject.layer) & obstacleLayer) == obstacleLayer)
 		{
 			// Cache the obstacle's Transform component
-			Transform obstacle = collider.transform;
-			//Debug.LogWarning("Collider entered in " + transform.parent.name + "'s neighbourhood: " + collider.transform.name);
-			
+			Transform obstacle = collider.transform;			
 			// Add the Transform to the list of visible obstacles, since it is inside this script's trigger collider 
 			visibleObstacles.Add(obstacle); 
 		}

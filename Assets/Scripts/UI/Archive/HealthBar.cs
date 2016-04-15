@@ -67,7 +67,6 @@ public class HealthBar : MonoBehaviour {
     
     void OnLightChanged(float currentEnergy)
     {
-        // Debug.Log("currentEnergy: " + currentEnergy + "\n healthBar: " + healthBar.value);
         healthBar.value = currentEnergy * 100;
     }
     

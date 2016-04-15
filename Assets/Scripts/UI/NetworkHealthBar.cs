@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 using UnityEngine.Networking;
 
 public class NetworkHealthBar : NetworkBehaviour
@@ -55,32 +53,9 @@ public class NetworkHealthBar : NetworkBehaviour
     void OnLightChanged(float currentEnergy)
     {
         if (!isLocalPlayer) { return; }
-        if (maxHealth == 0 || player == null) { InitializePlayer(); }
-        
-        // Debug.Log("currentEnergy: " + currentEnergy + "\n healthBar: " + healthBar.sizeDelta.x);
+        if (maxHealth == 0 || player == null) { InitializePlayer(); }        
         currentHealth = currentEnergy;
         healthBar.sizeDelta = new Vector2(currentHealth * multiplier, healthBar.sizeDelta.y);
     }
-
-    // public void OnRespawn()
-    // {
-    //     if (!isServer) { return; }
-    //     RpcRespawn();
-    // }
-
-    // [ClientRpc]
-    // void RpcRespawn()
-    // {
-    //     if (isLocalPlayer)
-    //     {
-    //         Vector3 spawnPoint = Vector3.zero;
-    //         if (spawnPoints != null && spawnPoints.Length > 0)
-    //         {
-    //             spawnPoint = spawnPoints[Random.Range(0, spawnPoints.Length)].transform.position;
-    //             // maybe have it iterate instead of being random
-    //         }
-    //         transform.position = spawnPoint;
-    //     }
-    // }
 
 }

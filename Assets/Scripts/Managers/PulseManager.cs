@@ -1,9 +1,14 @@
 ﻿using UnityEngine;
 
-// Calculates where the pulse should be instantiated
-// Need to deactivate pulse game object after a certain period of time
-// Need to invoke repeating
-
+/// <summary>
+/// Calculates where the pulse should be instantiated
+/// Need to deactivate pulse game object after a certain period of time
+/// Need to invoke repeating
+///
+/// @author - Simon T.
+/// @version - 1.0.0
+///
+/// </summary>
 public class PulseManager : MonoBehaviour
 {
     private Transform player;
@@ -51,17 +56,8 @@ public class PulseManager : MonoBehaviour
     
     void CalculatePosition()
     {
-        if (player == null) 
-        {
-           // Debug.Log("Please set a player for the Pulse Manager");
-           return; 
-        }
-        
-          if (target == null)
-       {
-           // Debug.Log("Please set a target for the Pulse Manager");
-           return;
-       }
+        if (player == null) { return; }        
+        if (target == null) { return; }
        
         // Get the bounds of the camera's screen
         Vector3 botLeft = new Vector2(player.transform.position.x - 10, player.transform.position.y-5.5f);
@@ -89,12 +85,10 @@ public class PulseManager : MonoBehaviour
         // Target is on the right of the camera bounds
         if (botRight.x <= target.position.x)
         {
-            // Debug.Log("botRight: " + botRight + " topRight: " + topRight + "\n botLeft: " + botLeft + " topLeft: " + topLeft);
             Vector2 intersection = lineIntersection(camPoint1, camPoint2);
             // Intersection is between botLeft and botRight
             if (intersection.y <= botLeft.y + 1 && intersection.y >= botLeft.y - 1 && intersection.x >= botLeft.x && intersection.x <= botRight.x)
             {
-                // Debug.Log("Intersection is at the bottom \n x-value: " + intersection.x + " y-value: " + intersection.y);
                 x = intersection.x;
                 y = intersection.y;
                 return;
@@ -102,7 +96,6 @@ public class PulseManager : MonoBehaviour
             else
             {
                 // Intersection wasn't between botLeft and botRight, check botRight and topRight
-                // Debug.Log("Intersection is at the right \n x-value: " + intersection.x + " y-value: " + intersection.y);
                 camPoint1 = botRight;
                 camPoint2 = topRight;
                 intersection = lineIntersection(camPoint1, camPoint2);
@@ -116,8 +109,7 @@ public class PulseManager : MonoBehaviour
         {
             Vector2 intersection = lineIntersection(camPoint1, camPoint2);
             x = intersection.x;
-            y = intersection.y;
-            // Debug.Log("Intersection is at the right \n x-value: " + intersection.x + " y-value: " + intersection.y);
+            y = intersection.y;          
             return;
         }
         // Target is on the left of the camera bounds
@@ -126,8 +118,7 @@ public class PulseManager : MonoBehaviour
             Vector2 intersection = lineIntersection(camPoint1, camPoint2);
             // Intersection is between botLeft and botRight
             if (intersection.y <= botLeft.y + 1 && intersection.y >= botLeft.y - 1 && intersection.x >= botLeft.x && intersection.x <= botRight.x)
-            {
-                // Debug.Log("Intersection is at the bottom \n x-value: " + intersection.x + " y-value: " + intersection.y);
+            {                
                 x = intersection.x;
                 y = intersection.y;
                 return;
@@ -135,7 +126,6 @@ public class PulseManager : MonoBehaviour
             else
             {
                 // Intersection wasn't between botLeft and botRight, check botLeft and topLeft
-                // Debug.Log("Intersection is at the left side \n x-value: " + intersection.x + " y-value: " + intersection.y);
                 camPoint2 = topLeft;
                 intersection = lineIntersection(camPoint1, camPoint2);
                 x = intersection.x;

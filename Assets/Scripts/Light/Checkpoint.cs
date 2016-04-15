@@ -24,6 +24,10 @@ public class Checkpoint : LightSource
         this.InfiniteEnergy = true; // override default LightSource value
     }
 
+    /// <summary>
+    /// Invoked when players collider intersects with checkpoint collider
+    /// </summary>
+    /// <param name="other"></param>
     protected void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player" && other.name == "Player")
@@ -34,13 +38,11 @@ public class Checkpoint : LightSource
             if (changeScene)
             {
                 // if checkpoint changes scene, save values for the new scene
-                data.playerPosition = VectorExtensions.Vector3ToString(new Vector3(0, 0, 0));
-                // data.levelID = player.CurrentLevel + 1;                    
+                data.playerPosition = VectorExtensions.Vector3ToString(new Vector3(0, 0, 0));                 
             } 
             else
             {
                 data.playerPosition = VectorExtensions.Vector3ToString(other.gameObject.transform.position);
-                // data.levelID = player.CurrentLevel;    
             }            
             
             data.playerRotation = VectorExtensions.Vector3ToString(other.gameObject.transform.localEulerAngles);
@@ -55,6 +57,11 @@ public class Checkpoint : LightSource
         }
     }
     
+    /// <summary>
+    /// If changeScene option is set to true, coroutine is invoked to smoothly
+    /// fade out to black and fade in on the new level.
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator ChangeLevel()
     {
         GameObject camera = GameObject.Find("Main Camera");

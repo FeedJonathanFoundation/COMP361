@@ -88,8 +88,6 @@ public class PlayerMovement
 
         if (leftStickDirection.sqrMagnitude > 0.01f)
         {
-            //Debug.Log("Move the player " + Time.time);
-
             // Get the angle the left stick is pointing in
             float leftStickAngle = 0.0f;
             if (leftStickDirection.x != 0 || leftStickDirection.y != 0)
@@ -148,8 +146,7 @@ public class PlayerMovement
     {
         // Compute how much the gameObject has to turn opposite to its velocity vector
         float angleChange = Vector2.Angle((Vector2)rigidbody.velocity, direction);
-        // Debug.Log("Change in angle (PlayerMovement.Propulse()): " + angleChange);
-
+       
         // Augment the thrusting power depending on how much the player has to turn
         float thrustBoost = 1 + (angleChange / 180) * changeDirectionBoost;
 

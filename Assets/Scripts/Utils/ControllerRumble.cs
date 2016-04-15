@@ -7,7 +7,6 @@ using XInputDotNetPure;
 /// Note: code is based on the template from XInputDotNet
 ///
 /// @author - Jonathan L.A
-///
 /// @version - 1.0.0
 ///
 /// </summary>

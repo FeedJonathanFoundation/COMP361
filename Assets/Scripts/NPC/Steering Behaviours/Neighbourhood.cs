@@ -83,8 +83,6 @@ public class Neighbourhood : MonoBehaviour
                 if (tagsToIgnore[i].Equals(colliderTag)) { return; }
             }
             
-			//Debug.LogWarning("Collider entered in " + transform.parent.name + "'s neighbourhood: " + collider.transform.name);
-            
             GameObject neighbour = collider.gameObject;
 
             // Add the GameObject to the neighbourhood, since it is inside this script's trigger collider 

@@ -408,8 +408,6 @@ public class Steerable : MonoBehaviour
 
         debugForce = (ahead - (Vector2)transform.position);
 
-        //Debug.Log ("Avoid the obstacle: " + obstacleHit.transform + " With force: " + avoidForce);
-
         // Returns a force which will avoid the nearest obstacle in the steerable's line of sight.
         return avoidForce;
     }
@@ -468,12 +466,7 @@ public class Steerable : MonoBehaviour
                 avoidForce = avoidDirection.SetMagnitude(avoidanceForce / distanceToObstaclePow4);
                 
                 // Adjust the wander angle to ensure the steerable wanders away from the obstacle
-                this.wanderAngle = Mathf.Rad2Deg * Mathf.Atan2(avoidDirection.y, avoidDirection.x);
-                //Debug.Log("New wander angle: " + wanderAngle);
-                
-                //Debug.Log("Avoid obstacle: " + hitInfo.transform.name + " normal = " + hitInfo.normal + " projection = " + projection);
-                //Debug.Log("Avoidance direction: " + avoidDirection);
-                
+                this.wanderAngle = Mathf.Rad2Deg * Mathf.Atan2(avoidDirection.y, avoidDirection.x);               
                 debugForce = avoidForce;
             }
         }

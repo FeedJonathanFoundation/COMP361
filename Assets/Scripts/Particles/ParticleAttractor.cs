@@ -38,8 +38,7 @@ public class ParticleAttractor : MonoBehaviour
         {
             // Attract the particles to the attraction point
             particles[i].velocity = Vector3.Lerp(particles[i].velocity, (attractionPoint.position - particles[i].position), 
-                                                 attractionSpeed * Time.deltaTime);
-            Debug.Log("Attract to player");      
+                                                 attractionSpeed * Time.deltaTime);    
         }
         
         // Apply changes to the particle system
