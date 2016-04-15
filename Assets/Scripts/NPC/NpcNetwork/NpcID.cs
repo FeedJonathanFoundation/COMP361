@@ -47,4 +47,11 @@ public class NpcID : NetworkBehaviour
         }
         identified = true;
     }
+    
+    public string ID
+    {
+        get { return npcID;  }
+        set { npcID = value; }
+    }  
+    
 }

@@ -55,6 +55,31 @@
     [Tooltip("Particle effect played when the player dies")]
     [SerializeField]
     private ParticleSystem playerDeathParticles;
+    
+    [SerializeField]
+    [Tooltip("The amount of force applied on the player when hit by an enemy")]
+    private float knockbackForce = 10;
+        
+    [SerializeField]
+    [Tooltip("Amount of time invulnerable after being hit by an enemy")]
+    private float invulnerabilityTime = 3;
+
+    [SerializeField]
+    [Tooltip("Linear drag applied when player is hit by enemy")]
+    private float invulnerabilityDrag = 2;
+      
+    [SerializeField]
+    [Tooltip("The last time player was hit by an enemy")]
+    private float lastTimeHit = -100; 
+    
+    [SerializeField]
+    [Tooltip("Default rigidbody drag")]
+    private float defaultDrag;
+    
+    [SerializeField]
+    [Tooltip("Previous value of Input.GetAxis('ThrustAxis')")]
+    private float previousThrustAxis;
+        
         
     public Transform MassEjectionTransform
     {
@@ -110,6 +135,39 @@
     public ParticleSystem PlayerDeathParticles
     {
         get { return playerDeathParticles; }
+    }
+    
+    public float KnockbackForce
+    {
+        get { return knockbackForce; }
+    }
+    
+    public float InvulnerabilityTime
+    {
+        get { return invulnerabilityTime; }
+    }
+    
+    public float InvulnerabilityDrag
+    {
+        get { return invulnerabilityDrag; }
+    }
+    
+    public float LastTimeHit
+    {
+        get { return lastTimeHit;  }
+        set { lastTimeHit = value; }
+    }
+    
+    public float DefaultDrag
+    {
+        get { return defaultDrag;  } 
+        set { defaultDrag = value; }
+    }
+    
+    public float PreviousThrustAxis
+    {
+        get { return previousThrustAxis;  }
+        set { previousThrustAxis = value; }
     }
     
  }

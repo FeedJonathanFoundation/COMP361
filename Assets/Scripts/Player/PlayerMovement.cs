@@ -1,5 +1,14 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Responsible for all the mechanics related to player's 
+/// movements in the game universe
+///
+/// @author - Jonathan L.A
+///
+/// @version - 1.0.0
+///
+/// </summary>
 public class PlayerMovement
 {
     /// <summary>
@@ -36,26 +45,13 @@ public class PlayerMovement
     /// The propulsion effect activated when the player is propulsing
     /// </summary>
     private GameObject jetFuelEffect;
-
     private float defaultDrag;
     private bool thrusting;  // True if the player is holding down the thrusting button
-
-    /** Caches the player's components */
     private Transform transform;
     private Rigidbody rigidbody;
-    private LightEnergy lightEnergy;
-    
-    /** Called when the player's thrusters are activated or deactivated. 
-    public delegate void OnPropulsionStartHandler();
-    public delegate void OnPropulsionEndHandler();
-    public event OnPropulsionStartHandler OnPropulsionStart = delegate {};
-    public event OnPropulsionEndHandler OnPropulsionEnd = delegate {}; */
-
+    private LightEnergy lightEnergy;       
     private float rotationSpeed;
 
-    /// <summary>
-    /// Public constructor
-    /// </summary>
     public PlayerMovement(MovementBean movementBean, Transform transform, Rigidbody rigidbody, LightEnergy lightEnergy)
     {
         this.massEjectionTransform = movementBean.MassEjectionTransform;
@@ -66,13 +62,19 @@ public class PlayerMovement
         this.brakeDrag = movementBean.BrakeDrag;
         this.jetFuelEffect = movementBean.JetFuelEffect;        
         this.rotationSpeed = movementBean.RotationSpeed;
-
         this.transform = transform;
         this.rigidbody = rigidbody;
         this.defaultDrag = rigidbody.drag;
         this.lightEnergy = lightEnergy;
-
         OnPropulsionEnd();
+    }
+
+    /// <summary>
+    /// Add linear damping on the player's rigidbody 
+    /// </summary>
+    public void Brake(float strength)
+    {
+        rigidbody.drag = Mathf.Lerp(defaultDrag, brakeDrag, strength);
     }
 
     /// <summary>
@@ -112,15 +114,27 @@ public class PlayerMovement
             particles.Play();
             var em = particles.emission;
             em.enabled = true;
-        }
-        //jetFuelEffect.enableEmission = true;
-        
+        }        
         thrusting = true;
-        
-        // Inform subscribers that the player activated his thrusters
-        //OnPropulsionStart();
+    }
+    
+    /// <summary>
+    /// Call this the frame the player releases the propulsion button
+    /// </summary>
+    public void OnPropulsionEnd()
+    {
+        foreach (ParticleSystem particles in jetFuelEffect.GetComponentsInChildren<ParticleSystem>())
+        {
+            var em = particles.emission;
+            em.enabled = false;
+        }        
+        thrusting = false;
     }
 
+    /// <summary>
+    /// Propulse in the given direction, pushing the gameObject in the given direction
+    /// Default propulsion strength is used.   
+    /// </summary>
     public void Propulse(Vector2 direction)
     {
         Propulse(direction, 1);
@@ -147,36 +161,9 @@ public class PlayerMovement
         lightEnergy.Deplete(thrustEnergyCost * strength);
     }
 
-    /// <summary>
-    /// Call this the frame the player releases the propulsion button
-    /// </summary>
-    public void OnPropulsionEnd()
-    {
-        foreach (ParticleSystem particles in jetFuelEffect.GetComponentsInChildren<ParticleSystem>())
-        {
-            var em = particles.emission;
-            em.enabled = false;
-        }
-        
-        thrusting = false;
-        
-        // Inform subscribers that the player deactivated his thrusters
-        //OnPropulsionEnd();
-    }
-
-    /// <summary>
-    /// Add linear damping on the player's rigidbody 
-    /// </summary>
-    public void Brake(float strength)
-    {
-        rigidbody.drag = Mathf.Lerp(defaultDrag, brakeDrag, strength);
-    }
-    
-    /// <summary>
-    /// If true, the player's thrusters are turned on
-    /// </summary>
     public bool Thrusting
     {
+        // If true, the player's thrusters are turned on
         get { return thrusting; }
     }
 }

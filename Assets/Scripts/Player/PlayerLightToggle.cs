@@ -11,8 +11,8 @@ using UnityEngine;
 /// </summary>
 public class PlayerLightToggle
 {
-    // If true, the lights that are children of this object are enabled.
-	private bool lightsEnabled;    
+    
+	private bool lightsEnabled; // If true, the lights that are children of this object are enabled.    
     private bool lightButtonPressed; // If true, the user has pressed the button to activate his lights
     private bool propulsionLightsOn; // If true, the player is holding down the propulsion button
     private float timeToDeplete;
@@ -25,8 +25,7 @@ public class PlayerLightToggle
     public PlayerLightToggle(GameObject lightsToToggle, Player player, LightToggleBean lightToggleBean)
     {        
         this.lightsToToggle = lightsToToggle;
-        this.player = player;
-        
+        this.player = player;        
         this.lightsEnabled = lightToggleBean.DefaultLightStatus;
         this.lightButtonPressed = lightToggleBean.DefaultLightStatus;                        
         this.minimalEnergyRestriction = lightToggleBean.MinimalEnergy;
@@ -47,8 +46,7 @@ public class PlayerLightToggle
     /// </summary>
     public void ToggleLights()
     {
-        this.lightButtonPressed = !this.lightButtonPressed;
-        
+        this.lightButtonPressed = !this.lightButtonPressed;        
         ToggleLights(this.lightButtonPressed);
     }
     
@@ -71,28 +69,18 @@ public class PlayerLightToggle
         foreach (Light light in this.lightsToToggle.GetComponentsInChildren<Light>())
         {
             // Skip VeryClose Light                                     
-            //Light light = childComponent.GetComponent<Light>();
-            if (light == null || light.name == "VeryClose Light")
-            {
-                continue;
-            }
-            
-            //light.enabled = enabled;
+            if (light == null || light.name == "VeryClose Light") { continue; }
             
             // Set the range of the light to the given percent
             LightRangeModifier rangeModifier = light.GetComponent<LightRangeModifier>();
             if (rangeModifier)
             {
-                // Turn off the player's light 
-                //if (!enabled) { rangeModifier.TurnOffLight(); }
                 rangeModifier.ActiveLights = enabled;
                 rangeModifier.PercentRange = percent;
             }
         }
-        // Update the status of the lights
+        // Update lights' status
         this.lightsEnabled = enabled;
-        
-        // Debug.Log("Toggle lights");
     }
 
     /// <summary>
@@ -107,7 +95,6 @@ public class PlayerLightToggle
             this.timeToDeplete += Time.deltaTime;
             if (this.timeToDeplete > timeToDeplete)
             {
-                //Debug.Log("DEPLETE LIGHT");
                 this.player.LightEnergy.Deplete(energyCost);
                 this.timeToDeplete = 0;
 
@@ -148,19 +135,15 @@ public class PlayerLightToggle
         }
     }
 
-    /// <summary>
-    /// If true, the lights are enabled and the GameObject is visible
-    /// </summary>
     public bool LightsEnabled
     {
+        // If true, the lights are enabled and the GameObject is visible
         get { return this.lightsEnabled; }
     }
     
-    /// <summary>
-    /// If true, the light button was pressed and the player's light should be on
-    /// </summary>
     public bool LightButtonPressed
     {
+        //If true, the light button was pressed and the player's light should be on
         get { return this.lightButtonPressed; }
     }
 

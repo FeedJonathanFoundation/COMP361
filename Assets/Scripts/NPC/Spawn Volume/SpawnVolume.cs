@@ -251,7 +251,7 @@ public class SpawnVolume : NetworkBehaviour
         if (npcID != null)
         {
             string identity =  lightSource.LightSourceID;
-            npcID.npcID = identity;
+            npcID.ID = identity;
         }
     }
     

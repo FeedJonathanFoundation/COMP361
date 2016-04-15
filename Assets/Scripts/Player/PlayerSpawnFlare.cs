@@ -1,5 +1,13 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Responsible for mechanics related to flare ejection by player
+///
+/// @author - Karl C.
+/// @author - Alex I.
+/// @version - 1.0.0
+///
+/// </summary>
 public class PlayerSpawnFlare
 {
     private float cooldownTime;
@@ -29,13 +37,13 @@ public class PlayerSpawnFlare
         this.rigidbody = player.GetComponent<Rigidbody>();
 
         GameObject mainCamera = GameObject.Find("Main Camera");
-        if (mainCamera != null)
-        {
-            this.smoothCamera = mainCamera.GetComponent<SmoothCamera>();
-        }
-
+        if (mainCamera != null) { this.smoothCamera = mainCamera.GetComponent<SmoothCamera>(); }
     }
 
+    /// <summary>
+    /// Spawns the flare if player has enough energy and flare spawner is ready
+    /// </summary>
+    /// <returns></returns>
     public bool SpawnFlare()
     {
         bool ready = true;
@@ -59,17 +67,19 @@ public class PlayerSpawnFlare
         return false;
 
     }
+    
+    /// <summary>
+    /// Shoots flare, deducts player's energy accordingly and
+    /// zooms out camera to see more environment around player.
+    /// </summary>
     private void ShootFlare()
     {
         player.LightEnergy.Deplete(flareEnergyCost);
         // Apply recoil in the opposite direction the flare was shot
         rigidbody.AddForce(-flareSpawnObject.right * recoilForce, ForceMode.Impulse);
         controllerRumble.ShotFlare();   // Rumble the controller
-        timer = 0.0f;
-
-        Debug.Log("Stella refactor flare sound");
-        // flareSound = new FlareSound(flare);
-        // flareSound.ShootFlareSound();
+        timer = 0.0f;        
+        flareSound.ShootFlareSound();
 
         //reset all values for the zoom whenever player fires a flare
         if (smoothCamera != null)
@@ -79,6 +89,10 @@ public class PlayerSpawnFlare
         }
     }
 
+    /// <summary>
+    /// Invoked when BossFish eats the flare
+    /// Trigger the sound effect.
+    /// </summary>
     public void EatFlare()
     {
         flareSound.EatFlareSound(player.gameObject);
