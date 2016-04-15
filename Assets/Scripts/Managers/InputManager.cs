@@ -18,8 +18,8 @@ public static class InputManager
         // Get the direction the left-stick is pointing
         float horizontalInput = Input.GetAxis("Horizontal");
         float verticalInput = Input.GetAxis("Vertical");
-        Vector2 leftStickDirection = new Vector2(horizontalInput,verticalInput);
-        
+        Vector2 leftStickDirection = new Vector2(horizontalInput, verticalInput);
+
         return leftStickDirection;
     }
 }

@@ -34,29 +34,29 @@ public static class DataManager
     public static PlayerData LoadFile()
     {
         PlayerData data = null;
-        
+
         if (File.Exists(Application.persistentDataPath + fileName))
         {
             BinaryFormatter bf = new BinaryFormatter();
             FileStream file = File.Open(Application.persistentDataPath + fileName, FileMode.Open);
-            try 
+            try
             {
-                data = (PlayerData) bf.Deserialize(file);
+                data = (PlayerData)bf.Deserialize(file);
             }
-            catch (SerializationException e) 
+            catch (SerializationException e)
             {
                 Debug.Log("Failed to serialize. Reason: " + e.Message);
                 throw;
             }
-            finally 
+            finally
             {
                 file.Close();
             }
-        }        
-        
+        }
+
         return data;
     }
-    
+
     /// <summary>
     /// Delete all locally saved information
     /// </summary>
@@ -95,10 +95,10 @@ public static class DataManager
             PlayerData data = new PlayerData();
             data.levelID = int.Parse(gameData["levelID"].ToString());
             data.playerID = int.Parse(gameData["playerID"].ToString());
-            data.playerEnergy = float.Parse(gameData["playerEnergy"].ToString());            
+            data.playerEnergy = float.Parse(gameData["playerEnergy"].ToString());
             data.playerPosition = gameData["playerPosition"].ToString();
             data.playerRotation = gameData["playerRotation"].ToString();
-            data.playerScale = gameData["playerScale"].ToString();            
+            data.playerScale = gameData["playerScale"].ToString();
             return data;
         });
         return null;
@@ -106,16 +106,16 @@ public static class DataManager
 
 }
 
- /// <summary>
- /// Model holding player data
- /// </summary>
+/// <summary>
+/// Model holding player data
+/// </summary>
 [Serializable]
 public class PlayerData
 {
     public int playerID;
     public int levelID;
     public float playerEnergy;
-    public String playerPosition;   
-    public String playerRotation;    
-    public String playerScale;    
+    public String playerPosition;
+    public String playerRotation;
+    public String playerScale;
 }

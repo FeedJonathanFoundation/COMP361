@@ -11,10 +11,10 @@ using UnityEngine.SceneManagement;
 /// </summary>
 public class LevelManager : MonoBehaviour
 {
-    private int currentLevel;  
+    private int currentLevel;
     private bool disableCheckpoints;
     private Player player;
-    
+
     protected void Awake()
     {
         this.currentLevel = SceneManager.GetActiveScene().buildIndex;
@@ -23,7 +23,7 @@ public class LevelManager : MonoBehaviour
         ResetPlayerState();
         LoadGame();
     }
-            
+
     /// <summary>
     /// Invoked when a new scene is loaded
     /// </summary>
@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
         Debug.Log("Scene " + level + " is loaded!");
         ResetPlayerState();
     }
-    
+
     /// <summary>
     /// Loads the last saved game state on the scene or places player at the origin
     /// </summary>
@@ -50,9 +50,9 @@ public class LevelManager : MonoBehaviour
             }
             this.player.Transform.position = VectorExtensions.Vector3FromString(data.playerPosition);
             this.player.Transform.localEulerAngles = VectorExtensions.Vector3FromString(data.playerRotation);
-        }        
+        }
     }
-    
+
     /// <summary>
     /// Resets player position, rotation and velocity when the scene
     /// is reloaded
@@ -64,10 +64,10 @@ public class LevelManager : MonoBehaviour
         {
             this.player.Rigidbody.velocity = Vector3.zero;
             this.player.Transform.position = Vector3.zero;
-            this.player.Transform.localEulerAngles = new Vector3(0, 0, -90);   
-        }        
+            this.player.Transform.localEulerAngles = new Vector3(0, 0, -90);
+        }
     }
-    
+
     public int CurrentLevel
     {
         get { return this.currentLevel; }
@@ -75,5 +75,5 @@ public class LevelManager : MonoBehaviour
     }
 
 
-   
+
 }

@@ -54,9 +54,9 @@ public static class VectorExtensions
     {
         // Clamp the vector's magnitude
         if (vector.magnitude > maxMagnitude)
-		{
-            vector = vector.SetMagnitude(maxMagnitude);						
-		}
+        {
+            vector = vector.SetMagnitude(maxMagnitude);
+        }
 
         return vector;
     }
@@ -73,17 +73,17 @@ public static class VectorExtensions
         float magnitude = vector.magnitude;
 
         if (magnitude > maxMagnitude)
-		{
-			vector = vector.SetMagnitude(maxMagnitude);
-        } 
-		else if (magnitude < minMagnitude) 
-		{
-			vector = vector.SetMagnitude(minMagnitude);
-		}
-            
+        {
+            vector = vector.SetMagnitude(maxMagnitude);
+        }
+        else if (magnitude < minMagnitude)
+        {
+            vector = vector.SetMagnitude(minMagnitude);
+        }
+
         return vector;
     }
-    
+
     /// <summary>
     /// Utility method - converts Vector3 objects to strings.
     /// Useful to allow serialization Vector3 objects.
