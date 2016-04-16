@@ -13,6 +13,7 @@ public class ParticleAttractor : MonoBehaviour
     
     /** The system whose particles are attracted to a point. */
     private new ParticleSystem particleSystem;
+    /** The particles which are attracted to a certain position */
     private ParticleSystem.Particle[] particles;
     
     /** The point to which the particles are attracted if 'attractToPlayer == true' 
@@ -20,6 +21,9 @@ public class ParticleAttractor : MonoBehaviour
       */
     private static Transform playerMouth;
     
+    /// <summary>
+    /// Called every frame
+    /// </summary>
     void Update()
     {        
         Transform attractionPoint = AttractionPoint;
@@ -46,9 +50,10 @@ public class ParticleAttractor : MonoBehaviour
         
     }
     
-    /** Create the 'particles' array for all the particles in the GameObject's ParticleSystem,
-      * if it hasn't been instantiated yet.
-      */ 
+    /// <summary>
+    /// Create the 'particles' array for all the particles in the GameObject's ParticleSystem,
+    /// if it hasn't been instantiated yet.
+    /// </summary> 
     private void InitializeIfNeeded()
     {
         if (particleSystem == null) 
