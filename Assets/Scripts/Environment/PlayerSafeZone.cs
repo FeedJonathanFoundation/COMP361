@@ -12,43 +12,43 @@
 [RequireComponent(typeof(Collider))]
 public class PlayerSafeZone : MonoBehaviour
 {
-    [Tooltip("Maximum player speed in the safe zone")]
+    
     [SerializeField]
     private int maxSpeed = 5;
-
     [SerializeField]
     [Tooltip("If given a current, it will activate a current and block that path.")]
     private GameObject blockingCurrent;
 
-    /// <summary>
-    /// Detect when player enters safe zone
-    /// </summary>
-    /// <param name="playerCollider"></param>
-    void OnTriggerEnter(Collider playerCollider)
+    void OnTriggerEnter(Collider col)
     {
-        if (playerCollider.tag == "Player")
+        if (col.tag == "Player")
         {
-            Player player = playerCollider.GetComponent<Player>();
+            Player player = col.GetComponent<Player>();
             if (player)
             {
-                player.IsSafe = true;
-                if (blockingCurrent) { player.MovementBean.MaxSpeed = 5; }
+                player.isSafe = true;
+                if (blockingCurrent)
+                {
+                    player.MovementBean.MaxSpeed = 5;
+                }
             }
         }
     }
 
-    /// <summary>
-    /// Detect when player exits safe zone
-    /// </summary>
-    /// <param name="playerCollider"></param>
-    void OnTriggerExit(Collider playerCollider)
+    IEnumerator WaitBeforeCurrent(float waitTime)
     {
-        if (playerCollider.tag == "Player")
+        yield return new WaitForSeconds(waitTime);
+        
+    }
+    
+    void OnTriggerExit(Collider col)
+    {
+        if (col.tag == "Player")
         {
-            Player player = playerCollider.GetComponent<Player>();
+            Player player = col.GetComponent<Player>();
             if (player)
             {
-                player.IsSafe = false;
+                player.isSafe = false;
                 if (blockingCurrent)
                 {
                     blockingCurrent.SetActive(true);
@@ -57,5 +57,4 @@ public class PlayerSafeZone : MonoBehaviour
             }
         }
     }
-
 }
