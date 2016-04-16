@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
+
 
 /// <summary>
 /// Moves the boss fish to the closest waypoint when the
@@ -15,6 +15,7 @@ public class MoveClosestWaypoint : NPCActionable
     [Tooltip("The list of waypoints that the big fish can go when the player is in a safe zone")]
     [SerializeField]
     private GameObject waypointList;
+
     [Tooltip("Distance at which then big fish slows down before getting to waypoint")]
     [SerializeField]
     private float slowingRadius;
@@ -25,7 +26,9 @@ public class MoveClosestWaypoint : NPCActionable
     [Tooltip("The steering behaviour which allows the steerable to avoid walls")]
     [SerializeField]
     private WallAvoidance wallAvoidance;
-    
+
+    private Transform bigFish;
+
     public MoveClosestWaypoint(int priority, string id, Transform boss) : base(priority, id)
     {
         this.SetPriority(priority);
@@ -40,9 +43,9 @@ public class MoveClosestWaypoint : NPCActionable
     public void SetPriority(int priority)
     {
         this.priority = priority;
-        wallAvoidance.priority = priority;
+        wallAvoidance.Priority = priority;
     }
-    
+
     /// <summary>
     /// Updates the ID for each internal steering behaviour.
     /// Allows the action to be referenced by a unique index
@@ -50,7 +53,7 @@ public class MoveClosestWaypoint : NPCActionable
     public void SetID(string id)
     {
         this.id = id;
-        wallAvoidance.id = id;
+        wallAvoidance.Id = id;
     }
     
     /// <summary>
@@ -60,6 +63,7 @@ public class MoveClosestWaypoint : NPCActionable
     {
         this.bigFish = boss;
     }
+
     
     /// <summary>
     /// Avoids the nearest obstacle in front of the object. This works for obstacles of any size or shape, unlike
@@ -75,7 +79,7 @@ public class MoveClosestWaypoint : NPCActionable
         wallAvoidance.MaxViewDistance = maxViewDistance;
         wallAvoidance.ObstacleLayer = obstacleLayer;
     }
-    
+
     /// <summary>
     /// Called every frame when this action needs to be performed.
     /// Allows the steerable to move to the closest waypoint
@@ -93,9 +97,9 @@ public class MoveClosestWaypoint : NPCActionable
         {
             steerable.MaxForce = maxForce;
         }
-        
+
         //checks if the boss fish is at the waypoint, if so then no need to move to waypoint anymore
-        if((Vector2)bigFish.GetComponent<Rigidbody>().velocity == Vector2.zero)
+        if ((Vector2)bigFish.GetComponent<Rigidbody>().velocity == Vector2.zero)
         {
             ActionCompleted();
         }
@@ -103,7 +107,7 @@ public class MoveClosestWaypoint : NPCActionable
         {
             steerable.AddMoveWaypointForce(waypointList, bigFish, slowingRadius, strengthMultiplier);
         }
-        
+
         wallAvoidance.Execute(steerable);
     }
-} 
+}
