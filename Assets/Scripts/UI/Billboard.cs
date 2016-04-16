@@ -1,6 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// The Billboard class keeps the health bar upright and above
+/// the player.
+///
+/// @author - Stella L.
+/// @author - Karl C.
+/// @version - 1.0.0
+///
+/// </summary>
 public class Billboard : MonoBehaviour
 {
     [SerializeField]
@@ -9,6 +18,9 @@ public class Billboard : MonoBehaviour
     private GameObject player;
     private Transform probeModel;
     
+    /// <summary>
+    /// Initializes the billboard.
+    /// </summary>
     void Start()
     {
         player = transform.parent.gameObject;
@@ -16,9 +28,20 @@ public class Billboard : MonoBehaviour
         transform.parent = null;
     }
     
+    /// <summary>
+    /// Sets the health bar upright and above the player.
+    /// </summary>
     void Update()
     {
         transform.LookAt(Camera.main.transform);
+        PlaceAbovePlayer();
+    }
+    
+    /// <summary>
+    /// Sets the health bar above the player.
+    /// </summary>
+    private void PlaceAbovePlayer()
+    {
         if (probeModel != null && probeModel.gameObject.activeSelf == true)
         {
             foreach (Transform child in transform)
@@ -37,7 +60,6 @@ public class Billboard : MonoBehaviour
             }
                                  
         }
-        
     }
-   
+
 }
