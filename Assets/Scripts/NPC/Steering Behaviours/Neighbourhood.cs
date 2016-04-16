@@ -17,16 +17,20 @@ public class Neighbourhood : MonoBehaviour
     private List<GameObject> neighbours = new List<GameObject>();
 
     /** The center position of the SphereCollider used to detect neighbours. */ 
-    public Vector3 centerOffset;
+    [SerializeField]
+    private Vector3 centerOffset;
 
 	/** The radius of the neighbourhood. Only collider's within 'radius' meters of the Neighbourhood are added to the list of neighbours */
-	public float radius;
+	[SerializeField]
+    private float radius;
 
     /** Colliders on this layer will be added to the neighbourhood. */
-    public LayerMask layerToDetect;
+    [SerializeField]
+    private LayerMask layerToDetect;
     
     /** Tags in this array will not be added to the neighbourhood. */
-    public string[] tagsToIgnore;
+    [SerializeField]
+    private string[] tagsToIgnore;
 
 	/** The trigger volume that detects if a GameObject is inside this neighbourhood or not. */
 	private SphereCollider circleCollider;
@@ -40,6 +44,9 @@ public class Neighbourhood : MonoBehaviour
     public event NeighbourExitHandler NeighbourExit = delegate {};
     public event NeighbourStayHandler NeighbourStay = delegate {};
 
+    /// <summary>
+    /// Called when the neighbourhood object is created
+    /// </summary>
 	void Awake()
 	{
 		// Create a circle collider to detect which colliders enter this neighbourhood
@@ -52,6 +59,9 @@ public class Neighbourhood : MonoBehaviour
 		circleCollider.isTrigger = true;
 	}
 
+    /// <summary>
+    /// Called every frame
+    /// </summary>
 	void Update()
 	{
 		for (int i = 0; i < neighbours.Count; i++)
@@ -68,6 +78,9 @@ public class Neighbourhood : MonoBehaviour
         }
 	}
 
+    /// <summary>
+    /// Called when a trigger collider enters the neighbourhood
+    /// </summary>
     void OnTriggerEnter(Collider collider)
     {
         if (collider == null) { return; }
@@ -94,6 +107,9 @@ public class Neighbourhood : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Called when a trigger collider exits the neighbourhood
+    /// </summary>
     void OnTriggerExit(Collider collider)
     {
         // If the collider which left the trigger volume belongs to the layer which is tracked by this neighbourhood
@@ -146,6 +162,9 @@ public class Neighbourhood : MonoBehaviour
         set { layerToDetect = value; }
     }
     
+    /// <summary>
+    /// Returns a string representation of this neighbourhood
+    /// </summary>
     public new string ToString()
     {
         string log = "Neighbours: ";

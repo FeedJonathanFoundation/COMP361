@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// ????
+/// Steering behaviour which allows fish to swim close together
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -15,6 +15,10 @@ public class Cohesion : NPCActionable
     {
     }
     
+    /// <summary>
+    /// Called every frame when the action needs to be performed.
+    /// Applies a cohesion steering force on the given steerable
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);

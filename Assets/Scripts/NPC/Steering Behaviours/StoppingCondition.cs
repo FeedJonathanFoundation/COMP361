@@ -15,17 +15,19 @@ public class StoppingCondition
     private const float epsilon = 0.2f;
 
     [Tooltip("The target that the steerable must reach for the 'Steer' action to return success.")]
-    public Transform target;
+    private Transform target;
 
     [Tooltip("The distance this steerable must be from his target for the 'Steer' action to return success.")]
-    public float stoppingDistance;
+    [SerializeField]
+    private float stoppingDistance;
 
     /** Caches the squared stopping distance for efficiency purposes. */
     private float stoppingDistanceSquared;
 
     [Tooltip("Once the 'Steer' action is active, 'waitTime' seconds will elapse before" +
         "the action returns 'Success'. If this is set to zero, the 'Steer' action will run until the target is reached.")]
-    public float waitTime;
+    [SerializeField]
+    private float waitTime;
 
     /** The amount of time that has passed since the 'Steer' action started. */
     private float timeElapsed;

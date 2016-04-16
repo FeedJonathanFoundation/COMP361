@@ -2,7 +2,8 @@
 using System.Collections;
 
 /// <summary>
-/// ????
+/// Applies an evade steering force, which allows steerables to
+/// escape from other gameObjects
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -22,6 +23,10 @@ public class Evade : NPCActionable
         this.targetSteerable = targetSteerable;
     }
     
+    /// <summary>
+    /// Called every frame when the action needs to be performed.
+    /// Applies an evade steering force on the given steerable
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);

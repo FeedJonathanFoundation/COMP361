@@ -68,6 +68,10 @@ public class BossSeekPlayer : NPCActionable
         wallAvoidance.id = id;
     }
 
+    /// <summary>
+    /// Called every frame when the action needs to be performed.
+    /// Applies a seeking force on the given steerable
+    /// </summary>
     public override void Execute(Steerable steerable)
     {
         Player player = targetLightSource.gameObject.GetComponent<Player>();

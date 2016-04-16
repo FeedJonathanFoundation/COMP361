@@ -47,9 +47,9 @@ public class MoveClosestWaypoint : NPCActionable
     public void SetWallAvoidanceProperties(float strengthMultiplier, float avoidanceForce, float maxViewDistance, LayerMask obstacleLayer)
     {
         wallAvoidance.strengthMultiplier = strengthMultiplier;
-        wallAvoidance.avoidanceForce = avoidanceForce;
-        wallAvoidance.maxViewDistance = maxViewDistance;
-        wallAvoidance.obstacleLayer = obstacleLayer;
+        wallAvoidance.AvoidanceForce = avoidanceForce;
+        wallAvoidance.MaxViewDistance = maxViewDistance;
+        wallAvoidance.ObstacleLayer = obstacleLayer;
     }
     
     public override void Execute(Steerable steerable)

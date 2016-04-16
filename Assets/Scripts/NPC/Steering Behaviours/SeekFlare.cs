@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// ????
+/// If active, this action allows a fish to seek the flare
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -22,6 +22,9 @@ public class SeekFlare : NPCActionable
     [SerializeField]
     private Arrival arrivalForce;
     
+    /// <summary>
+    /// The wall avoidance action performed when the NPC is seeking the light.
+    /// </summary>
     [SerializeField]
     private WallAvoidance wallAvoidance;
     
@@ -33,7 +36,9 @@ public class SeekFlare : NPCActionable
         SetID(id);
     }
     
-    /** Call this method in the Start() function of the fish performing this action. */
+    /// <summary>
+    /// Call this method in the Start() function of the fish performing this action. 
+    /// </summary>
     public void Init()
     {
         // Call ChildActionComplete() when either the seek or flee actions are completed.
@@ -41,6 +46,10 @@ public class SeekFlare : NPCActionable
         wallAvoidance.ActionComplete += ChildActionComplete;
     }
     
+    /// <summary>
+    /// Sets the priorities of each steering behaviour.
+    /// This priority is used to index the behaviours in a priority dictionary
+    /// </summary>
     public void SetPriority(int priority)
     {
         this.priority = priority;
@@ -49,6 +58,10 @@ public class SeekFlare : NPCActionable
         wallAvoidance.priority = priority;
     }
     
+    /// <summary>
+    /// Updates the ID for each internal steering behaviour.
+    /// Allows the action to be referenced by a unique index
+    /// </summary>
     public void SetID(string id)
     {
         this.id = id;
@@ -57,6 +70,9 @@ public class SeekFlare : NPCActionable
         wallAvoidance.id = id;
     }
     
+     /// <summary>
+    /// Makes the steerable seek the currently-set flare instance
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);
@@ -87,11 +103,17 @@ public class SeekFlare : NPCActionable
         wallAvoidance.Execute(steerable);
     }
     
+    /// <summary>
+    /// If true, this action can be cancelled before it's completed
+    /// </summary>
     public override bool CanBeCancelled()
     {
         return arrivalForce.CanBeCancelled() && wallAvoidance.CanBeCancelled();
     }
     
+    /// <summary>
+    /// Called when a child action is complete to notify subscribers that the parent action is also complete 
+    /// </summary>
     private void ChildActionComplete(NPCActionable childAction)
     {
         // Call ActionCompleted() to notify subscribers that the parent action is complete

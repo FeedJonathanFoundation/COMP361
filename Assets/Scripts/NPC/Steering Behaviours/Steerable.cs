@@ -15,47 +15,55 @@ public class Steerable : MonoBehaviour
     /// <summary>
     /// The steerable can never travel slower than this speed
     /// </summary>
-    public float minSpeed;
+    [SerializeField]
+    private float minSpeed;
     /// <summary>
     /// The maximum speed at which the GameObject can move 
     /// </summary>
-    public float maxSpeed;
+    [SerializeField]
+    private float maxSpeed;
 
     /// <summary>
     /// The maximum amount of steering force that can be applied every frame.
     /// </summary>
     [Tooltip("The maximum amount of steering force that can be applied every frame.")]
-    public float maxForce;
+    [SerializeField]
+    private float maxForce;
 
     /// <summary>
     /// The steerable's radius in meters. When trying to avoid obstacles, the steerable
     /// will take into account the fact that it has a radius and leave more space 
     /// between him and the obstacle.
     /// </summary>
-    public float bodyRadius;
+    [SerializeField]
+    private float bodyRadius;
 
     /// <summary>
     /// The collider which detects the nearest obstacle in the steerable's line of sight.
     /// Used in the obstacle avoidance behavior.
     /// </summary>
     [Tooltip("The collider which detects the nearest obstacle in the steerable's line of sight. Used in the obstacle avoidance behavior.")]
-    public ObstacleDetector obstacleDetector;
+    [SerializeField]
+    private ObstacleDetector obstacleDetector;
 
     /// <summary>
     /// The neighbourhood used for group behaviours. Determines which entities are close 
     /// to this steerable.
     /// </summary>
-    public Neighbourhood neighbourhood;
+    [SerializeField]
+    private Neighbourhood neighbourhood;
 
     /** If true, the steerable's speed is clamped to 'MaxSpeed'. The entity does not accelerate nor decelerate, but stay at a constant speed. */
     [Tooltip("If true, the steerable always moves at a constant speed (Max Speed)")]
-    public bool constantSpeed;
+    [SerializeField]
+    private bool constantSpeed;
     
     /// <summary>
     /// If true, the steerable faces its velocity vector
     /// </summary>
     [Tooltip("If true, the steerable faces its velocity vector")]
-    public bool faceVelocity;
+    [SerializeField]
+    private bool faceVelocity;
     
     /** Stores the steering force to be applied on this object this frame. 
       * This vector accumulates all steering forces before applying it to
@@ -88,26 +96,15 @@ public class Steerable : MonoBehaviour
     /** A force vector drawn as a gizmo on-screen. */
     private Vector2 debugForce;
 
-    //private Vector2 dampVelocity = Vector2.zero;
-    //public float timeToReachDesiredVelocity = 0.5f;
-    
+    /// <summary>
+    /// Called when a Steerable instance is created
+    /// </summary>
     void Awake()
     {
         // Cache this GameObject's Transform component
         transform = GetComponent<Transform>();
         rigidbody = GetComponent<Rigidbody>();
     }
-
-    // NOTE: This method is called after the physics update. Therefore, the ApplyForces() has already been called by the time this is called.
-    /*public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.green;
-        Gizmos.DrawLine((Vector2)Transform.position, (Vector2)transform.position + (Vector2)rigidbody.velocity);
-        Gizmos.color = Color.red;
-        Gizmos.DrawLine((Vector2)Transform.position, (Vector2)transform.position + steeringForce);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawLine((Vector2)Transform.position, (Vector2)transform.position + debugForce);
-    }*/
 
     /// <summary>
     /// Applies all the steering forces set by the AddSteeringForce() function. Must be called every

@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// ????
+/// If active, allows an NPC to separate from its neighbouring
+/// NPCs 
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -15,6 +16,9 @@ public class Separation : NPCActionable
     {
     }
     
+    /// <summary>
+    /// Adds a force which steers the steerable away from its neighbours
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);   

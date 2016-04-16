@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// ????
+/// Allows a fish to pursue other GameObjects
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -11,6 +11,7 @@ using System.Collections;
 [System.Serializable]
 public class Pursue : NPCActionable
 {   
+    /** The Transform to pursue. */
     private Transform targetTransform;
     
     /// <summary>
@@ -23,6 +24,9 @@ public class Pursue : NPCActionable
         this.targetSteerable = targetSteerable;
     }
     
+    /// <summary>
+    /// Makes the steerable pursue the 'targetTransform' instance
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);

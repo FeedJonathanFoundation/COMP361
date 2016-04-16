@@ -2,7 +2,8 @@ using UnityEngine;
 using System.Collections;
 
 /// <summary>
-/// ????
+/// If active, makes an NPC seek or flee a given
+/// light source
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -12,9 +13,11 @@ using System.Collections;
 public class SeekOrFleeLight : NPCActionable
 {
     [Tooltip("If true, this NPC will always flee the light source.")]   
-    public bool alwaysFlee = false;
+    [SerializeField]
+    private bool alwaysFlee = false;
     [Tooltip("If true, this NPC will always seek the light source.")]   
-    public bool alwaysSeek = false;
+    [SerializeField]
+    private bool alwaysSeek = false;
     
     /// <summary>
 	/// The light that this NPC can see
@@ -31,7 +34,9 @@ public class SeekOrFleeLight : NPCActionable
     /// </summary>
     [SerializeField]
     private Flee fleeWhenWeaker;
-    
+    /// <summary>
+    /// The wall avoidance action performed when the NPC has less light than the target light source.
+    /// </summary>
     [SerializeField]
     private WallAvoidance wallAvoidance;
     
@@ -43,7 +48,9 @@ public class SeekOrFleeLight : NPCActionable
         SetID(id);
     }
     
-    /** Call this method in the Start() function of the fish performing this action. */
+    /// <summary>
+    /// Call this method in the Start() function of the fish performing this action.
+    /// </summary>
     public void Init()
     {
         // Call ChildActionComplete() when either the seek or flee actions are completed.
@@ -52,6 +59,10 @@ public class SeekOrFleeLight : NPCActionable
         wallAvoidance.ActionComplete += ChildActionComplete;
     }
     
+    /// <summary>
+    /// Sets the priorities of each steering behaviour.
+    /// This priority is used to index the behaviours in a priority dictionary
+    /// </summary>
     public void SetPriority(int priority)
     {
         this.priority = priority;
@@ -61,6 +72,10 @@ public class SeekOrFleeLight : NPCActionable
         wallAvoidance.priority = priority;
     }
     
+    /// <summary>
+    /// Updates the ID for each internal steering behaviour.
+    /// Allows the action to be referenced by a unique index
+    /// </summary>
     public void SetID(string id)
     {
         this.id = id;
@@ -70,6 +85,9 @@ public class SeekOrFleeLight : NPCActionable
         wallAvoidance.id = id;
     }
     
+    /// <summary>
+    /// Makes the steerable seek or flee the light source target
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);
@@ -101,11 +119,17 @@ public class SeekOrFleeLight : NPCActionable
         wallAvoidance.Execute(steerable);
     }
     
+    /// <summary>
+    /// If true, this action can be cancelled before it's completed
+    /// </summary>
     public override bool CanBeCancelled()
     {
         return seekWhenStronger.CanBeCancelled() && fleeWhenWeaker.CanBeCancelled();
     }
     
+    /// <summary>
+    /// Called when a child action is complete to notify subscribers that the parent action is also complete 
+    /// </summary>
     private void ChildActionComplete(NPCActionable childAction)
     {
         // Call ActionCompleted() to notify subscribers that the parent action is complete

@@ -2,7 +2,8 @@
 using System.Collections;
 
 /// <summary>
-/// ????
+/// Applies a fleeing steering force on an NPC.
+/// Allows a fish to flee from the player
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -11,10 +12,14 @@ using System.Collections;
 [System.Serializable]
 public class Flee : NPCActionable
 {   
+    [SerializeField]
+    [Tooltip("If true, the fleeing behaviour stays active for 'timer' seconds")]
     public bool useTimer;
+    [SerializeField]
     [Tooltip("The action stays active 'timer' seconds before being recycled")]
-    public float timer;
+    private float timer;
     
+    /** The transform to flee from */
     private Transform targetTransform;
     
     public Flee(int priority, string id, Transform transform) : base(priority, id)
@@ -22,6 +27,10 @@ public class Flee : NPCActionable
         targetTransform = transform;
     }
     
+    /// <summary>
+    /// Called every frame when this action needs to be performed.
+    /// Applies a fleeing steering force on the given steerable
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {
         base.Execute(steerable);
@@ -81,6 +90,10 @@ public class Flee : NPCActionable
         }
     }
     
+    /// <summary>
+    /// Returns true if this fleeing action can be cancelled
+    /// before it is completed
+    /// </summary>
     public override bool CanBeCancelled()
     {
         // Return true only if the timer is elapsed or if a timer isn't used.

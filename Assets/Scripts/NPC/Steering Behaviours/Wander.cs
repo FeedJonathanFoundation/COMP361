@@ -2,7 +2,7 @@
 using System.Collections;
 
 /// <summary>
-/// ????
+/// If active, a chosen NPC will wander in a random direction smoothly
 ///
 /// @author - Jonathan L.A
 /// @version - 1.0.0
@@ -12,35 +12,58 @@ using System.Collections;
 public class Wander : NPCActionable 
 {
     
-    /// <summary>
-	/// The distance from the entity to the wander circle. The greater this value, the stronger the wander force, 
-	/// and the more likely the entity will change directions. 
-	/// </summary>
     [Tooltip("Wander: The greater this value, the stronger the wander force, and the more likely the entity will change directions whilst moving.")]
-	public float circleDistance = 1f;
+	[SerializeField]
+    private float circleDistance = 1f;
     
-	/// <summary>
-	/// The greater the radius, the stronger the wander force, and the more likely the entity will change directions
-	/// </summary>
     [Tooltip("Wander: The greater the radius, the stronger the wander force, and the more likely the entity will change directions")]
-	public float circleRadius = .5f;
+	[SerializeField]
+    private float circleRadius = .5f;
     
-	/// <summary>
-	/// The maximum angle in degrees that the wander force can change between two frames
-	/// </summary>
     [Tooltip("Wander: The maximum angle in degrees that the wander force can change between two frames")]
-	public float angleChange = 30f;
+	[SerializeField]
+    private float angleChange = 30f;
     
     public Wander(int priority, string id) : base(priority, id) 
     {
     }
     
-    // Need to be able to set these floats elsewhere;
-    
+    /// <summary>
+    /// Executes the wander action on the given steerable, making it 
+    /// wander in a random direction
+    /// </summary>
 	public override void Execute(Steerable steerable) 
     {      
         base.Execute(steerable);
           
         steerable.AddWanderForce(circleDistance, circleRadius, angleChange, strengthMultiplier);
+    }
+    
+    /// <summary>
+	/// The distance from the entity to the wander circle. The greater this value, the stronger the wander force, 
+	/// and the more likely the entity will change directions. 
+	/// </summary>
+    public float CircleDistance
+    {
+        get { return circleDistance; }
+        set { circleDistance = value; }
+    }
+    
+	/// <summary>
+	/// The greater the radius, the stronger the wander force, and the more likely the entity will change directions
+	/// </summary>
+    public float CircleRadius
+    {
+        get { return circleRadius; }
+        set { circleRadius = value; }
+    }
+    
+	/// <summary>
+	/// The maximum angle in degrees that the wander force can change between two frames
+	/// </summary>
+    private float AngleChange
+    {
+        get { return angleChange; }
+        set { angleChange = value; }
     }
 }

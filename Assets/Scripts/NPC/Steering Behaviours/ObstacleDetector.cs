@@ -18,13 +18,16 @@ public class ObstacleDetector : MonoBehaviour
 	private List<Transform> visibleObstacles = new List<Transform>();
 
 	/** The maximum distance a character can see an obstacle. */
-	public float viewDistance;
+    [SerializeField]
+	private float viewDistance;
 
 	/** The radius of the character. This is the breadth of the character's viewing box */
+    [SerializeField]
 	public float bodyRadius;
 	
 	/** Colliders on this layer are considered obstacles. */
-	public LayerMask obstacleLayer;
+    [SerializeField]
+	private LayerMask obstacleLayer;
 
 	/** The position of this GameObject the previous frame. Used to determine the entity's direction of movement. The detector
 	 *  is then oriented to this direction. */
@@ -55,6 +58,9 @@ public class ObstacleDetector : MonoBehaviour
         //tipCollider.isTrigger = true;
 	}
 	
+    /// <summary>
+    /// Called when a trigger collider enters this obstacle detector
+    /// </summary>
 	void OnTriggerEnter(Collider collider)
 	{
 		// If the collider which entered the trigger volume is on the correct layer
@@ -67,6 +73,9 @@ public class ObstacleDetector : MonoBehaviour
 		}
 	}
 	
+    /// <summary>
+    /// Called when a trigger collider exits this obstacle detector
+    /// </summary>
 	void OnTriggerExit(Collider collider)
 	{
 		// If the collider which left the trigger volume belongs to the layer which is tracked by this neighbourhood
@@ -81,7 +90,7 @@ public class ObstacleDetector : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Returns the nearest obstacle in the object's line of sight.
+	/// Returns the nearest obstacle in the object's line of sight
 	/// </summary>
 	public Transform GetNearestObstacle()
 	{
@@ -110,7 +119,7 @@ public class ObstacleDetector : MonoBehaviour
 	}
 	
 	/// <summary>
-	/// Update the radius of the detector used to detect obtacles. This represents the width of the character's line of sight.
+	/// Update the radius of the detector used to detect obtacles. This represents the width of the character's line of sight
 	/// </summary>
 	public void SetBodyRadius(float radius)
 	{
@@ -121,7 +130,7 @@ public class ObstacleDetector : MonoBehaviour
 	}
 
 	/// <summary>
-	/// Update the viewing distance of the detector used to detect obtacles. This represents the length of the character's line of sight.
+	/// Update the viewing distance of the detector used to detect obtacles. This represents the length of the character's line of sight
 	/// </summary>
 	public void SetViewDistance(float viewDistance)
 	{

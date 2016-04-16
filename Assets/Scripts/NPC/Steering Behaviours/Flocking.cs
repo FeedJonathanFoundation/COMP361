@@ -11,6 +11,7 @@ using System.Collections;
 [System.Serializable]
 public class Flocking : NPCActionable
 {
+    /** Steering behaviours which allow NPCs to flock together */
     [SerializeField]
     private Wander wander;
     [SerializeField]
@@ -28,6 +29,10 @@ public class Flocking : NPCActionable
         this.SetID(id);
     }
     
+    /// <summary>
+    /// Sets the priorities of each steering behaviour.
+    /// This priority is used to index the behaviours in a priority dictionary
+    /// </summary>
     public void SetPriority(int priority)
     {
         this.priority = priority;
@@ -39,6 +44,10 @@ public class Flocking : NPCActionable
         separation.priority = priority;
     }
     
+    /// <summary>
+    /// Updates the ID for each internal steering behaviour.
+    /// Allows the action to be referenced by a unique index
+    /// </summary>
     public void SetID(string id)
     {
         this.id = id;
@@ -62,9 +71,9 @@ public class Flocking : NPCActionable
     public void SetWanderProperties(float strengthMultiplier, float circleRadius, float circleDistance, float angleChange)
     {
         wander.strengthMultiplier = strengthMultiplier;
-        wander.circleRadius = circleRadius;
-        wander.circleDistance = circleDistance;
-        wander.angleChange = angleChange;
+        wander.CircleRadius = circleRadius;
+        wander.CircleDistance = circleDistance;
+        wander.AngleChange = angleChange;
     }
     
     /// <summary>
@@ -77,26 +86,39 @@ public class Flocking : NPCActionable
     public void SetWallAvoidanceProperties(float strengthMultiplier, float avoidanceForce, float maxViewDistance, LayerMask obstacleLayer)
     {
         wallAvoidance.strengthMultiplier = strengthMultiplier;
-        wallAvoidance.avoidanceForce = avoidanceForce;
-        wallAvoidance.maxViewDistance = maxViewDistance;
-        wallAvoidance.obstacleLayer = obstacleLayer;
+        wallAvoidance.AvoidanceForce = avoidanceForce;
+        wallAvoidance.MaxViewDistance = maxViewDistance;
+        wallAvoidance.ObstacleLayer = obstacleLayer;
     }
     
+    /// <summary>
+    /// Sets the strength at which the alignment behaviour is executed
+    /// </summary>
     public void SetAlignmentProperties(float strengthMultiplier)
     {
         alignment.strengthMultiplier = strengthMultiplier;
     }
     
+    /// <summary>
+    /// Sets the strength at which the separation behaviour is executed
+    /// </summary>
     public void SetCohesionProperties(float strengthMultiplier)
     {
         cohesion.strengthMultiplier = strengthMultiplier;
     }
     
+    /// <summary>
+    /// Sets the strength at which the separation behaviour is executed
+    /// </summary>
     public void SetSeparationProperties(float strengthMultiplier)
     {
         separation.strengthMultiplier = strengthMultiplier;
     }
     
+    /// <summary>
+    /// Called every frame when this action needs to be performed.
+    /// Applies a flocking steering force on the given steerable
+    /// </summary>
     public override void Execute(Steerable steerable)
     {
         // Override the steerable's min/max speed
