@@ -179,27 +179,39 @@ public class Zoom : MonoBehaviour
         }  
     }
     
+    /// <summary>
+    /// Triggers the camera to zoom out to the maximum value
+    /// </summary>
     public void MaxZoomOut()
     {
-        //need to check that we aren't in a zoomInZone
+        // Need to check that we aren't in a zoomInZone
         if(!zoomInZone && !current.PlayerInCurrents())
         {
             this.maxZoomOut = true;
         }
     }
     
+    /// <summary>
+    /// Resets the zoom timer
+    /// </summary>
     public void ResetTimer()
     {
         this.zoomTimer = 0.0f;
         this.maxZoomOut = false;
     }
     
+    /// <summary>
+    /// Reverts the zoom timer to the value before the zoom
+    /// </summary>
     public void RevertTimer()
     {
         this.zoomTimer = timeBeforeZoomIn;
         this.maxZoomOut = false;
     }
     
+    /// <summary>
+    /// Sets the camera as "in a zoom zone"
+    /// </summary>
     public void SetZoomInZone(bool isZoom)
     {
         this.zoomInZone = isZoom;
