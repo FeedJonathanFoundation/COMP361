@@ -61,7 +61,7 @@ public class Wander : NPCActionable
 	/// <summary>
 	/// The maximum angle in degrees that the wander force can change between two frames
 	/// </summary>
-    private float AngleChange
+    public float AngleChange
     {
         get { return angleChange; }
         set { angleChange = value; }

@@ -35,13 +35,12 @@ public class Flocking : NPCActionable
     /// </summary>
     public void SetPriority(int priority)
     {
-        this.priority = priority;
-        
-        wander.priority = priority;
-        wallAvoidance.priority = priority;
-        alignment.priority = priority;
-        cohesion.priority = priority;
-        separation.priority = priority;
+        this.priority = priority;        
+        wander.Priority = priority;
+        wallAvoidance.Priority = priority;
+        alignment.Priority = priority;
+        cohesion.Priority = priority;
+        separation.Priority = priority;
     }
     
     /// <summary>
@@ -52,11 +51,11 @@ public class Flocking : NPCActionable
     {
         this.id = id;
         
-        wander.id = id;
-        wallAvoidance.id = id;
-        alignment.id = id;
-        cohesion.id = id;
-        separation.id = id;
+        wander.Id = id;
+        wallAvoidance.Id = id;
+        alignment.Id = id;
+        cohesion.Id = id;
+        separation.Id = id;
     }
     
     /// <summary>

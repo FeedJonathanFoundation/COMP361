@@ -54,8 +54,8 @@ public class SeekFlare : NPCActionable
     {
         this.priority = priority;
         
-        arrivalForce.priority = priority;
-        wallAvoidance.priority = priority;
+        arrivalForce.Priority = priority;
+        wallAvoidance.Priority = priority;
     }
     
     /// <summary>
@@ -66,8 +66,8 @@ public class SeekFlare : NPCActionable
     {
         this.id = id;
         
-        arrivalForce.id = id;
-        wallAvoidance.id = id;
+        arrivalForce.Id = id;
+        wallAvoidance.Id = id;
     }
     
      /// <summary>

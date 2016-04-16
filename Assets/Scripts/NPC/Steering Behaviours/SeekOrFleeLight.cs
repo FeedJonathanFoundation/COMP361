@@ -65,11 +65,10 @@ public class SeekOrFleeLight : NPCActionable
     /// </summary>
     public void SetPriority(int priority)
     {
-        this.priority = priority;
-        
-        seekWhenStronger.priority = priority;
-        fleeWhenWeaker.priority = priority;
-        wallAvoidance.priority = priority;
+        this.priority = priority;        
+        seekWhenStronger.Priority = priority;
+        fleeWhenWeaker.Priority = priority;
+        wallAvoidance.Priority = priority;
     }
     
     /// <summary>
@@ -80,9 +79,9 @@ public class SeekOrFleeLight : NPCActionable
     {
         this.id = id;
         
-        seekWhenStronger.id = id;
-        fleeWhenWeaker.id = id;
-        wallAvoidance.id = id;
+        seekWhenStronger.Id = id;
+        fleeWhenWeaker.Id = id;
+        wallAvoidance.Id = id;
     }
     
     /// <summary>

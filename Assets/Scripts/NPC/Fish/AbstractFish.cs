@@ -233,7 +233,7 @@ public abstract class AbstractFish : LightSource
         }
         // Unsubscribe from events before removing the action
         action.ActionComplete -= OnActionComplete;
-        actions.RemoveAction(action.id);
+        actions.RemoveAction(action.Id);
     }
 
     /// <summary>
@@ -241,7 +241,7 @@ public abstract class AbstractFish : LightSource
     /// </summary>
     protected void OnActionComplete(NPCActionable completedAction)
     {
-        actions.RemoveAction(completedAction.id);
+        actions.RemoveAction(completedAction.Id);
     }
 
     /// <summary>

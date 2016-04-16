@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// The Jellyfish Bounce class causes jellyfish bouncing movement

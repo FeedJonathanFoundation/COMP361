@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// The player safe zone class marks the player as 'safe'
-/// when inside a safe zone trigger collider.
+/// when inside a safe zone trigger collider. 
+/// The boss fish can reach player in this zone.
 ///
 /// @author - Karl C.
 /// @version - 1.0.0
@@ -56,12 +56,6 @@ public class PlayerSafeZone : MonoBehaviour
                 }
             }
         }
-    }
-
-    IEnumerator WaitBeforeCurrent(float waitTime)
-    {
-        yield return new WaitForSeconds(waitTime);
-
     }
 
 }

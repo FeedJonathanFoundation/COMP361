@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Allows fish to seek other GameObjects
@@ -61,10 +60,7 @@ public class Seek : NPCActionable
                 if (player.IsDetectable)
                 {
                     steerable.AddSeekForce(targetTransform.position, strengthMultiplier);
-
                     PlaySeekSound();
-
-
                 }
             }
             else

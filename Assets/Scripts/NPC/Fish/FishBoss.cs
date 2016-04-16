@@ -120,7 +120,7 @@ public class FishBoss : AbstractFish
             player = GameObject.Find("Player");
         }
 
-        if (!player.GetComponent<Player>().isSafe)
+        if (!player.GetComponent<Player>().IsSafe)
         {
             Animate(true, true);
             followPlayer.TargetLightSource = player.GetComponent<LightSource>();

@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 /// <summary>
 /// Denotes an action that an NPC can perform
@@ -96,4 +95,17 @@ public abstract class NPCActionable
     {
         return base.ToString() + ", Priority = " + priority + ", ID = " + id;
     }
+    
+    public int Priority
+    {
+        get { return priority; }
+        set { priority = value; }
+    }
+    
+    public string Id 
+    {
+        get { return id; }
+        set { id = value;}
+    }
+    
 }

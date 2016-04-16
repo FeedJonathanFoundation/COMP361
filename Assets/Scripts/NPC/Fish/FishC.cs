@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
 
 // Large, impossible to kill NPCs
 // Seeks smaller fish by default

@@ -52,7 +52,7 @@ public class PriorityDictionary
     /// </summary>
     public void InsertAction(NPCActionable action)
     {
-        switch (action.priority)
+        switch (action.Priority)
         {
             case 3:
                 InsertVeryHighPriority(action);
@@ -90,9 +90,9 @@ public class PriorityDictionary
     /// </summary>
     public void InsertLowPriority(NPCActionable action)
     {
-        if (!lowPriorityAction.ContainsKey(action.id))
+        if (!lowPriorityAction.ContainsKey(action.Id))
         {
-            lowPriorityAction.Add(action.id, action);
+            lowPriorityAction.Add(action.Id, action);
             UpdatePriority();
         }
     }
@@ -102,9 +102,9 @@ public class PriorityDictionary
     /// </summary>
     public void InsertMedPriority(NPCActionable action)
     {
-        if (!medPriorityAction.ContainsKey(action.id))
+        if (!medPriorityAction.ContainsKey(action.Id))
         {
-            medPriorityAction.Add(action.id, action);
+            medPriorityAction.Add(action.Id, action);
             UpdatePriority();
         }
     }
@@ -114,9 +114,9 @@ public class PriorityDictionary
     /// </summary>
     public void InsertHighPriority(NPCActionable action)
     {
-        if (!highPriorityAction.ContainsKey(action.id))
+        if (!highPriorityAction.ContainsKey(action.Id))
         {
-            highPriorityAction.Add(action.id, action);
+            highPriorityAction.Add(action.Id, action);
             UpdatePriority();
         }
     }
@@ -126,9 +126,9 @@ public class PriorityDictionary
     /// </summary>
     public void InsertVeryHighPriority(NPCActionable action)
     {
-        if (!veryHighPriorityAction.ContainsKey(action.id))
+        if (!veryHighPriorityAction.ContainsKey(action.Id))
         {
-            veryHighPriorityAction.Add(action.id, action);
+            veryHighPriorityAction.Add(action.Id, action);
             UpdatePriority();
         }
     }

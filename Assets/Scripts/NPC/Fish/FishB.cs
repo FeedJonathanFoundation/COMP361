@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 /// <summary>
 /// FishA class is responsible for behaviour related to fish A
