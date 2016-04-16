@@ -190,6 +190,9 @@ public class Current : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Sets the zoom to the appropriate amount when the player is in the current
+    /// </summary>
     private void SetCurrentState(bool isCurrent, string direction)
     {
         if (zoomManager == null) { return; }
@@ -210,6 +213,9 @@ public class Current : MonoBehaviour
         zoomManager.RevertTimer();
     }
 
+    /// <summary>
+    /// Returns the particle direction of the current that the player is in
+    /// </summary>
     public string CurrentParticleDirection()
     {
         GameObject[] currents = GameObject.FindGameObjectsWithTag("Current");
@@ -224,6 +230,9 @@ public class Current : MonoBehaviour
         return null;
     }
     
+    /// <summary>
+    /// Returns the particle direction of this current
+    /// </summary>
     public string ParticleDirection
     {
         get { return particleDirection; }
@@ -250,6 +259,9 @@ public class Current : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Returns whether the player is in any current
+    /// </summary>
     public bool PlayerInCurrents()
     {
         GameObject[] currents = GameObject.FindGameObjectsWithTag("Current");
@@ -264,6 +276,9 @@ public class Current : MonoBehaviour
         return false;
     }
     
+    /// <summary>
+    /// Returns whether the player is in this specific current
+    /// </summary>
     public bool InCurrent
     {
         get { return playerInCurrent; }
