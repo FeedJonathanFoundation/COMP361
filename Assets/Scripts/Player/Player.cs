@@ -27,7 +27,7 @@ public class Player : LightSource
     private PlayerSound playerSound;
     
     private bool isDead;
-    public bool isSafe; // used for boss AI
+    private bool isSafe; // used for boss AI
     private bool showDeathParticles;
 
 
@@ -397,6 +397,13 @@ public class Player : LightSource
         // If true, the player has been hit and is temporarily invulnerable 
         get { return (Time.time - movementBean.LastTimeHit) < movementBean.InvulnerabilityTime; }
     }
+    
+    public bool IsSafe
+    { 
+        get { return isSafe; }
+        set { isSafe = value; }
+    }
+    
 
     public MovementBean MovementBean
     {

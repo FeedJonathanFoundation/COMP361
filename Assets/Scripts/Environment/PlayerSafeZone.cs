@@ -12,43 +12,43 @@ using System.Collections;
 [RequireComponent(typeof(Collider))]
 public class PlayerSafeZone : MonoBehaviour
 {
-    
+    [Tooltip("Maximum player speed in the safe zone")]
     [SerializeField]
     private int maxSpeed = 5;
+
     [SerializeField]
     [Tooltip("If given a current, it will activate a current and block that path.")]
     private GameObject blockingCurrent;
 
-    void OnTriggerEnter(Collider col)
+    /// <summary>
+    /// Detect when player enters safe zone
+    /// </summary>
+    /// <param name="playerCollider"></param>
+    void OnTriggerEnter(Collider playerCollider)
     {
-        if (col.tag == "Player")
+        if (playerCollider.tag == "Player")
         {
-            Player player = col.GetComponent<Player>();
+            Player player = playerCollider.GetComponent<Player>();
             if (player)
             {
-                player.isSafe = true;
-                if (blockingCurrent)
-                {
-                    player.MovementBean.MaxSpeed = 5;
-                }
+                player.IsSafe = true;
+                if (blockingCurrent) { player.MovementBean.MaxSpeed = 5; }
             }
         }
     }
 
-    IEnumerator WaitBeforeCurrent(float waitTime)
+    /// <summary>
+    /// Detect when player exits safe zone
+    /// </summary>
+    /// <param name="playerCollider"></param>
+    void OnTriggerExit(Collider playerCollider)
     {
-        yield return new WaitForSeconds(waitTime);
-        
-    }
-    
-    void OnTriggerExit(Collider col)
-    {
-        if (col.tag == "Player")
+        if (playerCollider.tag == "Player")
         {
-            Player player = col.GetComponent<Player>();
+            Player player = playerCollider.GetComponent<Player>();
             if (player)
             {
-                player.isSafe = false;
+                player.IsSafe = false;
                 if (blockingCurrent)
                 {
                     blockingCurrent.SetActive(true);
@@ -57,4 +57,11 @@ public class PlayerSafeZone : MonoBehaviour
             }
         }
     }
+
+    IEnumerator WaitBeforeCurrent(float waitTime)
+    {
+        yield return new WaitForSeconds(waitTime);
+
+    }
+
 }
