@@ -162,11 +162,17 @@ public class SmoothCamera : NetworkBehaviour
         }
     }
     
+    /// <summary>
+    /// Triggers the camera to zoom out to the maximum value
+    /// </summary>
     public void MaxZoomOut()
     {
         zoomManager.MaxZoomOut();
     }
     
+    /// <summary>
+    /// Resets the zoom timer
+    /// </summary>
     public void ResetTimer()
     {
         zoomManager.ResetTimer();
@@ -194,8 +200,12 @@ public class SmoothCamera : NetworkBehaviour
         set { playerRigidbody = value; }
     }
     
+    /// <summary>
+    /// The camera's z position
+    /// </summary>
     public float ZPosition
     {
         get { return zPosition; }
     }
+    
 }
